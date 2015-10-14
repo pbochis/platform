@@ -1,0 +1,15 @@
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(':platform-server-kernel')
+    compile project(':platform-server-rest')
+
+    compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+    compile "ch.qos.logback:logback-classic:1.1.3"
+}
+
+mainClassName = 'uno.cod.platform.server.Server'
+
+bootRepackage {
+    mainClass = 'uno.cod.platform.server.Server'
+}

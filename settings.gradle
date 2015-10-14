@@ -1,0 +1,1 @@
+include ':platform-server-kernel', ':platform-server-rest', ':platform-server'

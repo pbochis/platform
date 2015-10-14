@@ -1,0 +1,51 @@
+ext {
+    springBootVersion = '1.2.6.RELEASE'
+    guavaVersion = '18.0'
+    slf4jVersion = '1.7.12'
+}
+
+buildscript {
+    ext {
+        springBootVersion = '1.2.6.RELEASE'
+    }
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.spring.io/libs-release" }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+subprojects { proj ->
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    configurations {
+        all*.exclude group: 'commons-logging'
+        all*.exclude group: 'log4j'
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.spring.io/libs-release" }
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+        compile "com.google.guava:guava:${guavaVersion}"
+        testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    }
+  
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
