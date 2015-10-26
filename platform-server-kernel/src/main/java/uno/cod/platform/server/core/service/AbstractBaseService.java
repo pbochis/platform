@@ -14,7 +14,6 @@ public abstract class AbstractBaseService<R extends JpaRepository, E> {
         this.repository = repository;
     }
 
-
     public E save(E entity) {
         return (E) repository.save(entity);
     }

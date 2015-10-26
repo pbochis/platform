@@ -1,15 +1,18 @@
 package uno.cod.platform.server.core.service;
 
-import uno.cod.platform.server.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.core.repository.UserRepository;
 
 
 @Service
+@Order(-1)
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -23,6 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if(user == null)
+            throw new UsernameNotFoundException("user not registered yet");
+        return user;
     }
 }

@@ -8,8 +8,6 @@ dependencies {
     compile "ch.qos.logback:logback-classic:1.1.3"
 }
 
-mainClassName = 'uno.cod.platform.server.Server'
-
 bootRepackage {
     mainClass = 'uno.cod.platform.server.Server'
 }

@@ -12,8 +12,4 @@ spring:
      show-sql: false
      hibernate:
        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-       naming_strategy: org.hibernate.cfg.DefaultComponentSafeNamingStrategy
-       ddl-auto: update
-
-  thymeleaf:
-     cache: false
+       ddl-auto: create-drop

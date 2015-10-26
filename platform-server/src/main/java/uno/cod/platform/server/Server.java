@@ -6,7 +6,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 @SpringBootApplication
-//@Import({ UiConfig.class, RestConfig.class })
 public class Server extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

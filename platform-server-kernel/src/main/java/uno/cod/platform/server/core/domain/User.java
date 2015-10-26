@@ -1,38 +1,72 @@
 package uno.cod.platform.server.core.domain;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Set;
 
+/**
+ * A user, can be a coder, an organization employee, lecturer, or all of them
+ * The role of the user is defined by the profile, teams and organizations he belongs
+ */
 @Entity
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 255)
     @NotNull
     private String username;
 
-    @Column(nullable=false, length=255)
+    @Column(unique = true,nullable = false,length = 255)
+    @Email
+    private String email;
+
+    @Column(nullable = false,length = 255)
     private String password;
 
     boolean enabled;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    /**
+     * The current coding profile, represents his skills
+     */
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coder_profile")
+    private CoderProfile coderProfile;
 
-    @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created = new Date();
+    /**
+     * Organizations he belongs to, like github organizations
+     */
+    @OneToMany(mappedBy = "key.user")
+    private Set<OrganizationMember> organizations;
+
+    /**
+     * Teams he belongs to, can be used across multiple
+     * challenges
+     */
+    @OneToMany(mappedBy = "key.user")
+    private Set<TeamMember> teams;
+
+    /**
+     * Private (company) challenges he is invited
+     */
+    @ManyToMany(mappedBy = "invitedUsers")
+    private Set<Challenge> invitedChallenges;
+
+    @Column(nullable = false,updatable = false)
+    private ZonedDateTime created = ZonedDateTime.now();
 
     @Column
-    private Date lastLogin;
+    private ZonedDateTime lastLogin;
 
     public Long getId() {
         return id;
@@ -42,7 +76,6 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
@@ -51,7 +84,6 @@ public class User implements UserDetails {
         this.username = username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -60,7 +92,38 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<OrganizationMember> getOrganizations() {
+        return Collections.unmodifiableSet(organizations);
+    }
+
+    protected void setOrganizations(Set<OrganizationMember> organizations) {
+        this.organizations = organizations;
+    }
+
+    public Set<TeamMember> getTeams() {
+        return Collections.unmodifiableSet(teams);
+    }
+
+    protected void setTeams(Set<TeamMember> teams) {
+        this.teams = teams;
+    }
+
+    public Set<Challenge> getInvitedChallenges() {
+        return Collections.unmodifiableSet(invitedChallenges);
+    }
+
+    protected void setInvitedChallenges(Set<Challenge> invitedChallenges) {
+        this.invitedChallenges = invitedChallenges;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -69,66 +132,38 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Date getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    private void setCreated(Date created) {
+    private void setCreated(ZonedDateTime created) {
         this.created = created;
     }
 
-    public Date getLastLogin() {
+    public ZonedDateTime getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(ZonedDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
 
-    @Override
     @Transient
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
     @Transient
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
     @Transient
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        return !(id != null ? !id.equals(user.id) : user.id != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return new ArrayList<>();
     }
 }

@@ -7,5 +7,4 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @Configuration
 @ComponentScan({"uno.cod.platform.server.rest"})
-public class RestConfig {
-}
+public class RestConfig {}
