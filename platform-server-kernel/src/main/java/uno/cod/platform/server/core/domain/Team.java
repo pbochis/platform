@@ -20,7 +20,7 @@ public class Team {
     @Column(unique = true,nullable = false,length = 255)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "key.team")
+    @OneToMany(mappedBy = "key.team")
     private Set<TeamMember> members;
 
     public Long getId() {

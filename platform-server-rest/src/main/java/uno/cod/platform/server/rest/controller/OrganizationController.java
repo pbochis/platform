@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.organization.OrganizationCreateDto;
 import uno.cod.platform.server.core.service.OrganizationService;
+import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -20,19 +21,19 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
-    @RequestMapping(value = "/organizations", method = RequestMethod.POST)
+    @RequestMapping(value = RestUrls.ORGANIZATIONS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> create(@Valid @RequestBody OrganizationCreateDto createDto, Principal principal) {
         organizationService.createFromDto(createDto, principal.getName());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/organizations", method = RequestMethod.GET)
+    @RequestMapping(value = RestUrls.ORGANIZATIONS, method = RequestMethod.GET)
     public String list() {
         return "";
     }
 
-    @RequestMapping(value = "/organizations/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.GET)
     public String get(@PathVariable Long id) {
         return "";
     }

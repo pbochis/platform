@@ -20,7 +20,7 @@ public class Challenge implements Serializable {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Organization organization;
 
     @ManyToMany

@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class IllegalArgumentAdvice {
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason="Wrong parameters")
     public void handleIllegalArgument() {}
 }

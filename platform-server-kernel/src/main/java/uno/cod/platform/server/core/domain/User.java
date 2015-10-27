@@ -18,6 +18,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user")
+@NamedEntityGraph(name = "User.detail",
+        attributeNodes = {
+                @NamedAttributeNode("organizations"),
+                @NamedAttributeNode("teams"),
+                @NamedAttributeNode("invitedChallenges")
+        })
 public class User implements UserDetails {
     @Id
     @GeneratedValue

@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
+import uno.cod.platform.server.core.dto.user.UserShowDto;
 import uno.cod.platform.server.core.service.UserService;
+import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -21,18 +24,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = RestUrls.USERS, method = RequestMethod.POST)
     public ResponseEntity<String> create(@Valid @RequestBody UserCreateDto dto) {
         userService.createFromDto(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public String list() {
-        return "";
+    @RequestMapping(value = RestUrls.USERS, method = RequestMethod.GET)
+    public List<UserShowDto> list() {
+        return userService.listUsers();
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = RestUrls.USER, method = RequestMethod.GET)
     public String get() {
         return "";
     }

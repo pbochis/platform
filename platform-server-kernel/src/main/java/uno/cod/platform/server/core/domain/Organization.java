@@ -31,13 +31,13 @@ public class Organization implements Serializable {
     /**
      * all organization members
      */
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "key.organization")
+    @OneToMany(mappedBy = "key.organization")
     private Set<OrganizationMember> members;
 
     /**
      * challenges owned by the organization
      */
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "organization")
+    @OneToMany(mappedBy = "organization")
     private Set<Challenge> challenges;
 
     public Long getId() {
