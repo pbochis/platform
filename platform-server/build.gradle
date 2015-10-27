@@ -4,6 +4,10 @@ dependencies {
     compile project(':platform-server-kernel')
     compile project(':platform-server-rest')
 
+    compile "org.hibernate:hibernate-entitymanager:5.0.2.Final"
+    compile "org.hibernate:hibernate-core:5.0.2.Final"
+    compile "org.hibernate:hibernate-java8:5.0.2.Final"
+
     compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
     compile "ch.qos.logback:logback-classic:1.1.3"
 }
