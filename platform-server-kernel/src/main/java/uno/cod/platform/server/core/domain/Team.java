@@ -1,6 +1,9 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Collections;
 import java.util.Set;
 
@@ -12,24 +15,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "team")
-public class Team {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @Column(unique = true,nullable = false,length = 255)
+public class Team extends IdentifiableEntity {
+    @Column(unique = true, nullable = false, length = 255)
     private String name;
 
     @OneToMany(mappedBy = "key.team")
     private Set<TeamMember> members;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

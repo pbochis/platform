@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
         @AssociationOverride(name = "key.user", joinColumns = {@JoinColumn(name = "user_id")}),
         @AssociationOverride(name = "key.team", joinColumns = {@JoinColumn(name = "team_id")})
 })
-public class TeamMember implements Serializable {
+public class TeamMember {
     @EmbeddedId
     private TeamMemberKey key = new TeamMemberKey();
 

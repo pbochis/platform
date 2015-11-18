@@ -1,4 +1,3 @@
-
 package uno.cod.platform.server.core.domain;
 
 import javax.persistence.Embeddable;
@@ -6,7 +5,7 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class OrganizationMemberKey implements Serializable {
+public class OrganizationMemberKey {
     @ManyToOne
     private Organization organization;
     @ManyToOne

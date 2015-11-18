@@ -7,19 +7,20 @@ import java.util.Date;
 @Entity
 @Table(name = "organization_member")
 @AssociationOverrides({
-    @AssociationOverride(name = "key.user",joinColumns = {@JoinColumn(name = "user_id")}),
-    @AssociationOverride(name = "key.organization",joinColumns = {@JoinColumn(name = "organization_id")})
+        @AssociationOverride(name = "key.user", joinColumns = {@JoinColumn(name = "user_id")}),
+        @AssociationOverride(name = "key.organization", joinColumns = {@JoinColumn(name = "organization_id")})
 })
-public class OrganizationMember implements Serializable {
+public class OrganizationMember {
     @EmbeddedId
     private OrganizationMemberKey key = new OrganizationMemberKey();
 
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private Date created = new Date();
 
     private boolean admin = false;
 
-    public OrganizationMember() {}
+    public OrganizationMember() {
+    }
 
     public OrganizationMemberKey getKey() {
         return this.key;

@@ -1,36 +1,27 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * A submission for a (task, challenge, user)
  */
 @Entity
 @Table(name = "submission")
-public class Submission {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @ManyToOne(optional=false)
-    @JoinColumn(name="user_id", nullable=false, updatable=false)
+public class Submission extends IdentifiableEntity {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @ManyToOne(optional=false)
-    @JoinColumn(name="challenge_id", nullable=false, updatable=false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "challenge_id", nullable = false, updatable = false)
     private Challenge challenge;
 
-    @ManyToOne(optional=false)
-    @JoinColumn(name="task_id", nullable=false, updatable=false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "task_id", nullable = false, updatable = false)
     private Task task;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public User getUser() {
         return user;

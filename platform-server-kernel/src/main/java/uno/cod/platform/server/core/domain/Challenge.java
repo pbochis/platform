@@ -13,11 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "challenge")
-public class Challenge implements Serializable {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Challenge extends IdentifiableEntity {
     private String name;
 
     @ManyToOne
@@ -30,19 +26,15 @@ public class Challenge implements Serializable {
     @ManyToMany
     private List<Task> tasks;
 
-    /** Start of the challenge, users can already be invited before */
+    /**
+     * Start of the challenge, users can already be invited before
+     */
     private ZonedDateTime startDate;
 
-    /** End of the challenge, the challenge is read only afterwards */
+    /**
+     * End of the challenge, the challenge is read only afterwards
+     */
     private ZonedDateTime endDate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

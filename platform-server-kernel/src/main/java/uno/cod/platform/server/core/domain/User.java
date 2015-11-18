@@ -24,20 +24,16 @@ import java.util.Set;
                 @NamedAttributeNode("teams"),
                 @NamedAttributeNode("invitedChallenges")
         })
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class User extends IdentifiableEntity {
     @Column(unique = true, nullable = false, length = 255)
     @NotNull
     private String username;
 
-    @Column(unique = true,nullable = false,length = 255)
+    @Column(unique = true, nullable = false, length = 255)
     @Email
     private String email;
 
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false, length = 255)
     private String password;
 
     boolean enabled;
@@ -68,19 +64,11 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "invitedUsers")
     private Set<Challenge> invitedChallenges;
 
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created = ZonedDateTime.now();
 
     @Column
     private ZonedDateTime lastLogin;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
