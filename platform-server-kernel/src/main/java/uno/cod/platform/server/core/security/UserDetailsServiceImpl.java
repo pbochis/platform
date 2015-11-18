@@ -1,4 +1,4 @@
-package uno.cod.platform.server.core.service;
+package uno.cod.platform.server.core.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;

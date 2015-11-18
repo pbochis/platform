@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uno.cod.platform.server.core.repository.UserRepository;
-import uno.cod.platform.server.core.service.UserDetailsServiceImpl;
+import uno.cod.platform.server.core.security.UserDetailsServiceImpl;
 
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)

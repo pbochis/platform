@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
 import uno.cod.platform.server.core.dto.user.UserShowDto;
-import uno.cod.platform.server.core.security.AllowedForAdmin;
 import uno.cod.platform.server.core.service.UserService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -38,9 +37,7 @@ public class UserController {
     }
 
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.GET)
-    @AllowedForAdmin
     public String get(Principal principal) {
-        System.out.print("wat");
-        return "";
+        return "Hello " + principal.getName() + "!";
     }
 }
