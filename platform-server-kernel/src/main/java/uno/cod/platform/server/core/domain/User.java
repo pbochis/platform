@@ -38,6 +38,8 @@ public class User extends IdentifiableEntity implements UserDetails {
 
     boolean enabled;
 
+    boolean admin = false;
+
     /**
      * The current coding profile, represents his skills
      */
@@ -140,6 +142,14 @@ public class User extends IdentifiableEntity implements UserDetails {
 
     public void setLastLogin(ZonedDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     @Transient

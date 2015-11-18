@@ -34,7 +34,15 @@ public class OrganizationController {
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.GET)
-    public String get(@PathVariable Long id) {
+    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #organizationId)")
+    public String get(@PathVariable("id") Long organizationId) {
         return "";
     }
+
+    @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #organizationId)")
+    public String delete(@PathVariable("id") Long organizationId) {
+        return "";
+    }
+
 }
