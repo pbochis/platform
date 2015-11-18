@@ -8,12 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskMapper {
-    public static Task map(TaskCreateDto dto){
-        Task task = new Task();
-        task.setName(dto.getName());
-        return task;
-    }
-
     public static TaskShowDto map(Task task){
         return new TaskShowDto(task);
     }

@@ -2,6 +2,7 @@ package uno.cod.platform.server.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uno.cod.platform.server.core.domain.Task;
 import uno.cod.platform.server.core.dto.task.TaskCreateDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
 import uno.cod.platform.server.core.mapper.TaskMapper;
@@ -20,8 +21,11 @@ public class TaskService {
         this.repository = repository;
     }
 
-    public TaskShowDto save(TaskCreateDto dto) {
-        return TaskMapper.map(repository.save(TaskMapper.map(dto)));
+    public void save(TaskCreateDto dto) {
+        Task task = new Task();
+        task.setName(dto.getName());
+
+        repository.save(task);
     }
 
     public TaskShowDto findById(Long id) {
