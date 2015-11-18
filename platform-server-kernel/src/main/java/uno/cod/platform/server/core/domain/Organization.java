@@ -13,19 +13,15 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "organization",
-       uniqueConstraints = {@UniqueConstraint(name = "nick",columnNames = "nick")}
+        uniqueConstraints = {@UniqueConstraint(name = "nick", columnNames = "nick")}
 )
-public class Organization implements Serializable {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Organization extends IdentifiableEntity {
     @Column(unique = true, nullable = false, length = 40)
     @Size(min = 5, max = 40)
     @Pattern(regexp = "^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$")
     private String nick;
 
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false, length = 255)
     private String name;
 
     /**
@@ -39,14 +35,6 @@ public class Organization implements Serializable {
      */
     @OneToMany(mappedBy = "organization")
     private Set<Challenge> challenges;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNick() {
         return nick;

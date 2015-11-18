@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class TeamMemberKey implements Serializable {
+public class TeamMemberKey {
     @ManyToOne
     private Team team;
     @ManyToOne
