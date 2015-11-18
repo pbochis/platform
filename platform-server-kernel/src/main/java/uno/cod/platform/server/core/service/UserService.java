@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserService extends AbstractBaseService<UserRepository, User> {
+public class UserService{
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository repository;
 
     @Autowired
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
-        super(repository);
+        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 
