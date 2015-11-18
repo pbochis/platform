@@ -24,7 +24,7 @@ import java.util.Set;
                 @NamedAttributeNode("teams"),
                 @NamedAttributeNode("invitedChallenges")
         })
-public class User extends IdentifiableEntity {
+public class User extends IdentifiableEntity implements UserDetails {
     @Column(unique = true, nullable = false, length = 255)
     @NotNull
     private String username;
