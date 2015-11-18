@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.organization.OrganizationCreateDto;
+import uno.cod.platform.server.core.dto.organization.OrganizationShowDto;
 import uno.cod.platform.server.core.service.OrganizationService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class OrganizationController {
@@ -29,14 +31,14 @@ public class OrganizationController {
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS, method = RequestMethod.GET)
-    public String list() {
-        return "";
+    public ResponseEntity<List<OrganizationShowDto>> list() {
+        return new ResponseEntity<>(organizationService.findAll(), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #organizationId)")
-    public String get(@PathVariable("id") Long organizationId) {
-        return "";
+    public ResponseEntity<OrganizationShowDto> get(@PathVariable Long id) {
+        return new ResponseEntity<>(organizationService.findById(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.DELETE)
