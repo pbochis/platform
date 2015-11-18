@@ -22,8 +22,9 @@ public class TaskController {
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.POST)
-    public ResponseEntity<TaskShowDto> create(@Valid @RequestBody TaskCreateDto dto) {
-        return new ResponseEntity<>(taskService.save(dto), HttpStatus.CREATED);
+    public ResponseEntity<String> create(@Valid @RequestBody TaskCreateDto dto) {
+        taskService.save(dto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID, method = RequestMethod.GET)
