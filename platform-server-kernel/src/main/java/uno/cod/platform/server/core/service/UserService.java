@@ -1,6 +1,5 @@
 package uno.cod.platform.server.core.service;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import uno.cod.platform.server.core.exception.ResourceConflictException;
 import uno.cod.platform.server.core.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
