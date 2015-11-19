@@ -17,12 +17,8 @@ import uno.cod.platform.server.core.security.UserDetailsServiceImpl;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
-    private UserRepository userRepository;
-
     @Autowired
-    public void SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

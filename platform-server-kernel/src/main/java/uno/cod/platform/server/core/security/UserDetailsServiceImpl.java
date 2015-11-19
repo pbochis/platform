@@ -1,7 +1,6 @@
 package uno.cod.platform.server.core.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +11,6 @@ import uno.cod.platform.server.core.repository.UserRepository;
 
 
 @Service
-@Order(-1)
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
