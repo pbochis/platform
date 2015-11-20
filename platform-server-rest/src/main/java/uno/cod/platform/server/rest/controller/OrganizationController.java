@@ -36,7 +36,7 @@ public class OrganizationController {
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #organizationId)")
+    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #id)")
     public ResponseEntity<OrganizationShowDto> get(@PathVariable Long id) {
         return new ResponseEntity<>(organizationService.findById(id), HttpStatus.OK);
     }
