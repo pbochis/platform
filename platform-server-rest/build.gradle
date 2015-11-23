@@ -1,9 +1,9 @@
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-web"
     compile project(':platform-server-kernel')
 
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 
-    testCompile 'com.jayway.jsonpath:json-path:2.0.0'
-    testCompile 'com.jayway.jsonpath:json-path-assert:2.0.0'
+    testCompile 'com.jayway.jsonpath:json-path'
+    testCompile 'com.jayway.jsonpath:json-path-assert'
 }
