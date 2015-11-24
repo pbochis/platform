@@ -24,7 +24,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user;
+        if (username.contains("@"))
+            user = userRepository.findByEmail(username);
+        else
+            user = userRepository.findByUsername(username);
         if(user == null)
             throw new UsernameNotFoundException("user not registered yet");
         return user;
