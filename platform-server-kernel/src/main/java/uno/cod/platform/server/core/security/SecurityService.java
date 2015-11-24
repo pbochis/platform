@@ -18,8 +18,8 @@ import java.util.Set;
 public class SecurityService {
     public boolean isTeamMember(User user, Long teamId) {
         Set<TeamMember> teams = user.getTeams();
-        for(TeamMember teamMember : user.getTeams()) {
-            if(teamMember.getKey().getTeam().getId().equals(teamId))
+        for (TeamMember teamMember : user.getTeams()) {
+            if (teamMember.getKey().getTeam().getId().equals(teamId))
                 return true;
         }
         return false;
@@ -27,8 +27,8 @@ public class SecurityService {
 
     public boolean isTeamAdmin(User user, Long teamId) {
         Set<TeamMember> teams = user.getTeams();
-        for(TeamMember teamMember : user.getTeams()) {
-            if(teamMember.isAdmin() && teamMember.getKey().getTeam().getId().equals(teamId))
+        for (TeamMember teamMember : user.getTeams()) {
+            if (teamMember.isAdmin() && teamMember.getKey().getTeam().getId().equals(teamId))
                 return true;
         }
         return false;
@@ -36,8 +36,8 @@ public class SecurityService {
 
     public boolean isOrganizationMember(User user, Long organizationId) {
         Set<OrganizationMember> organizations = user.getOrganizations();
-        for(OrganizationMember organizationMember : user.getOrganizations()) {
-            if(organizationMember.getKey().getOrganization().getId().equals(organizationId))
+        for (OrganizationMember organizationMember : user.getOrganizations()) {
+            if (organizationMember.getKey().getOrganization().getId().equals(organizationId))
                 return true;
         }
         return false;
@@ -45,8 +45,8 @@ public class SecurityService {
 
     public boolean isOrganizationAdmin(User user, Long organizationId) {
         Set<OrganizationMember> organizations = user.getOrganizations();
-        for(OrganizationMember organizationMember : user.getOrganizations()) {
-            if(organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organizationId))
+        for (OrganizationMember organizationMember : user.getOrganizations()) {
+            if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organizationId))
                 return true;
         }
         return false;

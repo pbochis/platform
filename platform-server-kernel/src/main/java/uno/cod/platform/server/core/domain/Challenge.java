@@ -3,6 +3,7 @@ package uno.cod.platform.server.core.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -82,5 +83,16 @@ public class Challenge extends IdentifiableEntity {
 
     public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public void addTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("task not valid");
+        }
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        task.addChallenge(this);
+        tasks.add(task);
     }
 }

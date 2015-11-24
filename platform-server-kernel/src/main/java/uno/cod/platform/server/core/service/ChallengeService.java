@@ -26,27 +26,21 @@ public class ChallengeService {
         this.taskRepository = taskRepository;
     }
 
-    public Long save(ChallengeCreateDto dto){
+    public Long save(ChallengeCreateDto dto) {
         Challenge challenge = new Challenge();
         challenge.setName(dto.getName());
-        List<Task> tasks = new ArrayList<>();
-        for(Long taskId: dto.getTasks()){
-            Task task = taskRepository.getOne(taskId);
-            if(task == null){
-                throw new IllegalArgumentException("task id " + taskId + " is not valid");
-            }
-            tasks.add(task);
+        for (Long taskId : dto.getTasks()) {
+            challenge.addTask(taskRepository.getOne(taskId));
         }
-        challenge.setTasks(tasks);
 
         return repository.save(challenge).getId();
     }
 
-    public ChallengeShowDto findById(Long id){
+    public ChallengeShowDto findById(Long id) {
         return ChallengeMapper.map(repository.findOne(id));
     }
 
-    public List<ChallengeShowDto> findAll(){
+    public List<ChallengeShowDto> findAll() {
         return ChallengeMapper.map(repository.findAll());
     }
 }

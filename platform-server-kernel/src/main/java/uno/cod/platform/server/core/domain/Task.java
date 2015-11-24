@@ -1,9 +1,7 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,8 +15,23 @@ public class Task extends IdentifiableEntity {
     @Column(unique = true, nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String instructions;
+
     @ManyToMany(mappedBy = "tasks")
     private List<Challenge> challenges;
+
+    @ManyToOne
+    private Endpoint endpoint;
+
+    @ManyToOne
+    private Organization organization;
+
+    @Column
+    private boolean isPublic = false;
 
     public String getName() {
         return name;
@@ -34,6 +47,53 @@ public class Task extends IdentifiableEntity {
 
     protected void setChallenges(List<Challenge> challenges) {
         this.challenges = challenges;
+    }
+
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(Endpoint endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    protected void addChallenge(Challenge challenge) {
+        if (challenges == null) {
+            challenges = new ArrayList<>();
+        }
+        challenges.add(challenge);
     }
 }
 

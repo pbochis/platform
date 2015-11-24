@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A user, can be a coder, an organization employee, lecturer, or all of them
@@ -169,5 +166,12 @@ public class User extends IdentifiableEntity implements UserDetails {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
+    }
+
+    public void addOrganizationMember(OrganizationMember member) {
+        if (organizations == null) {
+            organizations = new HashSet<>();
+        }
+        organizations.add(member);
     }
 }
