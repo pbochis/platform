@@ -1,0 +1,14 @@
+spring:
+  profiles.active: appengine
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: x
+    password: x
+    properties:
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.auth.mechanisms: "XOAUTH2"
+    test-connection: true
+

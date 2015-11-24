@@ -4,6 +4,8 @@ dependencies {
     compile project(':platform-server-kernel')
     compile project(':platform-server-rest')
 
+    compile "org.springframework.boot:spring-boot-starter-mail"
+
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-core"
     compile "org.hibernate:hibernate-java8"
