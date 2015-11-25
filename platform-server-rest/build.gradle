@@ -2,8 +2,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile project(':platform-server-kernel')
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-
     testCompile 'com.jayway.jsonpath:json-path'
     testCompile 'com.jayway.jsonpath:json-path-assert'
 }
