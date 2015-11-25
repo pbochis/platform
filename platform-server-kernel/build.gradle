@@ -8,7 +8,8 @@ dependencies {
     compile "javax.validation:validation-api"
     compile "org.hibernate:hibernate-validator"
 
-    compile "javax.mail:javax.mail-api"
+    compile "org.springframework.boot:spring-boot-starter-mail"
+    compile "org.thymeleaf:thymeleaf-spring4"
 
     compile "com.h2database:h2"
     compile "org.mariadb.jdbc:mariadb-java-client"
