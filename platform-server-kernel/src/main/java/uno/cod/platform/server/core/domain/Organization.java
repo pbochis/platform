@@ -5,6 +5,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -36,6 +37,9 @@ public class Organization extends IdentifiableEntity {
     @OneToMany(mappedBy = "organization")
     private Set<Challenge> challenges;
 
+    @OneToMany(mappedBy = "organization")
+    private Set<Task> tasks;
+
     public String getNick() {
         return nick;
     }
@@ -66,5 +70,34 @@ public class Organization extends IdentifiableEntity {
 
     protected void setChallenges(Set<Challenge> challenges) {
         this.challenges = challenges;
+    }
+
+    public Set<Task> getTasks() {
+        return Collections.unmodifiableSet(tasks);
+    }
+
+    protected void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addOrganizationMember(OrganizationMember member) {
+        if (member == null) {
+            throw new IllegalArgumentException("organization member not valid");
+        }
+        if (members == null) {
+            members = new HashSet<>();
+        }
+        members.add(member);
+    }
+
+    public void addTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("task not valid");
+        }
+        if (tasks == null) {
+            tasks = new HashSet<>();
+        }
+        task.setOrganization(this);
+        tasks.add(task);
     }
 }
