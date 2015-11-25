@@ -87,7 +87,7 @@ public class Challenge extends IdentifiableEntity {
 
     public void addTask(Task task) {
         if (task == null) {
-            throw new IllegalArgumentException("task not valid");
+            throw new IllegalArgumentException("task.invalid");
         }
         if (tasks == null) {
             tasks = new ArrayList<>();

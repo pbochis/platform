@@ -11,6 +11,11 @@ import java.util.List;
 @ControllerAdvice(annotations = RestController.class)
 public class MethodArgumentNotValidAdvice {
 
+    /**
+     * Thrown on spring validation errors
+     * @param ex validation error exception
+     * @return list of errors
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody

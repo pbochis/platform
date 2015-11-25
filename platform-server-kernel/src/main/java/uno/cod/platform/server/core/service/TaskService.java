@@ -32,11 +32,11 @@ public class TaskService {
     public void save(TaskCreateDto dto) {
         Endpoint endpoint = endpointRepository.findOne(dto.getEndpointId());
         if (endpoint == null) {
-            throw new IllegalArgumentException("endpoint not valid");
+            throw new IllegalArgumentException("endpoint.invalid");
         }
         Organization organization= organizationRepository.findOne(dto.getOrganizationId());
         if (organization == null) {
-            throw new IllegalArgumentException("organization not valid");
+            throw new IllegalArgumentException("organization.invalid");
         }
         Task task = new Task();
         task.setName(dto.getName());

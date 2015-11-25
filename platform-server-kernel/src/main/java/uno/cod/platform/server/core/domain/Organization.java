@@ -82,7 +82,7 @@ public class Organization extends IdentifiableEntity {
 
     public void addOrganizationMember(OrganizationMember member) {
         if (member == null) {
-            throw new IllegalArgumentException("organization member not valid");
+            throw new IllegalArgumentException("organization.member.invalid");
         }
         if (members == null) {
             members = new HashSet<>();
@@ -92,7 +92,7 @@ public class Organization extends IdentifiableEntity {
 
     public void addTask(Task task) {
         if (task == null) {
-            throw new IllegalArgumentException("task not valid");
+            throw new IllegalArgumentException("task.invalid");
         }
         if (tasks == null) {
             tasks = new HashSet<>();
