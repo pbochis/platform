@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import uno.cod.platform.server.rest.RestUrls;
 
 @Configuration
 @EnableWebSecurity
@@ -18,7 +17,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/setup", "/organizations", "/users", RestUrls.USER).permitAll()
+                .antMatchers("/setup", "/organizations", "/users").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .httpBasic()

@@ -55,6 +55,16 @@ public class OrganizationService {
         return OrganizationMapper.map(organizationRepository.findOne(id));
     }
 
+    public OrganizationShowDto findUserAdminOrganization(String username){
+        User user = userRepository.findByUsernameOrEmail(username, username);
+        for(OrganizationMember member: user.getOrganizations()){
+            if(member.isAdmin()){
+                return OrganizationMapper.map(member.getKey().getOrganization());
+            }
+        }
+        return null;
+    }
+
     public List<OrganizationShowDto> findAll(){
         return OrganizationMapper.map(organizationRepository.findAll());
     }

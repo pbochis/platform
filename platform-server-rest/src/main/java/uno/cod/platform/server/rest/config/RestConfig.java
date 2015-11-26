@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import uno.cod.platform.server.core.Profiles;
 
 @EnableWebMvc
 @Configuration
@@ -24,7 +25,7 @@ public class RestConfig {
     }
 
     @Bean
-    @Profile("development")
+    @Profile(Profiles.DEVELOPMENT)
     public WebMvcConfigurer devCorsConfigurer(){
         return new WebMvcConfigurerAdapter() {
             @Override
@@ -35,7 +36,7 @@ public class RestConfig {
     }
 
     @Bean
-    @Profile("production")
+    @Profile(Profiles.PRODUCTION)
     public WebMvcConfigurer corsConfigurer(){
         return new WebMvcConfigurerAdapter() {
             @Override
