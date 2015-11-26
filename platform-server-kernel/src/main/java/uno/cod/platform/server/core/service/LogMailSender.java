@@ -2,6 +2,7 @@ package uno.cod.platform.server.core.service;
 
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,7 +18,7 @@ import java.nio.charset.Charset;
 @Profile({Profiles.DEVELOPMENT, Profiles.TEST})
 public class LogMailSender extends JavaMailSenderImpl implements JavaMailSender {
 
-    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(LogMailSender.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LogMailSender.class);
 
     public LogMailSender() {
         setHost("log-only-sending");//no real host

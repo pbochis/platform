@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uno.cod.platform.server.core.Profiles;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.repository.*;
 
@@ -46,11 +47,11 @@ public class SetupService {
         user.setPassword(this.passwordEncoder.encode(password));
         user.setEnabled(true);
         this.userRepository.save(user);
-        if(Arrays.asList(this.environment.getActiveProfiles()).contains("development")) {
+        if(Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
+            logger.info("initializing development database");
             this.initDevelopmentDatabase();
             this.initOrganizationsAndUsers();
         }
-
     }
 
     private void initDevelopmentDatabase() {
