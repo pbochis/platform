@@ -5,8 +5,17 @@ import uno.cod.platform.server.core.dto.task.TaskShowDto;
 import java.util.List;
 
 public class ChallengeShowDto {
+    private Long id;
     private String name;
     private List<TaskShowDto> tasks;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

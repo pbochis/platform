@@ -9,7 +9,11 @@ import java.util.stream.Collectors;
 
 public class ChallengeMapper {
     public static ChallengeShowDto map(Challenge challenge){
+        if(challenge==null){
+            return null;
+        }
         ChallengeShowDto dto = new ChallengeShowDto();
+        dto.setId(challenge.getId());
         dto.setName(challenge.getName());
         dto.setTasks(challenge.getTasks().stream().map(e -> new TaskShowDto(e)).collect(Collectors.toList()));
         return dto;

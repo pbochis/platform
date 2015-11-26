@@ -27,9 +27,10 @@ public class SetupService {
     private final TaskRepository taskRepository;
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
+    private final ChallengeRepository challengeRepository;
 
     @Autowired
-    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository) {
+    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository) {
         this.environment = environment;
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -38,6 +39,7 @@ public class SetupService {
         this.taskRepository = taskRepository;
         this.organizationRepository = organizationRepository;
         this.organizationMemberRepository = organizationMemberRepository;
+        this.challengeRepository = challengeRepository;
     }
 
     public void init(String username, String password, String email) {
@@ -49,8 +51,8 @@ public class SetupService {
         this.userRepository.save(user);
         if(Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
             logger.info("initializing development database");
-            this.initDevelopmentDatabase();
             this.initOrganizationsAndUsers();
+            this.initDevelopmentDatabase();
         }
     }
 
@@ -92,6 +94,13 @@ public class SetupService {
                 "The output needs to be separated by '\\n'.");
         fizzBuzzTask.setEndpoint(outputMatchEndpoint);
         taskRepository.save(fizzBuzzTask);
+
+        Challenge challenge = new Challenge();
+        challenge.setName("Coduno test");
+        challenge.setOrganization(organizationRepository.findByNick("coduno"));
+        challenge.addTask(helloWorldTask);
+        challenge.addTask(fizzBuzzTask);
+        challengeRepository.save(challenge);
     }
 
     private void initOrganizationsAndUsers(){
