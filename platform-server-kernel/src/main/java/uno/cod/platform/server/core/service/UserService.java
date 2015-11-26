@@ -40,5 +40,13 @@ public class UserService{
     public List<UserShowDto> listUsers() {
         return repository.findAll().stream().map(UserShowDto::new).collect(Collectors.toList());
     }
+
+    public UserShowDto findByEmail(String email){
+        User user = repository.findByEmail(email);
+        if (user == null){
+            return null;
+        }
+        return new UserShowDto(user);
+    }
 }
 

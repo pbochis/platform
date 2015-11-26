@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 public class OrganizationMapper {
     public static OrganizationShowDto map(Organization organization){
+        if(organization == null){
+            return null;
+        }
         return new OrganizationShowDto(organization);
     }
 
