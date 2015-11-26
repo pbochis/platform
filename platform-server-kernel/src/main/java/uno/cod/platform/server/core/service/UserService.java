@@ -37,6 +37,10 @@ public class UserService{
         repository.save(user);
     }
 
+    public UserShowDto findByUsername(String username){
+        return new UserShowDto(repository.findByUsernameOrEmail(username, username));
+    }
+
     public List<UserShowDto> listUsers() {
         return repository.findAll().stream().map(UserShowDto::new).collect(Collectors.toList());
     }

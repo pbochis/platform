@@ -47,4 +47,9 @@ public class OrganizationController {
         return "";
     }
 
+    @RequestMapping(value = RestUrls.USER_ORGANIZATION, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<OrganizationShowDto> ownOrganization(Principal principal) {
+        return new ResponseEntity<>(organizationService.findUserAdminOrganization(principal.getName()), HttpStatus.OK);
+    }
 }

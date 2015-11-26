@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.GET)
-    public String get(Principal principal) {
-        return "Hello " + principal.getName() + "!";
+    public ResponseEntity<UserShowDto> get(Principal principal) {
+        return new ResponseEntity<UserShowDto>(userService.findByUsername(principal.getName()), HttpStatus.OK);
     }
 }
