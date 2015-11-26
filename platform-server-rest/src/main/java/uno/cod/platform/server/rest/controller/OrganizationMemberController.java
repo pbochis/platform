@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uno.cod.platform.server.core.dto.organizationMember.OrganizationMemberCreateDto;
+import uno.cod.platform.server.core.dto.organization.member.OrganizationMemberCreateDto;
 import uno.cod.platform.server.core.service.OrganizationMemberService;
 import uno.cod.platform.server.rest.RestUrls;
 

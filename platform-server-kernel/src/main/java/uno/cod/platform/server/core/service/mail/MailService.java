@@ -1,4 +1,4 @@
-package uno.cod.platform.server.core.service;
+package uno.cod.platform.server.core.service.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

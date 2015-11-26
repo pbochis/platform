@@ -6,7 +6,7 @@ import uno.cod.platform.server.core.domain.Organization;
 import uno.cod.platform.server.core.domain.OrganizationMember;
 import uno.cod.platform.server.core.domain.OrganizationMemberKey;
 import uno.cod.platform.server.core.domain.User;
-import uno.cod.platform.server.core.dto.organizationMember.OrganizationMemberCreateDto;
+import uno.cod.platform.server.core.dto.organization.member.OrganizationMemberCreateDto;
 import uno.cod.platform.server.core.exception.ResourceConflictException;
 import uno.cod.platform.server.core.repository.OrganizationMemberRepository;
 import uno.cod.platform.server.core.repository.OrganizationRepository;

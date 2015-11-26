@@ -1,4 +1,4 @@
-package uno.cod.platform.server.core.service;
+package uno.cod.platform.server.core.service.mail;
 
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;

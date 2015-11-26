@@ -1,4 +1,4 @@
-package uno.cod.platform.server.core.dto.organizationMember;
+package uno.cod.platform.server.core.dto.organization.member;
 
 import javax.validation.constraints.NotNull;
 
