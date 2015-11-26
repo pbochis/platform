@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 /**
@@ -18,11 +19,13 @@ public class Invitation {
     @Id
     private String token;
 
+    @NotNull
     private String email;
 
     @ManyToOne(optional = false)
     private Challenge challenge;
 
+    @NotNull
     private ZonedDateTime expire;
 
     public String getToken() {
