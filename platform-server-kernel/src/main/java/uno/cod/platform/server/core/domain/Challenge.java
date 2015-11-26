@@ -1,7 +1,6 @@
 package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

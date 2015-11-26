@@ -11,7 +11,6 @@ import uno.cod.platform.server.core.service.TaskService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @RestController

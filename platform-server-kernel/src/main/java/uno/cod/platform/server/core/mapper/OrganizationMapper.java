@@ -1,7 +1,6 @@
 package uno.cod.platform.server.core.mapper;
 
 import uno.cod.platform.server.core.domain.Organization;
-import uno.cod.platform.server.core.dto.organization.OrganizationCreateDto;
 import uno.cod.platform.server.core.dto.organization.OrganizationShowDto;
 
 import java.util.List;

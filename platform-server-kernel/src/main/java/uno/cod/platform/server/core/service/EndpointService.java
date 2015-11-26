@@ -7,7 +7,6 @@ import uno.cod.platform.server.core.mapper.EndpointMapper;
 import uno.cod.platform.server.core.repository.EndpointRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EndpointService {

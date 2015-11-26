@@ -1,2 +1,7 @@
 coduno:
   url: http://localhost:6060
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

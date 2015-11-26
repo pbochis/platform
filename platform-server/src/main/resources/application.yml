@@ -5,7 +5,6 @@ coduno:
 
 spring:
   application.name: Coduno Platform
-  profiles.active: development
 
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
@@ -17,4 +16,7 @@ spring:
      show-sql: false
      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
      hibernate:
-       ddl-auto: create-drop
+       ddl-auto: validate
+
+  mail:
+    host: localhost

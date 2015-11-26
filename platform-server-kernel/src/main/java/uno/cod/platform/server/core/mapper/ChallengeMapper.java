@@ -1,11 +1,8 @@
 package uno.cod.platform.server.core.mapper;
 
 import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.Task;
-import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeShowDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
-import uno.cod.platform.server.core.repository.TaskRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
