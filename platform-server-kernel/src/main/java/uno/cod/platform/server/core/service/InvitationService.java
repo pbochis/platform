@@ -1,46 +1,54 @@
 package uno.cod.platform.server.core.service;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.Organization;
-import uno.cod.platform.server.core.domain.OrganizationMember;
-import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
 import uno.cod.platform.server.core.dto.user.UserShowDto;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
-import uno.cod.platform.server.core.repository.OrganizationRepository;
+import uno.cod.platform.server.core.repository.InvitationRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 import uno.cod.platform.server.core.service.mail.MailService;
 
 import javax.mail.MessagingException;
-import javax.persistence.Access;
 import java.math.BigInteger;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Service
 public class InvitationService {
+    @Value("#{T(java.time.Duration).parse('${coduno.invite.expire}')}")
+    private Duration duration;
+
     private final UserRepository userRepository;
-    private final UserService userService;
-    private final OrganizationRepository organizationRepository;
+    private final InvitationRepository invitationRepository;
     private final ChallengeRepository challengeRepository;
-    private final Environment environment;
+
     private final MailService mailService;
+    private final UserService userService;
+
     private Logger log = Logger.getLogger(InvitationService.class.getName());
     private Random random = new Random();
 
     @Autowired
-    public InvitationService(UserRepository userRepository, UserService userService, OrganizationRepository organizationRepository, ChallengeRepository challengeRepository, Environment environment, MailService mailService) {
+    public InvitationService(UserRepository userRepository,
+                             InvitationRepository invitationRepository,
+                             ChallengeRepository challengeRepository,
+                             UserService userService,
+                             MailService mailService) {
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.organizationRepository = organizationRepository;
+        this.invitationRepository = invitationRepository;
         this.challengeRepository = challengeRepository;
-        this.environment = environment;
+        this.userService = userService;
         this.mailService = mailService;
     }
 
@@ -61,24 +69,61 @@ public class InvitationService {
         if (!ok) {
             throw new AccessDeniedException("you are not an admin to the parent organization of the challenge");
         }
-        UserShowDto user = userService.findByEmail(dto.getEmail());
-        Map<String, Object> params = new HashMap<>();
-        if (user == null) {
-            UserCreateDto userCreateDto = new UserCreateDto();
-            userCreateDto.setEmail(dto.getEmail());
-            userCreateDto.setNick(new BigInteger(130, random).toString(32));
-            userCreateDto.setPassword(new BigInteger(130, random).toString(32));
-            userService.createFromDto(userCreateDto);
-            params.put("username", userCreateDto.getNick());
-            params.put("password", userCreateDto.getPassword());
-        }
 
+        String token = new BigInteger(130, random).toString(32);
+
+        Invitation invitation = new Invitation();
+        invitation.setChallenge(challenge);
+        invitation.setEmail(dto.getEmail());
+        invitation.setExpire(ZonedDateTime.now().plus(duration));
+        invitation.setToken(token);
+
+        invitationRepository.save(invitation);
+
+        Map<String, Object> params = new HashMap<>();
         params.put("organization", organization.getName());
-        params.put("token", getToken(challenge.getId()));
+        params.put("token", token);
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
 
-    private String getToken(Long challengeId) {
-        return challengeId + ":TOKEN";
+    public Long authByToken(String token) {
+        Invitation invite = invitationRepository.findOne(token);
+        if (invite == null)
+            throw new AccessDeniedException("invite.token.invalid");
+
+        if (invite.getExpire().isBefore(ZonedDateTime.now()))
+            throw new AccessDeniedException("invite.token.expired");
+
+
+        /* create user if not exists */
+        User user = userRepository.findByEmail(invite.getEmail());
+        if (user == null) {
+            UserCreateDto dto = new UserCreateDto();
+            dto.setEmail(invite.getEmail());
+            dto.setNick(new BigInteger(130, random).toString(32));
+            dto.setPassword(new BigInteger(130, random).toString(32));
+            userService.createFromDto(dto);
+
+            user = userRepository.findByEmail(invite.getEmail());
+        }
+
+        /* invite to challenge if not already invited*/
+        Challenge challenge = invite.getChallenge();
+        if (!challenge.getInvitedUsers().contains(user)) {
+            user.addInvitedChallenge(challenge);
+            challengeRepository.save(challenge);
+            user = userRepository.save(user);
+        }
+
+        /* authenticate */
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return challenge.getId();
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void cleanupTokens() {
+        invitationRepository.deleteExpiredTokens(ZonedDateTime.now());
     }
 }

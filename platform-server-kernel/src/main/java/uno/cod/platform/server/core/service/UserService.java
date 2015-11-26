@@ -26,7 +26,7 @@ public class UserService{
     }
 
     public void createFromDto(UserCreateDto dto) {
-        User found= repository.findByUsernameOrEmail(dto.getNick(), dto.getEmail());
+        User found = repository.findByUsernameOrEmail(dto.getNick(), dto.getEmail());
         if(found != null)
             throw new ResourceConflictException("user.name.exists");
         User user = new User();

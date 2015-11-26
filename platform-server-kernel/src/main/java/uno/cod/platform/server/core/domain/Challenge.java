@@ -3,6 +3,7 @@ package uno.cod.platform.server.core.domain;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.HashSet;
 
 /**
  * A challenge is a sequence of tasks, the runtime
@@ -104,6 +105,12 @@ public class Challenge extends Assignment {
         task.addChallenge(this);
         tasks.add(task);
     }
+
+    protected void addInvitedUser(User user) {
+        if (invitedUsers == null)
+            invitedUsers = new HashSet<>();
+        invitedUsers.add(user);
+   }
 
     public void addResult(Result result) {
         if (results == null) {

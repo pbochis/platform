@@ -10,6 +10,10 @@ public class RestUrls {
 
     public static final String ORGANIZATION_MEMBERS = "/organization/{id}/members";
 
+    public static final String INVITE = "/invite";
+    public static final String INVITE_AUTH_TOKEN = "/invite/auth/{token}";
+
+
     public static final String USERS = "/users";
     public static final String USER = "/user";
     public static final String USER_ORGANIZATION = "/user/organization";
