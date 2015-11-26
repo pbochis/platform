@@ -99,4 +99,15 @@ public class Organization extends IdentifiableEntity {
         task.setOrganization(this);
         tasks.add(task);
     }
+
+    public void addChallenge(Challenge challenge) {
+        if (challenge == null) {
+            throw new IllegalArgumentException("challenge.invalid");
+        }
+        if (challenges == null) {
+            challenges = new HashSet<>();
+        }
+        challenge.setOrganization(this);
+        challenges.add(challenge);
+    }
 }

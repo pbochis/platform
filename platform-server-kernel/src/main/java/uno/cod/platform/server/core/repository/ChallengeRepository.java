@@ -15,5 +15,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
             "LEFT JOIN FETCH challenge.organization " +
             "WHERE challenge.id = :id")
     Challenge findOneWithOrganization(@Param("id") Long id);
+
+    @Query("SELECT challenge FROM Challenge challenge " +
+            "LEFT JOIN FETCH challenge.tasks " +
+            "LEFT JOIN FETCH challenge.organization organization " +
+            "WHERE organization.id = :organizationId")
+    List<Challenge> findAllWithTasks(@Param("organizationId") Long organizationId);
 }
 
