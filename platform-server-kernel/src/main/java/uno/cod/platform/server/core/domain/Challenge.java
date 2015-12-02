@@ -2,9 +2,7 @@ package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A challenge is a sequence of tasks, the runtime
@@ -25,6 +23,9 @@ public class Challenge extends IdentifiableEntity {
     @OrderColumn
     @ManyToMany
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "challenge")
+    private Set<Result> results;
 
     /**
      * Start of the challenge, users can already be invited before
@@ -84,6 +85,14 @@ public class Challenge extends IdentifiableEntity {
         this.endDate = endDate;
     }
 
+    public Set<Result> getResults() {
+        return Collections.unmodifiableSet(results);
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
+
     public void addTask(Task task) {
         if (task == null) {
             throw new IllegalArgumentException("task.invalid");
@@ -93,5 +102,13 @@ public class Challenge extends IdentifiableEntity {
         }
         task.addChallenge(this);
         tasks.add(task);
+    }
+
+    public void addResult(Result result) {
+        if (results == null) {
+            results = new HashSet<>();
+        }
+        results.add(result);
+        result.setChallenge(this);
     }
 }
