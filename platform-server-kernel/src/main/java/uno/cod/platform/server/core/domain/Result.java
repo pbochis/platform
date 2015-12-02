@@ -2,6 +2,7 @@ package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,10 +22,8 @@ public class Result extends IdentifiableEntity{
     @ElementCollection
     private List<ZonedDateTime> startTimes;
 
-    @Column
     private ZonedDateTime started;
 
-    @Column
     private ZonedDateTime finished;
 
     public User getUser() {
@@ -44,7 +43,7 @@ public class Result extends IdentifiableEntity{
     }
 
     public List<ZonedDateTime> getStartTimes() {
-        return startTimes;
+        return Collections.unmodifiableList(startTimes);
     }
 
     public void setStartTimes(List<ZonedDateTime> startTimes) {

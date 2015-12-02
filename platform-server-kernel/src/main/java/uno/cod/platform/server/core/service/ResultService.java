@@ -16,29 +16,23 @@ import java.time.ZonedDateTime;
 @Service
 public class ResultService {
     private final ResultRepository repository;
-    private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
 
     @Autowired
-    public ResultService(ResultRepository repository, UserRepository userRepository, ChallengeRepository challengeRepository) {
+    public ResultService(ResultRepository repository, ChallengeRepository challengeRepository) {
         this.repository = repository;
-        this.userRepository = userRepository;
         this.challengeRepository = challengeRepository;
     }
 
-    public ResultShowDto save(Long challengeId, String username){
-        User user = userRepository.findByUsernameOrEmail(username, username);
-        if (user == null){
-            throw new IllegalArgumentException("user.invalid");
-        }
+    public ResultShowDto save(Long challengeId, User user){
         Challenge challenge = challengeRepository.findOne(challengeId);
         if (challenge == null){
             throw new IllegalArgumentException("challenge.invalid");
         }
         Result result = new Result();
-        user.addResult(result);
         challenge.addResult(result);
         result.setStarted(ZonedDateTime.now());
+        result.setUser(user);
 
         return ResultMapper.map(repository.save(result));
     }
