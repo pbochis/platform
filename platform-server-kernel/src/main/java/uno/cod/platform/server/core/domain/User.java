@@ -201,4 +201,11 @@ public class User extends IdentifiableEntity implements UserDetails {
         results.add(result);
         result.setUser(this);
     }
+
+    public void addInvitedChallenge(Challenge challenge) {
+        if (invitedChallenges == null)
+            invitedChallenges = new HashSet<>();
+        challenge.addInvitedUser(this);
+        invitedChallenges.add(challenge);
+    }
 }
