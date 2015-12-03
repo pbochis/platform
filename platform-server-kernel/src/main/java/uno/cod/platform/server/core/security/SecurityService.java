@@ -6,6 +6,7 @@ import uno.cod.platform.server.core.domain.OrganizationMember;
 import uno.cod.platform.server.core.domain.TeamMember;
 import uno.cod.platform.server.core.domain.User;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 /**
