@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Entity
-@Table(name = "coder_profile")
+@Table(name = "coderprofile")
 public class CoderProfile {
 
     @Id
@@ -16,6 +16,7 @@ public class CoderProfile {
     private User user;
 
     @ElementCollection
+    @CollectionTable(name = "coderprofile_skillmap")
     private Map<CodingSkill, Double> skillMap;
 
     @Column

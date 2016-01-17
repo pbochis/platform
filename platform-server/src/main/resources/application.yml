@@ -19,7 +19,13 @@ spring:
      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
      hibernate:
        ddl-auto: validate
+     properties:
+       hibernate.id.new_generator_mappings: false
 
   jackson:
     serialization:
       write_dates_as_timestamps: false
+
+flyway:
+  sql-migration-prefix: ""
+  out-of-order: true

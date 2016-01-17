@@ -22,6 +22,7 @@ public class Result extends IdentifiableEntity{
 
     @OrderColumn
     @ElementCollection
+    @CollectionTable(name = "coderprofile_skillmap")
     private List<ZonedDateTime> startTimes;
 
     private ZonedDateTime started;

@@ -4,9 +4,10 @@ dependencies {
 
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-core"
-    compile "org.hibernate:hibernate-java8:5.0.4.Final"
+    compile "org.hibernate:hibernate-java8:5.0.7.Final"
     compile "javax.validation:validation-api"
     compile "org.hibernate:hibernate-validator"
+    compile "org.flywaydb:flyway-core"
 
     compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.thymeleaf:thymeleaf-spring4"
