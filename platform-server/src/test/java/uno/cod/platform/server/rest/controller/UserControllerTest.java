@@ -26,6 +26,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(userCreateDto))
                 ).andExpect(status().isCreated());
+
         assertNotNull(userRepository.findByUsername("testnick"));
     }
 }

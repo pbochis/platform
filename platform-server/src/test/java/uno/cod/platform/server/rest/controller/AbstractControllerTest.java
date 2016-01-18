@@ -26,7 +26,6 @@ public abstract class AbstractControllerTest {
     ObjectMapper mapper;
     protected MockMvc mockMvc;
 
-
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
