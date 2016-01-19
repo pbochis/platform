@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import uno.cod.platform.server.core.domain.Submission;
 
 @Repository
-public interface SubmissionRepository extends JpaRepository<Submission, Long>{
+public interface SubmissionRepository extends JpaRepository<Submission, Long> {
 }

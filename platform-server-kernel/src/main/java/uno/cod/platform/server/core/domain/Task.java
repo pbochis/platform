@@ -1,7 +1,6 @@
 package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
-import java.time.Duration;
 import java.util.*;
 
 /**
@@ -21,7 +20,7 @@ public class Task extends Assignment {
     private Organization organization;
 
     @Column
-    private boolean isPublic = false;
+    private boolean isPublic;
 
     @OneToMany(mappedBy = "result")
     private Set<Submission> submissions;

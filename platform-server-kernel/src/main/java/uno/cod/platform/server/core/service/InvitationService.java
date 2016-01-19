@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
-import uno.cod.platform.server.core.dto.user.UserShowDto;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.InvitationRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
@@ -22,7 +20,10 @@ import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 public class InvitationService {
@@ -88,12 +89,13 @@ public class InvitationService {
 
     public Long authByToken(String token) {
         Invitation invite = invitationRepository.findOne(token);
-        if (invite == null)
+        if (invite == null) {
             throw new AccessDeniedException("invite.token.invalid");
+        }
 
-        if (invite.getExpire().isBefore(ZonedDateTime.now()))
+        if (invite.getExpire().isBefore(ZonedDateTime.now())) {
             throw new AccessDeniedException("invite.token.expired");
-
+        }
 
         /* create user if not exists */
         User user = userRepository.findByEmail(invite.getEmail());

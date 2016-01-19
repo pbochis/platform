@@ -35,7 +35,7 @@ public class User extends IdentifiableEntity implements UserDetails {
 
     boolean enabled;
 
-    boolean admin = false;
+    boolean admin;
 
     /**
      * The current coding profile, represents his skills
@@ -203,8 +203,9 @@ public class User extends IdentifiableEntity implements UserDetails {
     }
 
     public void addInvitedChallenge(Challenge challenge) {
-        if (invitedChallenges == null)
+        if (invitedChallenges == null) {
             invitedChallenges = new HashSet<>();
+        }
         challenge.addInvitedUser(this);
         invitedChallenges.add(challenge);
     }

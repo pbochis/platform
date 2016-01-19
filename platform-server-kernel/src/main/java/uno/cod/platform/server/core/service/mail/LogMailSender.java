@@ -21,7 +21,7 @@ public class LogMailSender extends JavaMailSenderImpl implements JavaMailSender 
     private static final Logger LOG = LoggerFactory.getLogger(LogMailSender.class);
 
     public LogMailSender() {
-        setHost("log-only-sending");//no real host
+        setHost("log-only-sending"); //no real host
         LOG.info("LogMailSender in use. No real mails are sent.");
     }
 

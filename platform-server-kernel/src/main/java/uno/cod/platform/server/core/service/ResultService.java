@@ -9,7 +9,6 @@ import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
-import uno.cod.platform.server.core.repository.UserRepository;
 
 import java.time.ZonedDateTime;
 

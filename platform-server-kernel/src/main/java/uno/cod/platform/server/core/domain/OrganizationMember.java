@@ -16,7 +16,7 @@ public class OrganizationMember {
     @Column(nullable = false, updatable = false)
     private Date created = new Date();
 
-    private boolean admin = false;
+    private boolean admin;
 
     public OrganizationMember() {
     }

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 public class OrganizationMemberCreateDto {
     @NotNull
     private Long userId;
-    private boolean isAdmin = false;
+    private boolean isAdmin;
 
     public Long getUserId() {
         return userId;

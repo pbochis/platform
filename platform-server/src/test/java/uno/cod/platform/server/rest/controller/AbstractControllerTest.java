@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +16,7 @@ import uno.cod.platform.server.Server;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@WebIntegrationTest
+@WebIntegrationTest({"server.port=0", "management.port=0"})
 @SpringApplicationConfiguration(classes = Server.class)
 public abstract class AbstractControllerTest {
     @Autowired

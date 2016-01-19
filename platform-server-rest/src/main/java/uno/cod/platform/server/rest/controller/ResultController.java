@@ -12,7 +12,6 @@ import uno.cod.platform.server.core.service.ResultService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.constraints.NotNull;
-import java.security.Principal;
 
 @RestController
 public class ResultController {

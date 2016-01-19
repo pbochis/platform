@@ -11,9 +11,7 @@ import uno.cod.platform.server.core.repository.SubmissionRepository;
 import uno.cod.platform.server.core.repository.TaskRepository;
 
 import javax.transaction.Transactional;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 @Service
 @Transactional

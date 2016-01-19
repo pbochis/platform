@@ -25,12 +25,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user;
-        if (username.contains("@"))
+        if (username.contains("@")) {
             user = userRepository.findByEmail(username);
-        else
+        } else {
             user = userRepository.findByUsername(username);
-        if(user == null)
+        }
+
+        if(user == null) {
             throw new UsernameNotFoundException("user not registered yet");
+        }
+
         return user;
     }
 }

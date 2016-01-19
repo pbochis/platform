@@ -29,12 +29,18 @@ public class TeamMemberKey implements Serializable{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TeamMemberKey that = (TeamMemberKey) o;
 
-        if (team != null ? !team.equals(that.team) : that.team != null) return false;
+        if (team != null ? !team.equals(that.team) : that.team != null) {
+            return false;
+        }
         return !(user != null ? !user.equals(that.user) : that.user != null);
 
     }

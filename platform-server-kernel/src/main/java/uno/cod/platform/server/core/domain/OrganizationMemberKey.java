@@ -29,12 +29,18 @@ public class OrganizationMemberKey implements Serializable{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OrganizationMemberKey that = (OrganizationMemberKey) o;
 
-        if (organization != null ? !organization.equals(that.organization) : that.organization != null) return false;
+        if (organization != null ? !organization.equals(that.organization) : that.organization != null) {
+            return false;
+        }
         return !(user != null ? !user.equals(that.user) : that.user != null);
 
     }

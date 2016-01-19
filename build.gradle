@@ -16,6 +16,7 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath 'io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.30'
     }
 }
 
@@ -24,6 +25,7 @@ subprojects { proj ->
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'spring-boot'
     apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -56,6 +58,10 @@ subprojects { proj ->
 
     bootRepackage {
         mainClass = 'uno.cod.platform.server.Server'
+    }
+
+    checkstyle {
+        configFile = rootProject.file('checkstyle.xml')
     }
 }
 

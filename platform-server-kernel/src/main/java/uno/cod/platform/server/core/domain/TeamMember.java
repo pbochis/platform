@@ -16,7 +16,7 @@ public class TeamMember {
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created = ZonedDateTime.now();
 
-    private boolean admin = false;
+    private boolean admin;
 
     public TeamMemberKey getKey() {
         return this.key;

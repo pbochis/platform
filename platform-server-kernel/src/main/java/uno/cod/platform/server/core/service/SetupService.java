@@ -18,7 +18,7 @@ import java.util.Arrays;
 @Service
 @Transactional
 public class SetupService {
-    static final Logger logger = LoggerFactory.getLogger(SetupService.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(SetupService.class);
     private static final String TAG = SetupService.class.getSimpleName();
     private Environment environment;
     private JdbcTemplate jdbcTemplate;
@@ -51,7 +51,7 @@ public class SetupService {
         user.setEnabled(true);
         this.userRepository.save(user);
         if(Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
-            logger.info("initializing development database");
+            LOGGER.info("initializing development database");
             this.initOrganizationsAndUsers();
             this.initDevelopmentDatabase();
         }
