@@ -1,8 +1,10 @@
 language: java
+sudo: required
 jdk:
 - oraclejdk8
 services:
 - mysql
+- docker
 before_install:
 - openssl aes-256-cbc -K $encrypted_e55aacca67f1_key -iv $encrypted_e55aacca67f1_iv
   -in secrets.tar.enc -out secrets.tar -d
@@ -12,3 +14,4 @@ script: ./gradlew build
 deploy:
   provider: gae
   project: coduno
+  docker_build: local
