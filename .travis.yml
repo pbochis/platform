@@ -8,6 +8,7 @@ before_install:
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
 - mysql -e "create database if not exists test default charset utf8;" -uroot
+script: ./gradlew build
 deploy:
   provider: gae
   project: coduno
