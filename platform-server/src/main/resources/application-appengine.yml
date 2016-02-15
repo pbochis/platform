@@ -3,7 +3,7 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    username: jakob.englisch@cod.uno
+    username: x
     # http://code.google.com/p/google-mail-oauth2-tools/wiki/JavaSampleCode => python/oauth2.py
     # oauth2.py --user=jakob.englisch@cod.uno \
     #      --client_id=*.apps.googleusercontent.com \
@@ -19,5 +19,7 @@ spring:
       mail.smtp.auth.plain.disable: true
       mail.smtp.auth.login.disable: true
 
-    test-connection: true
+    test-connection: false
 
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
