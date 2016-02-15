@@ -5,10 +5,10 @@ services:
 - mysql
 before_install:
 - openssl aes-256-cbc -K $encrypted_e55aacca67f1_key -iv $encrypted_e55aacca67f1_iv
+  -in service-account.json.enc -out service-account.json -d
+- openssl aes-256-cbc -K $encrypted_e55aacca67f1_key -iv $encrypted_e55aacca67f1_iv
   -in application-appengine-secrets.yml.enc -out platform-server/src/main/resources/application-appengine-secrets.yml
   -d
-- openssl aes-256-cbc -K $encrypted_e55aacca67f1_key -iv $encrypted_e55aacca67f1_iv
-  -in service-account.json.enc -out service-account.json -d
 - mysql -e "create database if not exists test default charset utf8;" -uroot
 deploy:
   provider: gae
