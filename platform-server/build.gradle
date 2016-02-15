@@ -1,6 +1,5 @@
 //apply plugin: 'com.google.gcloud-preview'
 //apply plugin: 'appengine'
-apply plugin: 'war'
 
 dependencies {
     compile project(':platform-server-kernel')
