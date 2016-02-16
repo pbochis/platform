@@ -11,6 +11,10 @@ before_install:
 - tar xvf secrets.tar
 - sudo apt-get -qq update
 - sudo apt-get -y install mariadb-server
+- mysql -u root -e "CREATE USER 'travis'@'%' IDENTIFIED BY ''"
+- mysql -u root -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY ''"
+- mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%'"
+- mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost'"
 - mysql -u root -e "create database if not exists test default charset utf8;"
 script: ./gradlew build
 deploy:
