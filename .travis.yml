@@ -9,7 +9,8 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_e55aacca67f1_key -iv $encrypted_e55aacca67f1_iv
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
-- mysql -e "create database if not exists test default charset utf8;" -uroot
+- sudo apt-get install mariadb-server
+- mysql -u root -e "create database if not exists test default charset utf8;"
 script: ./gradlew build
 deploy:
   provider: gae
