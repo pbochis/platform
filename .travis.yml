@@ -20,4 +20,5 @@ script: ./gradlew build
 deploy:
   provider: gae
   project: coduno
+  skip_cleanup: true
   docker_build: local
