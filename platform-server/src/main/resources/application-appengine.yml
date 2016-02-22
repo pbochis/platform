@@ -1,3 +1,10 @@
+coduno:
+  storage:
+    gcs:
+      accountId: platform-gcs@coduno.iam.gserviceaccount.com
+      pkcs12: ./gcs-key.pk12
+      bucket: bucket
+
 spring:
   profiles.active: appengine
 
