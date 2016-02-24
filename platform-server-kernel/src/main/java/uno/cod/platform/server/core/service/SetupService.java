@@ -84,6 +84,7 @@ public class SetupService {
         helloWorldTask.setInstructions("Create a program that outputs 'Hello, world!' in a language of your preference.");
         helloWorldTask.setEndpoint(outputMatchEndpoint);
         helloWorldTask.setDuration(Duration.ofMinutes(30));
+        helloWorldTask.addSkill(CodingSkill.CODING_SPEED, 1D);
         taskRepository.save(helloWorldTask);
 
         Task fizzBuzzTask = new Task();
@@ -96,8 +97,9 @@ public class SetupService {
                 "The output needs to be separated by '\\n'.");
         fizzBuzzTask.setEndpoint(outputMatchEndpoint);
         fizzBuzzTask.setDuration(Duration.ofMinutes(30));
+        fizzBuzzTask.addSkill(CodingSkill.CODING_SPEED, 0.6);
+        fizzBuzzTask.addSkill(CodingSkill.ALGORITHMICS, 0.4);
         taskRepository.save(fizzBuzzTask);
-
 
         Endpoint sequentialChallengeEndpoint = new Endpoint();
         sequentialChallengeEndpoint.setComponent("sequential-challenge");

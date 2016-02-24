@@ -1,6 +1,8 @@
 package uno.cod.platform.server.core.domain;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -24,6 +26,10 @@ public class Task extends Assignment {
 
     @OneToMany(mappedBy = "result")
     private Set<Submission> submissions;
+
+    @ElementCollection
+    @CollectionTable(name = "task_skillmap")
+    private Map<CodingSkill, Double> skillMap;
 
     public List<Challenge> getChallenges() {
         return Collections.unmodifiableList(challenges);
@@ -78,6 +84,21 @@ public class Task extends Assignment {
         }
         submissions.add(submission);
         submission.setTask(this);
+    }
+
+    public Map<CodingSkill, Double> getSkillMap() {
+        return skillMap;
+    }
+
+    public void setSkillMap(Map<CodingSkill, Double> skillMap) {
+        this.skillMap = skillMap;
+    }
+
+    public void addSkill(CodingSkill skill, Double value){
+        if (skillMap == null){
+            skillMap = new HashMap<>();
+        }
+        skillMap.put(skill, value);
     }
 }
 
