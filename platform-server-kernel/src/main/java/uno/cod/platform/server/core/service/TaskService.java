@@ -38,12 +38,20 @@ public class TaskService {
         if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
         }
+        double skillSum = 0;
+        for (Double skill: dto.getSkillMap().values()){
+            skillSum += skill;
+        }
+        if (skillSum != 1){
+            throw new IllegalArgumentException("skills.invalid");
+        }
         Task task = new Task();
         task.setName(dto.getName());
         task.setInstructions(dto.getInstructions());
         task.setDescription(dto.getDescription());
         task.setPublic(dto.isPublic());
         task.setDuration(dto.getDuration());
+        task.setSkillMap(dto.getSkillMap());
         endpoint.addTask(task);
         organization.addTask(task);
         repository.save(task);
