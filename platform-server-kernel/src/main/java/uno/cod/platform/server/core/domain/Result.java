@@ -2,10 +2,7 @@ package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Result holds the performance of an user for a challenge.
@@ -13,7 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "result")
-public class Result extends IdentifiableEntity{
+public class Result extends IdentifiableEntity {
     @ManyToOne
     private User user;
 
@@ -22,7 +19,6 @@ public class Result extends IdentifiableEntity{
 
     @OrderColumn
     @ElementCollection
-    @CollectionTable(name = "coderprofile_skillmap")
     private List<ZonedDateTime> startTimes;
 
     private ZonedDateTime started;
@@ -49,6 +45,9 @@ public class Result extends IdentifiableEntity{
     }
 
     public List<ZonedDateTime> getStartTimes() {
+        if (startTimes == null) {
+            return null;
+        }
         return Collections.unmodifiableList(startTimes);
     }
 
@@ -80,11 +79,27 @@ public class Result extends IdentifiableEntity{
         this.submissions = submissions;
     }
 
-    public void addSubmission(Submission submission){
-        if(submissions == null){
+    public void addSubmission(Submission submission) {
+        if (submissions == null) {
             submissions = new HashSet<>();
         }
         submissions.add(submission);
         submission.setResult(this);
+    }
+
+    public boolean start(int index) {
+        if (startTimes == null) {
+            startTimes = new ArrayList<>();
+        }
+        if (index >= startTimes.size()) {
+            for (int i = startTimes.size() - 1; i <= index; i++) {
+                startTimes.add(null);
+            }
+        }
+        if (startTimes.get(index) == null) {
+            startTimes.set(index, ZonedDateTime.now());
+            return true;
+        }
+        return false;
     }
 }
