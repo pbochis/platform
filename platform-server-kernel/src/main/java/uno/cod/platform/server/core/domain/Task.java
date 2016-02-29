@@ -1,8 +1,6 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
-import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -30,6 +28,9 @@ public class Task extends Assignment {
     @ElementCollection
     @CollectionTable(name = "task_skillmap")
     private Map<CodingSkill, Double> skillMap;
+    @OneToMany(mappedBy = "task")
+    private List<Test> tests;
+
 
     public List<Challenge> getChallenges() {
         return Collections.unmodifiableList(challenges);
@@ -71,19 +72,12 @@ public class Task extends Assignment {
         this.submissions = submissions;
     }
 
-    protected void addChallenge(Challenge challenge) {
-        if (challenges == null) {
-            challenges = new ArrayList<>();
-        }
-        challenges.add(challenge);
+    public List<Test> getTests() {
+        return Collections.unmodifiableList(tests);
     }
 
-    public void addSubmission(Submission submission){
-        if(submissions == null){
-            submissions = new HashSet<>();
-        }
-        submissions.add(submission);
-        submission.setTask(this);
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
     }
 
     public Map<CodingSkill, Double> getSkillMap() {
@@ -94,8 +88,31 @@ public class Task extends Assignment {
         this.skillMap = skillMap;
     }
 
-    public void addSkill(CodingSkill skill, Double value){
-        if (skillMap == null){
+    protected void addChallenge(Challenge challenge) {
+        if (challenges == null) {
+            challenges = new ArrayList<>();
+        }
+        challenges.add(challenge);
+    }
+
+    public void addSubmission(Submission submission) {
+        if (submissions == null) {
+            submissions = new HashSet<>();
+        }
+        submissions.add(submission);
+        submission.setTask(this);
+    }
+
+    public void addTest(Test test) {
+        if (tests == null) {
+            tests = new ArrayList<>();
+        }
+        tests.add(test);
+        test.setTask(this);
+    }
+
+    public void addSkill(CodingSkill skill, Double value) {
+        if (skillMap == null) {
             skillMap = new HashMap<>();
         }
         skillMap.put(skill, value);
