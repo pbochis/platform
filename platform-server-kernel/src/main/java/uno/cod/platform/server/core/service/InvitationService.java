@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.dto.invitation.InvitationAuthDto;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
@@ -87,7 +88,7 @@ public class InvitationService {
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
 
-    public Long authByToken(String token) {
+    public InvitationAuthDto authByToken(String token) {
         Invitation invite = invitationRepository.findOne(token);
         if (invite == null) {
             throw new AccessDeniedException("invite.token.invalid");
@@ -121,7 +122,7 @@ public class InvitationService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return challenge.getId();
+        return new InvitationAuthDto(user, challenge.getId());
     }
 
     @Scheduled(fixedRate = 5000)

@@ -8,7 +8,8 @@ public class UserShowDto {
     private String username;
 
     public UserShowDto(User user) {
-        BeanUtils.copyProperties(user, this);
+        this.id = user.getId();
+        this.username = user.getUsername();
     }
 
     public Long getId() {

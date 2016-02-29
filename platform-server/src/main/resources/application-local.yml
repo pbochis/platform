@@ -1,4 +1,11 @@
+coduno:
+  url: http://localhost:6060
+  runtime_url: http://localhost:8081
+  mail:
+    from: noreply@cod.uno
+  invite:
+    expire: P30D
 spring:
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop

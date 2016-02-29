@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uno.cod.platform.server.core.dto.invitation.InvitationAuthDto;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.service.InvitationService;
 import uno.cod.platform.server.rest.RestUrls;
@@ -30,7 +31,7 @@ public class InvitationController {
     }
 
     @RequestMapping(value = RestUrls.INVITE_AUTH_TOKEN, method = RequestMethod.GET)
-    public ResponseEntity<Long> authByToken(@PathVariable String token) {
+    public ResponseEntity<InvitationAuthDto> authByToken(@PathVariable String token) {
         return new ResponseEntity<>(service.authByToken(token), HttpStatus.OK);
     }
 

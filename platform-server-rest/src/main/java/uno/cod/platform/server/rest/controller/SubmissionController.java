@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.core.service.SubmissionService;
+import uno.cod.platform.server.core.service.WebSocketService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 public class SubmissionController {
@@ -24,8 +26,10 @@ public class SubmissionController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> create(@PathVariable Long resultId,
                                          @PathVariable Long taskId,
-                                         @RequestBody MultipartFile file) throws IOException {
-        service.create(resultId, taskId, file);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+                                         @RequestParam("language") String language,
+                                         @RequestParam("file") MultipartFile file,
+                                         Principal principal) throws IOException {
+        service.create(principal.getName(), resultId, taskId, file, language);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

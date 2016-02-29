@@ -4,6 +4,11 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-security"
 
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework:spring-messaging"
+
+    compile 'org.json:json:20151123'
+
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-core"
     compile "org.hibernate:hibernate-java8:5.0.7.Final"
