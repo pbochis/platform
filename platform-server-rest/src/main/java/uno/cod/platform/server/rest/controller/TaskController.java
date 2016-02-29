@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.task.TaskCreateDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
+import uno.cod.platform.server.core.service.ResultService;
 import uno.cod.platform.server.core.service.TaskService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -16,10 +17,12 @@ import java.util.List;
 @RestController
 public class TaskController {
     private final TaskService taskService;
+    private final ResultService resultService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, ResultService resultService) {
         this.taskService = taskService;
+        this.resultService = resultService;
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.POST)
@@ -33,6 +36,13 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TaskShowDto> findById(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.RESULTS_ID_TASK_ID, method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> start(@PathVariable("id") Long id, @PathVariable("taskId") Long taskId) {
+        resultService.startTask(id, taskId);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.GET)

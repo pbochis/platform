@@ -20,9 +20,12 @@ public class RestUrls {
 
     public static final String RESULTS = "/results";
     public static final String RESULTS_ID = "/results/{id}";
+    public static final String RESULTS_ID_TASK_ID = "/results/{id}/task/{taskId}";
 
     public static final String TASKS = "/tasks";
     public static final String TASKS_ID = "/tasks/{id}";
+
+    public static final String TASKS_ID_TESTS = "/tasks/{id}/tests";
 
     public static final String RESULTS_TASKS_SUBMISSIONS = "/results/{resultId}/tasks/{taskId}/submissions";
 
