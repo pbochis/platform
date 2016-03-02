@@ -33,9 +33,10 @@ public class SetupService {
     private final ChallengeRepository challengeRepository;
     private final RunnerRepository runnerRepository;
     private final TestRepository testRepository;
+    private final TemplateRepository templateRepository;
 
     @Autowired
-    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository, RunnerRepository runnerRepository, TestRepository testRepository) {
+    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
         this.environment = environment;
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -47,6 +48,7 @@ public class SetupService {
         this.challengeRepository = challengeRepository;
         this.runnerRepository = runnerRepository;
         this.testRepository = testRepository;
+        this.templateRepository = templateRepository;
     }
 
     public void init(String username, String password, String email) {
@@ -64,6 +66,7 @@ public class SetupService {
     }
 
     private void initDevelopmentDatabase() {
+
         Runner simpleRunner = new Runner();
         simpleRunner.setName("simple");
         simpleRunner = runnerRepository.save(simpleRunner);
@@ -103,6 +106,19 @@ public class SetupService {
         helloWorldTask.addSkill(CodingSkill.CODING_SPEED, 1D);
         taskRepository.save(helloWorldTask);
 
+        Template helloWorldPyTemplate = new Template();
+        helloWorldPyTemplate.setLanguage(Language.JAVA);
+        helloWorldPyTemplate.setFileName("default/app.py");
+        helloWorldPyTemplate.setTask(helloWorldTask);
+        templateRepository.save(helloWorldPyTemplate);
+
+        Template helloWorldJavaTemplate = new Template();
+        helloWorldJavaTemplate.setLanguage(Language.PYTHON);
+        helloWorldJavaTemplate.setFileName("default/Application.java");
+        helloWorldJavaTemplate.setTask(helloWorldTask);
+        templateRepository.save(helloWorldJavaTemplate);
+
+
         Map<String, String> params = new HashMap<>();
         params.put(Test.PATH, "helloworld");
         Test helloWorldTest = new Test();
@@ -124,6 +140,18 @@ public class SetupService {
         fizzBuzzTask.addSkill(CodingSkill.CODING_SPEED, 0.6);
         fizzBuzzTask.addSkill(CodingSkill.ALGORITHMICS, 0.4);
         taskRepository.save(fizzBuzzTask);
+
+        Template pythonTemplate = new Template();
+        pythonTemplate.setLanguage(Language.PYTHON);
+        pythonTemplate.setFileName("default/app.py");
+        pythonTemplate.setTask(fizzBuzzTask);
+        templateRepository.save(pythonTemplate);
+
+        Template javaTemplate = new Template();
+        javaTemplate.setLanguage(Language.JAVA);
+        javaTemplate.setFileName("default/Application.java");
+        javaTemplate.setTask(fizzBuzzTask);
+        templateRepository.save(javaTemplate);
 
         params = new HashMap<>();
         params.put(Test.PATH, "fizzbuzz-fizzbuzz10^2");

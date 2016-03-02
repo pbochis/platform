@@ -5,6 +5,11 @@ coduno:
     from: noreply@cod.uno
   invite:
     expire: P30D
+  storage:
+    gcs:
+      accountId: platform-gcs@coduno.iam.gserviceaccount.com
+      pkcs12: ./gcs-key.pk12
+
 spring:
   jpa:
     hibernate:

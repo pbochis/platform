@@ -21,10 +21,9 @@ public class StorageConfig {
     private StorageProperties storageProperties;
 
     @Bean
-    @Profile(Profiles.APPENGINE)
     public PlatformStorage platformStorage() throws GeneralSecurityException, IOException {
-        return new GcsStorageDriver(storageProperties.getGcs().getAccountId(),
-                new File(storageProperties.getGcs().getPkcs12()),
-                storageProperties.getGcs().getBucket());
+        return new GcsStorageDriver(
+                storageProperties.getGcs().getAccountId(),
+                new File(storageProperties.getGcs().getPkcs12()));
     }
 }

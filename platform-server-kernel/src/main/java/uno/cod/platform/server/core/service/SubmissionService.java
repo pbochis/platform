@@ -15,6 +15,7 @@ import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.SubmissionRepository;
 import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
+import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -28,17 +29,19 @@ public class SubmissionService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final WebSocketService webSocketService;
+    private final PlatformStorage platformStorage;
 
     @Value("${coduno.runtime_url}")
     private String runtimeUrl;
 
     @Autowired
-    public SubmissionService(SubmissionRepository repository, ResultRepository resultRepository, TaskRepository taskRepository, UserRepository userRepository, WebSocketService webSocketService) {
+    public SubmissionService(SubmissionRepository repository, ResultRepository resultRepository, TaskRepository taskRepository, UserRepository userRepository, PlatformStorage platformStorage, WebSocketService webSocketService) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.webSocketService = webSocketService;
+        this.platformStorage = platformStorage;
     }
 
     public void create(String username, Long resultId, Long taskId, MultipartFile file, String language) throws IOException {
@@ -50,12 +53,14 @@ public class SubmissionService {
         if (task == null) {
             throw new IllegalArgumentException("task.invalid");
         }
-        // TODO save files with the code and put a reference in the submission
 
         Submission submission = new Submission();
         result.addSubmission(submission);
         task.addSubmission(submission);
-        repository.save(submission);
+        submission.setFileName(file.getOriginalFilename());
+        submission = repository.save(submission);
+
+        platformStorage.upload(Submission.BUCKET, submission.filePath(), file.getInputStream(), file.getContentType());
 
         User user = userRepository.findByUsernameOrEmail(username, username);
         // TODO update submission with results
@@ -84,5 +89,4 @@ public class SubmissionService {
             webSocketService.send(userId, "error");
         }
     }
-
 }

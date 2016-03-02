@@ -10,13 +10,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "submission")
-public class Submission extends IdentifiableEntity {
+public class Submission extends IdentifiableEntity implements StoredObject{
+    public static final String BUCKET = "coduno";
+
     @ManyToOne
     private Result result;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "task_id", nullable = false, updatable = false)
     private Task task;
+
+    private String fileName;
 
     public Result getResult() {
         return result;
@@ -32,5 +36,18 @@ public class Submission extends IdentifiableEntity {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public String filePath() {
+        return getId() + "/" + fileName;
     }
 }
