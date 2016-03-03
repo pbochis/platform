@@ -115,3 +115,5 @@ persistence.xml
 application-local.yml
 service-account.json
 application-appengine-secrets.yml
+
+service-account.p12

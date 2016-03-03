@@ -28,9 +28,12 @@ public class Task extends Assignment {
     @ElementCollection
     @CollectionTable(name = "task_skillmap")
     private Map<CodingSkill, Double> skillMap;
+
     @OneToMany(mappedBy = "task")
     private List<Test> tests;
 
+    @OneToMany(mappedBy = "task")
+    private List<Template> templates;
 
     public List<Challenge> getChallenges() {
         return Collections.unmodifiableList(challenges);
@@ -116,6 +119,21 @@ public class Task extends Assignment {
             skillMap = new HashMap<>();
         }
         skillMap.put(skill, value);
+    }
+
+    public List<Template> getTemplates() {
+        return Collections.unmodifiableList(templates);
+    }
+
+    public void setTemplates(List<Template> templates) {
+        this.templates = templates;
+    }
+
+    public void addTemplate(Template template){
+        if (templates == null){
+            templates = new ArrayList<>();
+        }
+        templates.add(template);
     }
 }
 

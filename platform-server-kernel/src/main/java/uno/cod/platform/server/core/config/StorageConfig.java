@@ -20,11 +20,14 @@ public class StorageConfig {
     @Autowired
     private StorageProperties storageProperties;
 
+    //TODO: revise the developement implementation
     @Bean
-    @Profile(Profiles.APPENGINE)
+    @Profile({Profiles.APPENGINE, Profiles.DEVELOPMENT})
     public PlatformStorage platformStorage() throws GeneralSecurityException, IOException {
-        return new GcsStorageDriver(storageProperties.getGcs().getAccountId(),
-                new File(storageProperties.getGcs().getPkcs12()),
-                storageProperties.getGcs().getBucket());
+        return new GcsStorageDriver(
+                storageProperties.getGcs().getAccountId(),
+                new File(storageProperties.getGcs().getPkcs12()));
     }
+
+
 }

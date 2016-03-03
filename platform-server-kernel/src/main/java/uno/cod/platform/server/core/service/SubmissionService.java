@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -17,6 +18,7 @@ import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.SubmissionRepository;
 import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
+import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -30,17 +32,27 @@ public class SubmissionService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final WebSocketService webSocketService;
+    private final PlatformStorage platformStorage;
     private final ObjectMapper objectMapper;
+
+    @Value("${coduno.storage.gcs.buckets.submissions}")
+    private String bucket;
 
     @Value("${coduno.runtime_url}")
     private String runtimeUrl;
 
     @Autowired
-    public SubmissionService(SubmissionRepository repository, ResultRepository resultRepository, TaskRepository taskRepository, UserRepository userRepository, WebSocketService webSocketService) {
+    public SubmissionService(SubmissionRepository repository,
+                             ResultRepository resultRepository,
+                             TaskRepository taskRepository,
+                             UserRepository userRepository,
+                             PlatformStorage platformStorage,
+                             WebSocketService webSocketService) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.platformStorage = platformStorage;
         this.webSocketService = webSocketService;
         this.objectMapper = new ObjectMapper();
     }
@@ -59,6 +71,11 @@ public class SubmissionService {
         Submission submission = new Submission();
         result.addSubmission(submission);
         task.addSubmission(submission);
+        submission.setFileName(file.getOriginalFilename());
+        submission = repository.save(submission);
+
+        platformStorage.upload(bucket, submission.filePath(), file.getInputStream(), file.getContentType());
+
         repository.save(submission);
 
         // TODO update submission with results

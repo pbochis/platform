@@ -1,7 +1,9 @@
 package uno.cod.platform.server.core.mapper;
 
 import uno.cod.platform.server.core.domain.Task;
+import uno.cod.platform.server.core.domain.Template;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
+import uno.cod.platform.server.core.dto.template.TemplateShowDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +13,13 @@ public class TaskMapper {
         TaskShowDto dto = new TaskShowDto(task);
         if (task.getEndpoint() != null) {
             dto.setEndpoint(EndpointMapper.map(task.getEndpoint()));
+        }
+        if (task.getTemplates() != null){
+            dto.setTemplates(task
+                    .getTemplates()
+                    .stream()
+            .map(TemplateShowDto::new)
+            .collect(Collectors.toList()));
         }
         return dto;
     }

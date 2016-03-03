@@ -14,6 +14,8 @@ import uno.cod.platform.server.core.repository.*;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -29,9 +31,12 @@ public class SetupService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
     private final ChallengeRepository challengeRepository;
+    private final RunnerRepository runnerRepository;
+    private final TestRepository testRepository;
+    private final TemplateRepository templateRepository;
 
     @Autowired
-    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository) {
+    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
         this.environment = environment;
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -41,6 +46,9 @@ public class SetupService {
         this.organizationRepository = organizationRepository;
         this.organizationMemberRepository = organizationMemberRepository;
         this.challengeRepository = challengeRepository;
+        this.runnerRepository = runnerRepository;
+        this.testRepository = testRepository;
+        this.templateRepository = templateRepository;
     }
 
     public void init(String username, String password, String email) {
@@ -58,6 +66,17 @@ public class SetupService {
     }
 
     private void initDevelopmentDatabase() {
+
+        Runner simpleRunner = new Runner();
+        simpleRunner.setName("simple");
+        simpleRunner = runnerRepository.save(simpleRunner);
+        Runner diffRunner = new Runner();
+        diffRunner.setName("diff");
+        diffRunner = runnerRepository.save(diffRunner);
+        Runner ioRunner = new Runner();
+        ioRunner.setName("io");
+        ioRunner = runnerRepository.save(ioRunner);
+
         Endpoint outputMatchEndpoint = new Endpoint();
         outputMatchEndpoint.setComponent("output-match-task");
         outputMatchEndpoint.setName("Output match");
@@ -87,6 +106,27 @@ public class SetupService {
         helloWorldTask.addSkill(CodingSkill.CODING_SPEED, 1D);
         taskRepository.save(helloWorldTask);
 
+        Template helloWorldPyTemplate = new Template();
+        helloWorldPyTemplate.setLanguage(Language.JAVA);
+        helloWorldPyTemplate.setFileName("default/app.py");
+        helloWorldPyTemplate.setTask(helloWorldTask);
+        templateRepository.save(helloWorldPyTemplate);
+
+        Template helloWorldJavaTemplate = new Template();
+        helloWorldJavaTemplate.setLanguage(Language.PYTHON);
+        helloWorldJavaTemplate.setFileName("default/Application.java");
+        helloWorldJavaTemplate.setTask(helloWorldTask);
+        templateRepository.save(helloWorldJavaTemplate);
+
+
+        Map<String, String> params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        Test helloWorldTest = new Test();
+        helloWorldTest.setRunner(diffRunner);
+        helloWorldTest.setTask(helloWorldTask);
+        helloWorldTest.setParams(params);
+        testRepository.save(helloWorldTest);
+
         Task fizzBuzzTask = new Task();
         fizzBuzzTask.setName("Fizz Buzz");
         fizzBuzzTask.setDescription("Fizz buzz is a group word game for children to teach them about division.\n" +
@@ -101,6 +141,35 @@ public class SetupService {
         fizzBuzzTask.addSkill(CodingSkill.ALGORITHMICS, 0.4);
         taskRepository.save(fizzBuzzTask);
 
+        Template pythonTemplate = new Template();
+        pythonTemplate.setLanguage(Language.PYTHON);
+        pythonTemplate.setFileName("default/app.py");
+        pythonTemplate.setTask(fizzBuzzTask);
+        templateRepository.save(pythonTemplate);
+
+        Template javaTemplate = new Template();
+        javaTemplate.setLanguage(Language.JAVA);
+        javaTemplate.setFileName("default/Application.java");
+        javaTemplate.setTask(fizzBuzzTask);
+        templateRepository.save(javaTemplate);
+
+        params = new HashMap<>();
+        params.put(Test.PATH, "fizzbuzz-fizzbuzz10^2");
+        params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^2");
+        Test fizzBuzzTest2 = new Test();
+        fizzBuzzTest2.setParams(params);
+        fizzBuzzTest2.setRunner(ioRunner);
+        fizzBuzzTest2.setTask(fizzBuzzTask);
+        testRepository.save(fizzBuzzTest2);
+
+        params = new HashMap<>();
+        params.put(Test.PATH, "fizzbuzz-fizzbuzz10^3");
+        params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^3");
+        Test fizzBuzzTest3 = new Test();
+        fizzBuzzTest3.setParams(params);
+        fizzBuzzTest3.setRunner(ioRunner);
+        fizzBuzzTest3.setTask(fizzBuzzTask);
+        testRepository.save(fizzBuzzTest3);
         Endpoint sequentialChallengeEndpoint = new Endpoint();
         sequentialChallengeEndpoint.setComponent("sequential-challenge");
         sequentialChallengeEndpoint.setName("Sequential challenge");
