@@ -12,8 +12,6 @@ public class StorageProperties {
         private String accountId;
         @NotBlank
         private String pkcs12;
-        @NotBlank
-        private String bucket;
 
         public String getAccountId() {
             return accountId;
@@ -29,14 +27,6 @@ public class StorageProperties {
 
         public void setPkcs12(String pkcs12) {
             this.pkcs12 = pkcs12;
-        }
-
-        public String getBucket() {
-            return bucket;
-        }
-
-        public void setBucket(String bucket) {
-            this.bucket = bucket;
         }
     }
 

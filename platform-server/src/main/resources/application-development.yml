@@ -5,6 +5,14 @@ coduno:
     from: noreply@cod.uno
   invite:
     expire: P30D
+  storage:
+    gcs:
+      accountId: platform-gcs@coduno.iam.gserviceaccount.com
+      pkcs12: ./service-account.p12
+      buckets:
+        submissions: coduno-submissions
+        templates: coduno-templates
+
 spring:
   jpa:
     hibernate:

@@ -2,8 +2,10 @@ coduno:
   storage:
     gcs:
       accountId: platform-gcs@coduno.iam.gserviceaccount.com
-      pkcs12: ./gcs-key.pk12
-      bucket: bucket
+      pkcs12: ./service-account.p12
+      buckets:
+        submissions: coduno-submissions
+        templates: coduno-templates
 
 spring:
   profiles.active: appengine
