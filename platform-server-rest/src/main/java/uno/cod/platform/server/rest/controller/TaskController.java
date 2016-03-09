@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessTask(principal, #id)")
     public ResponseEntity<TaskShowDto> findById(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }

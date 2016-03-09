@@ -2,6 +2,7 @@ package uno.cod.platform.server.core.security;
 
 
 import org.springframework.stereotype.Service;
+import uno.cod.platform.server.core.domain.Challenge;
 import uno.cod.platform.server.core.domain.OrganizationMember;
 import uno.cod.platform.server.core.domain.TeamMember;
 import uno.cod.platform.server.core.domain.User;
@@ -17,6 +18,10 @@ import java.util.Set;
 @Service
 public class SecurityService {
     public boolean isTeamMember(User user, Long teamId) {
+        if (user == null || teamId == null) {
+            return false;
+        }
+
         Set<TeamMember> teams = user.getTeams();
         for (TeamMember teamMember : user.getTeams()) {
             if (teamMember.getKey().getTeam().getId().equals(teamId)) {
@@ -27,6 +32,10 @@ public class SecurityService {
     }
 
     public boolean isTeamAdmin(User user, Long teamId) {
+        if (user == null || teamId == null) {
+            return false;
+        }
+
         Set<TeamMember> teams = user.getTeams();
         for (TeamMember teamMember : user.getTeams()) {
             if (teamMember.isAdmin() && teamMember.getKey().getTeam().getId().equals(teamId)) {
@@ -37,6 +46,10 @@ public class SecurityService {
     }
 
     public boolean isOrganizationMember(User user, Long organizationId) {
+        if (user == null || organizationId == null) {
+            return false;
+        }
+
         Set<OrganizationMember> organizations = user.getOrganizations();
         for (OrganizationMember organizationMember : user.getOrganizations()) {
             if (organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
@@ -47,6 +60,10 @@ public class SecurityService {
     }
 
     public boolean isOrganizationAdmin(User user, Long organizationId) {
+        if (user == null || organizationId == null) {
+            return false;
+        }
+
         Set<OrganizationMember> organizations = user.getOrganizations();
         for (OrganizationMember organizationMember : user.getOrganizations()) {
             if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
@@ -54,5 +71,29 @@ public class SecurityService {
             }
         }
         return false;
+    }
+
+    public boolean canAccessChallenge(User user, Long challengeId) {
+        if (user == null || challengeId == null) {
+            return false;
+        }
+
+        /* grant access to user if he is invited */
+        for(Challenge challenge: user.getInvitedChallenges()){
+            if(challenge.getId().equals(challengeId)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canAccessTask(User user, Long taskId) {
+        if (user == null || taskId == null) {
+            return false;
+        }
+
+        // TODO
+
+        return true;
     }
 }
