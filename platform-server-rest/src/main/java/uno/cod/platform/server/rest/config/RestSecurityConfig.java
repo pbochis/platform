@@ -25,7 +25,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/setup", "/organizations", "/users", "/invite/auth/*").permitAll()
+                .antMatchers("/setup", "/organizations", "/users", "/invite/auth/*", "/ws/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .sessionManagement()

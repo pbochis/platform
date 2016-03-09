@@ -1,5 +1,6 @@
 coduno:
   url: https://app.cod.uno
+  runtime_url: https://runtime.cod.uno
   mail:
     from: noreply@cod.uno
   invite:
@@ -24,7 +25,9 @@ spring:
 
   jackson:
     serialization:
-      write_dates_as_timestamps: false
+      write_durations_as_timestamps: true
+      # TODO - check why write_dates_as_timestamps overrides write_durations_as_timestamps
+      write_dates_as_timestamps: true
 
 flyway:
   sql-migration-prefix: ""

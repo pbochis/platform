@@ -1,5 +1,6 @@
 coduno:
   url: http://localhost:6060
+  runtime_url: http://localhost:8081
   mail:
     from: noreply@cod.uno
   invite:
