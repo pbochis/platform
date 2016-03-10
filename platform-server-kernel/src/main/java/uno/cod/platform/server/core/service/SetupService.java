@@ -60,120 +60,62 @@ public class SetupService {
         this.userRepository.save(user);
         if(Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
             LOGGER.info("initializing development database");
-            this.initOrganizationsAndUsers();
             this.initDevelopmentDatabase();
         }
     }
 
     private void initDevelopmentDatabase() {
+        this.initCoduno();
+        Runner simpleRunner = createRunner("simple");
+        Runner diffRunner = createRunner("diff");
+        Runner ioRunner = createRunner("io");
+        Runner cccTestRunner = createRunner("cccdronetest");
+        Runner cccNormalRunner = createRunner("cccdronerun");
 
-        Runner simpleRunner = new Runner();
-        simpleRunner.setName("simple");
-        simpleRunner = runnerRepository.save(simpleRunner);
-        Runner diffRunner = new Runner();
-        diffRunner.setName("diff");
-        diffRunner = runnerRepository.save(diffRunner);
-        Runner ioRunner = new Runner();
-        ioRunner.setName("io");
-        ioRunner = runnerRepository.save(ioRunner);
+        Endpoint outputMatchTaskEndpoint = createEndpoint("Output match", "output-match-task");
+        Endpoint javaUnitTestTaskEndpoint = createEndpoint("Java Unit Test", "javaut-task");
+        Endpoint robotGameTaskEndpoint = createEndpoint("Robot game", "canvas-game-task");
+        Endpoint coderJUnitTaskEndpoint = createEndpoint("User coded JUnit tests", "coder-javaut-task");
 
-        Endpoint outputMatchEndpoint = new Endpoint();
-        outputMatchEndpoint.setComponent("output-match-task");
-        outputMatchEndpoint.setName("Output match");
-        endpointRepository.save(outputMatchEndpoint);
+        Endpoint sequentialChallengeEndpoint = createEndpoint("Sequential challenge", "sequential-challenge");
 
-        Endpoint javaUnitTestEndpoint = new Endpoint();
-        javaUnitTestEndpoint.setComponent("javaut-task");
-        javaUnitTestEndpoint.setName("Java Unit Test");
-        endpointRepository.save(javaUnitTestEndpoint);
+        Endpoint cccTaskEndpoint = createEndpoint("CCC drone task", "ccc-drone-task");
+        Endpoint cccChallengeEndpoint = createEndpoint("CCC challenge", "ccc-challenge");
 
-        Endpoint robotGameEndpoint = new Endpoint();
-        robotGameEndpoint.setComponent("canvas-game-task");
-        robotGameEndpoint.setName("Robot game");
-        endpointRepository.save(robotGameEndpoint);
-
-        Endpoint coderJUnitEndpoint = new Endpoint();
-        coderJUnitEndpoint.setComponent("coder-javaut-task");
-        coderJUnitEndpoint.setName("User coded JUnit tests");
-        endpointRepository.save(coderJUnitEndpoint);
-
-        Task helloWorldTask = new Task();
-        helloWorldTask.setName("Hello, world!");
-        helloWorldTask.setDescription("This is a welcome task to our platform. It is the easiest one so you can learn the ui and the workflow.");
-        helloWorldTask.setInstructions("Create a program that outputs 'Hello, world!' in a language of your preference.");
-        helloWorldTask.setEndpoint(outputMatchEndpoint);
-        helloWorldTask.setDuration(Duration.ofMinutes(30));
-        helloWorldTask.addSkill(CodingSkill.CODING_SPEED, 1D);
-        taskRepository.save(helloWorldTask);
-
-        Template helloWorldPyTemplate = new Template();
-        helloWorldPyTemplate.setLanguage(Language.JAVA);
-        helloWorldPyTemplate.setFileName("default/app.py");
-        helloWorldPyTemplate.setTask(helloWorldTask);
-        templateRepository.save(helloWorldPyTemplate);
-
-        Template helloWorldJavaTemplate = new Template();
-        helloWorldJavaTemplate.setLanguage(Language.PYTHON);
-        helloWorldJavaTemplate.setFileName("default/Application.java");
-        helloWorldJavaTemplate.setTask(helloWorldTask);
-        templateRepository.save(helloWorldJavaTemplate);
-
+        Task helloWorldTask = createTask(
+                "Hello, world!", "This is a welcome task to our platform. It is the easiest one so you can learn the ui and the workflow.",
+                "Create a program that outputs 'Hello, world!' in a language of your preference.",
+                outputMatchTaskEndpoint, simpleRunner, Duration.ofMinutes(30));
 
         Map<String, String> params = new HashMap<>();
         params.put(Test.PATH, "helloworld");
-        Test helloWorldTest = new Test();
-        helloWorldTest.setRunner(diffRunner);
-        helloWorldTest.setTask(helloWorldTask);
-        helloWorldTest.setParams(params);
-        testRepository.save(helloWorldTest);
+        createTest(helloWorldTask, diffRunner, params);
 
-        Task fizzBuzzTask = new Task();
-        fizzBuzzTask.setName("Fizz Buzz");
-        fizzBuzzTask.setDescription("Fizz buzz is a group word game for children to teach them about division.\n" +
-                "Players take turns to count incrementally, replacing any number divisible by three with the word 'fizz',\n" +
-                "and any number divisible by five with the word 'buzz'.");
-        fizzBuzzTask.setInstructions("Your job is to create the 'fizzbuzz(int n)' function.\n" +
-                "The n parameter represents the max number to wich you need to generate the fizzbuzz data.\n" +
-                "The output needs to be separated by '\\n'.");
-        fizzBuzzTask.setEndpoint(outputMatchEndpoint);
-        fizzBuzzTask.setDuration(Duration.ofMinutes(30));
-        fizzBuzzTask.addSkill(CodingSkill.CODING_SPEED, 0.6);
-        fizzBuzzTask.addSkill(CodingSkill.ALGORITHMICS, 0.4);
-        taskRepository.save(fizzBuzzTask);
+        createTemplate(helloWorldTask, Language.PYTHON, "default/app.py");
+        createTemplate(helloWorldTask, Language.JAVA, "default/Application.java");
 
-        Template pythonTemplate = new Template();
-        pythonTemplate.setLanguage(Language.PYTHON);
-        pythonTemplate.setFileName("default/app.py");
-        pythonTemplate.setTask(fizzBuzzTask);
-        templateRepository.save(pythonTemplate);
-
-        Template javaTemplate = new Template();
-        javaTemplate.setLanguage(Language.JAVA);
-        javaTemplate.setFileName("default/Application.java");
-        javaTemplate.setTask(fizzBuzzTask);
-        templateRepository.save(javaTemplate);
+        Task fizzBuzzTask = createTask(
+                "Fizz Buzz", "Fizz buzz is a group word game for children to teach them about division.\n" +
+                        "Players take turns to count incrementally, replacing any number divisible by three with the word 'fizz',\n" +
+                        "and any number divisible by five with the word 'buzz'.",
+                "Your job is to create the 'fizzbuzz(int n)' function.\n" +
+                        "The n parameter represents the max number to wich you need to generate the fizzbuzz data.\n" +
+                        "The output needs to be separated by '\\n'.",
+                outputMatchTaskEndpoint, null, Duration.ofMinutes(30)
+        );
 
         params = new HashMap<>();
         params.put(Test.PATH, "fizzbuzz-fizzbuzz10^2");
         params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^2");
-        Test fizzBuzzTest2 = new Test();
-        fizzBuzzTest2.setParams(params);
-        fizzBuzzTest2.setRunner(ioRunner);
-        fizzBuzzTest2.setTask(fizzBuzzTask);
-        testRepository.save(fizzBuzzTest2);
+        createTest(fizzBuzzTask, ioRunner, params);
 
         params = new HashMap<>();
         params.put(Test.PATH, "fizzbuzz-fizzbuzz10^3");
         params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^3");
-        Test fizzBuzzTest3 = new Test();
-        fizzBuzzTest3.setParams(params);
-        fizzBuzzTest3.setRunner(ioRunner);
-        fizzBuzzTest3.setTask(fizzBuzzTask);
-        testRepository.save(fizzBuzzTest3);
-        Endpoint sequentialChallengeEndpoint = new Endpoint();
-        sequentialChallengeEndpoint.setComponent("sequential-challenge");
-        sequentialChallengeEndpoint.setName("Sequential challenge");
-        sequentialChallengeEndpoint = endpointRepository.save(sequentialChallengeEndpoint);
+        createTest(fizzBuzzTask, ioRunner, params);
+
+        createTemplate(fizzBuzzTask, Language.PYTHON, "default/app.py");
+        createTemplate(fizzBuzzTask, Language.JAVA, "default/Application.java");
 
         Challenge challenge = new Challenge();
         challenge.setName("Coduno test");
@@ -185,9 +127,12 @@ public class SetupService {
         challenge.addTask(fizzBuzzTask);
         challenge.setDuration(Duration.ofMinutes(30));
         challengeRepository.save(challenge);
+
+
+        initCCC(cccTestRunner, cccNormalRunner, cccChallengeEndpoint, cccTaskEndpoint);
     }
 
-    private void initOrganizationsAndUsers(){
+    private void initCoduno(){
         User victor = new User();
         victor.setUsername("vbalan");
         victor.setEmail("victor.balan@cod.uno");
@@ -209,5 +154,132 @@ public class SetupService {
         victorCoduno.setKey(victorCodunoKey);
         victorCoduno.setAdmin(true);
         victorCoduno = organizationMemberRepository.save(victorCoduno);
+    }
+
+    private Organization initCatalysts(){
+        User victor = new User();
+        victor.setUsername("catavbalan");
+        victor.setEmail("victor.balan@catalysts.cc");
+        victor.setPassword(this.passwordEncoder.encode("password"));
+        victor.setAdmin(true);
+        victor.setEnabled(true);
+        victor = userRepository.save(victor);
+
+        Organization catalysts = new Organization();
+        catalysts.setName("Catalysts");
+        catalysts.setNick("catalysts");
+        catalysts = organizationRepository.save(catalysts);
+
+        OrganizationMemberKey victorCatalystsKey = new OrganizationMemberKey();
+        victorCatalystsKey.setUser(victor);
+        victorCatalystsKey.setOrganization(catalysts);
+
+        OrganizationMember victorCatalysts = new OrganizationMember();
+        victorCatalysts.setKey(victorCatalystsKey);
+        victorCatalysts.setAdmin(true);
+        victorCatalysts = organizationMemberRepository.save(victorCatalysts);
+        return catalysts;
+    }
+
+    private void initCCC(Runner cccTestRunner,Runner cccNormalRunner, Endpoint cccChallengeEndpoint, Endpoint cccEndpoint){
+        Organization catalysts = initCatalysts();
+
+        Task levelOne = createTask("Level 1", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        Map<String, String> params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelOne, cccTestRunner, params);
+
+        Task levelTwo = createTask("Level 2", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelTwo, cccTestRunner, params);
+
+        Task levelThree = createTask("Level 3", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelThree, cccTestRunner, params);;
+
+        Task levelFour = createTask("Level 4", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelFour, cccTestRunner, params);
+
+        Task levelFive = createTask("Level 5", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelFive, cccTestRunner, params);
+
+        Task levelSix = createTask("Level 6", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelSix, cccTestRunner, params);
+
+        Task levelSeven = createTask("Level 7", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
+        params = new HashMap<>();
+        params.put(Test.PATH, "helloworld");
+        createTest(levelSeven, cccTestRunner, params);
+
+        Challenge ccc = new Challenge();
+        ccc.setName("Catalysts Coding Contest");
+        ccc.setDescription("## Description");
+        ccc.setInstructions("## Instructions for Catalysts Coding Contest");
+        ccc.setOrganization(catalysts);
+        ccc.setEndpoint(cccChallengeEndpoint);
+        ccc.addTask(levelOne);
+        ccc.addTask(levelTwo);
+        ccc.addTask(levelThree);
+        ccc.addTask(levelFour);
+        ccc.addTask(levelFive);
+        ccc.addTask(levelSix);
+        ccc.addTask(levelSeven);
+        ccc.setDuration(Duration.ofHours(4));
+        challengeRepository.save(ccc);
+
+    }
+
+    private Runner createRunner(String name){
+        Runner runner = new Runner();
+        runner.setName(name);
+        return runnerRepository.save(runner);
+    }
+
+    private Endpoint createEndpoint(String name, String component){
+        Endpoint outputMatchEndpoint = new Endpoint();
+        outputMatchEndpoint.setName(name);
+        outputMatchEndpoint.setComponent(component);
+        return endpointRepository.save(outputMatchEndpoint);
+    }
+
+    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration){
+        return createTask(name, description, instructions, endpoint, runner, duration, null);
+    }
+
+    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization){
+        Task task = new Task();
+        task.setName(name);
+        task.setDescription(description);
+        task.setInstructions(instructions);
+        task.setEndpoint(endpoint);
+        task.setDuration(duration);
+        task.setRunner(runner);
+        task.addSkill(CodingSkill.CODING_SPEED, 1D);
+        task.setOrganization(organization);
+        return taskRepository.save(task);
+    }
+
+    private Test createTest(Task task, Runner runner, Map<String, String> params){
+        Test helloWorldTest = new Test();
+        helloWorldTest.setTask(task);
+        helloWorldTest.setRunner(runner);
+        helloWorldTest.setParams(params);
+        return testRepository.save(helloWorldTest);
+    }
+
+    private Template createTemplate(Task task, Language language, String fileName){
+        Template helloWorldPyTemplate = new Template();
+        helloWorldPyTemplate.setTask(task);
+        helloWorldPyTemplate.setLanguage(language);
+        helloWorldPyTemplate.setFileName(fileName);
+        return templateRepository.save(helloWorldPyTemplate);
     }
 }
