@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,6 +19,9 @@ public class Runner extends IdentifiableEntity{
     @OneToMany(mappedBy = "runner")
     private List<Test> tests;
 
+    @OneToMany(mappedBy = "runner")
+    private List<Task> tasks;
+
     public String getName() {
         return name;
     }
@@ -27,10 +31,18 @@ public class Runner extends IdentifiableEntity{
     }
 
     public List<Test> getTests() {
-        return tests;
+        return Collections.unmodifiableList(tests);
     }
 
     public void setTests(List<Test> tests) {
         this.tests = tests;
+    }
+
+    public List<Task> getTasks() {
+        return Collections.unmodifiableList(tasks);
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

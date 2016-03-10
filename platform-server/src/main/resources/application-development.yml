@@ -10,7 +10,7 @@ coduno:
       accountId: platform-gcs@coduno.iam.gserviceaccount.com
       pkcs12: ./service-account.p12
       buckets:
-        submissions: coduno-submissions
+        submissions: coduno-dev
         templates: coduno-templates
 
 spring:

@@ -78,6 +78,11 @@ public class SecurityService {
             return false;
         }
 
+        // TODO add organization check
+        if(user.getOrganizations() != null){
+            return true;
+        }
+
         /* grant access to user if he is invited */
         for(Challenge challenge: user.getInvitedChallenges()){
             if(challenge.getId().equals(challengeId)){

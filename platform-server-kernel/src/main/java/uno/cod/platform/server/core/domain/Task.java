@@ -1,5 +1,7 @@
 package uno.cod.platform.server.core.domain;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -34,6 +36,9 @@ public class Task extends Assignment {
 
     @OneToMany(mappedBy = "task")
     private List<Template> templates;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Runner runner;
 
     public List<Challenge> getChallenges() {
         return Collections.unmodifiableList(challenges);
@@ -89,6 +94,14 @@ public class Task extends Assignment {
 
     public void setSkillMap(Map<CodingSkill, Double> skillMap) {
         this.skillMap = skillMap;
+    }
+
+    public Runner getRunner() {
+        return runner;
+    }
+
+    public void setRunner(Runner runner) {
+        this.runner = runner;
     }
 
     protected void addChallenge(Challenge challenge) {

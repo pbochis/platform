@@ -84,6 +84,23 @@ public class SubmissionService {
         }
     }
 
+    public void run(User user, Long taskId, MultipartFile file, String language) throws IOException {
+        Task task = taskRepository.findOneWithRunner(taskId);
+        if (task == null) {
+            throw new IllegalArgumentException("task.invalid");
+        }
+        // TODO update submission with results
+        run(user.getId(), file, language, task.getRunner());
+    }
+
+    private void run(Long userId, MultipartFile file, String language, Runner runner) throws IOException {
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+        form.add("language", language);
+        form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
+
+        webSocketService.send(userId, postToRuntime(runner, form).toString());
+    }
+
     private void runTest(Long userId, MultipartFile file, String language, Test test) throws IOException {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("language", language);
