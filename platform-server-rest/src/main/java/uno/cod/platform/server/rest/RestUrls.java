@@ -30,6 +30,7 @@ public class RestUrls {
     public static final String TASKS_ID_TESTS = "/tasks/{id}/tests";
 
     public static final String RESULTS_TASKS_SUBMISSIONS = "/results/{resultId}/tasks/{taskId}/submissions";
+    public static final String TASKS_ID_RUN = "/tasks/{taskId}/run";
 
     public static final String SETUP = "/setup";
 

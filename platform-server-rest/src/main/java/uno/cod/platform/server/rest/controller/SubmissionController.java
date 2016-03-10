@@ -34,4 +34,14 @@ public class SubmissionController {
         service.create(principal, resultId, taskId, file, language);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = RestUrls.TASKS_ID_RUN, method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> runtask(@PathVariable Long taskId,
+                                         @RequestParam("language") String language,
+                                         @RequestParam("file") MultipartFile file,
+                                          @AuthenticationPrincipal User principal) throws IOException {
+        service.run(principal, taskId, file, language);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
