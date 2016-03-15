@@ -3,9 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/platform.iml" filepath="$PROJECT_DIR$/platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-codingcontest-sync/platform-codingcontest-sync.iml" filepath="$PROJECT_DIR$/platform-codingcontest-sync/platform-codingcontest-sync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-runtime-client/platform-runtime-client.iml" filepath="$PROJECT_DIR$/platform-runtime-client/platform-runtime-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-server/platform-server.iml" filepath="$PROJECT_DIR$/platform-server/platform-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-server-kernel/platform-server-kernel.iml" filepath="$PROJECT_DIR$/platform-server-kernel/platform-server-kernel.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-server-rest/platform-server-rest.iml" filepath="$PROJECT_DIR$/platform-server-rest/platform-server-rest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" filepath="$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" filepath="$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" filepath="$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" />
     </modules>
