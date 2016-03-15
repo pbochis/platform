@@ -36,6 +36,7 @@ public class Task extends Assignment {
     private List<Template> templates;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "runner_id")
     private Runner runner;
 
     public List<ChallengeTemplate> getChallengeTemplates() {

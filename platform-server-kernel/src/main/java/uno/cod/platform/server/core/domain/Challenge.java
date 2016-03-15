@@ -5,8 +5,14 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 @Entity
-@Table(name = "scheduled_challenge")
+@Table(name = "challenge")
 public class Challenge extends IdentifiableEntity{
+
+    @Column(name = "challenge_name")
+    private String name;
+    @Column(name = "canonical_name")
+    private String canonicalName;
+
     @ManyToOne
     private ChallengeTemplate challengeTemplate;
 
@@ -15,6 +21,8 @@ public class Challenge extends IdentifiableEntity{
 
     @OneToMany(mappedBy = "challenge")
     private Set<Result> results;
+
+    private boolean inviteOnly = true;
 
     /**
      * Start of the challenge, users can already be invited before
@@ -58,6 +66,14 @@ public class Challenge extends IdentifiableEntity{
         this.results = results;
     }
 
+    public boolean isInviteOnly() {
+        return inviteOnly;
+    }
+
+    public void setInviteOnly(boolean inviteOnly) {
+        this.inviteOnly = inviteOnly;
+    }
+
     protected void addInvitedUser(User user) {
         if (invitedUsers == null) {
             invitedUsers = new HashSet<>();
@@ -79,5 +95,21 @@ public class Challenge extends IdentifiableEntity{
 
     public void setChallengeTemplate(ChallengeTemplate challengeTemplate) {
         this.challengeTemplate = challengeTemplate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 }

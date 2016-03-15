@@ -10,7 +10,7 @@ import java.util.*;
  * tasks will be done by the platform
  */
 @Entity
-@Table(name = "challenge")
+@Table(name = "challenge_template")
 public class ChallengeTemplate extends Assignment {
     @ManyToOne
     private Endpoint endpoint;
@@ -21,6 +21,9 @@ public class ChallengeTemplate extends Assignment {
     @OrderColumn
     @ManyToMany
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "challengeTemplate")
+    private List<Challenge> challenges;
 
     public Organization getOrganization() {
         return organization;
@@ -55,5 +58,13 @@ public class ChallengeTemplate extends Assignment {
         }
         task.addChallenge(this);
         tasks.add(task);
+    }
+
+    public List<Challenge> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(List<Challenge> challenges) {
+        this.challenges = challenges;
     }
 }
