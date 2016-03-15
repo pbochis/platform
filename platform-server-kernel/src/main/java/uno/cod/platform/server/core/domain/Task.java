@@ -1,7 +1,5 @@
 package uno.cod.platform.server.core.domain;
 
-import org.hibernate.annotations.Fetch;
-
 import javax.persistence.*;
 import java.util.*;
 
