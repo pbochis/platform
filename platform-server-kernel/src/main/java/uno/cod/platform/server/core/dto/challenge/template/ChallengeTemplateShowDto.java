@@ -1,17 +1,17 @@
-package uno.cod.platform.server.core.dto.challenge;
+package uno.cod.platform.server.core.dto.challenge.template;
 
 import org.springframework.beans.BeanUtils;
-import uno.cod.platform.server.core.domain.Challenge;
+import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.dto.assignment.AssignmentShowDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
 
 import java.util.List;
 
-public class ChallengeShowDto extends AssignmentShowDto{
+public class ChallengeTemplateShowDto extends AssignmentShowDto{
     private List<TaskShowDto> tasks;
 
-    public ChallengeShowDto(Challenge challenge){
-        BeanUtils.copyProperties(challenge, this);
+    public ChallengeTemplateShowDto(ChallengeTemplate challengeTemplate){
+        BeanUtils.copyProperties(challengeTemplate, this);
     }
 
     public List<TaskShowDto> getTasks() {

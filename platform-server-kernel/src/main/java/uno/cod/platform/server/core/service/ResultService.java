@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
-import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
-import uno.cod.platform.server.core.repository.ScheduledChallengeRepository;
+import uno.cod.platform.server.core.repository.ChallengeRepository;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
@@ -17,17 +16,17 @@ import java.util.List;
 @Transactional
 public class ResultService {
     private final ResultRepository repository;
-    private final ScheduledChallengeRepository scheduledChallengeRepository;
+    private final ChallengeRepository challengeRepository;
 
     @Autowired
-    public ResultService(ResultRepository repository, ScheduledChallengeRepository scheduledChallengeRepository) {
+    public ResultService(ResultRepository repository, ChallengeRepository challengeRepository) {
         this.repository = repository;
-        this.scheduledChallengeRepository = scheduledChallengeRepository;
+        this.challengeRepository = challengeRepository;
     }
 
     public ResultShowDto save(Long challengeId, User user){
-        ScheduledChallenge scheduledChallenge = scheduledChallengeRepository.findOne(challengeId);
-        if (scheduledChallenge == null){
+        Challenge challenge = challengeRepository.findOne(challengeId);
+        if (challenge == null){
             throw new IllegalArgumentException("challenge.invalid");
         }
         Result result = repository.findOneByUserAndChallenge(user.getId(), challengeId);
@@ -35,7 +34,7 @@ public class ResultService {
             return ResultMapper.map(result);
         }
         result = new Result();
-        scheduledChallenge.addResult(result);
+        challenge.addResult(result);
         result.setStarted(ZonedDateTime.now());
         result.setUser(user);
 
@@ -44,7 +43,7 @@ public class ResultService {
 
     public void startTask(Long resultId, Long taskId){
         Result result = repository.findOneWithChallenge(resultId);
-        List<Task> tasks =result.getChallenge().getChallenge().getTasks();
+        List<Task> tasks =result.getChallenge().getChallengeTemplate().getTasks();
         for(int i=0; i<tasks.size();i++){
             if(tasks.get(i).getId().equals(taskId)){
                 if(result.start(i)) {

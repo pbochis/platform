@@ -61,7 +61,7 @@ public class User extends IdentifiableEntity implements UserDetails {
      * Private (company) challenges he is invited
      */
     @ManyToMany(mappedBy = "invitedUsers")
-    private Set<ScheduledChallenge> invitedChallenges;
+    private Set<Challenge> invitedChallenges;
 
     @OneToMany(mappedBy = "user")
     private Set<Result> results;
@@ -115,11 +115,11 @@ public class User extends IdentifiableEntity implements UserDetails {
         this.teams = teams;
     }
 
-    public Set<ScheduledChallenge> getInvitedChallenges() {
+    public Set<Challenge> getInvitedChallenges() {
         return Collections.unmodifiableSet(invitedChallenges);
     }
 
-    protected void setInvitedChallenges(Set<ScheduledChallenge> invitedChallenges) {
+    protected void setInvitedChallenges(Set<Challenge> invitedChallenges) {
         this.invitedChallenges = invitedChallenges;
     }
 
@@ -205,7 +205,7 @@ public class User extends IdentifiableEntity implements UserDetails {
         result.setUser(this);
     }
 
-    public void addInvitedChallenge(ScheduledChallenge challenge) {
+    public void addInvitedChallenge(Challenge challenge) {
         if (invitedChallenges == null) {
             invitedChallenges = new HashSet<>();
         }

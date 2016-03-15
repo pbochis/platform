@@ -21,7 +21,7 @@ public class Endpoint extends IdentifiableEntity {
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "endpoint")
-    private List<Challenge> challenges;
+    private List<ChallengeTemplate> challengeTemplates;
 
     public String getName() {
         return name;
@@ -47,12 +47,12 @@ public class Endpoint extends IdentifiableEntity {
         this.tasks = tasks;
     }
 
-    public List<Challenge> getChallenges() {
-        return Collections.unmodifiableList(challenges);
+    public List<ChallengeTemplate> getChallengeTemplates() {
+        return Collections.unmodifiableList(challengeTemplates);
     }
 
-    protected void setChallenges(List<Challenge> challenges) {
-        this.challenges = challenges;
+    protected void setChallengeTemplates(List<ChallengeTemplate> challengeTemplates) {
+        this.challengeTemplates = challengeTemplates;
     }
 
     public void addTask(Task task) {
@@ -63,11 +63,11 @@ public class Endpoint extends IdentifiableEntity {
         tasks.add(task);
     }
 
-    public void addChallenge(Challenge challenge) {
-        if (challenge == null) {
-            challenges = new ArrayList<>();
+    public void addChallenge(ChallengeTemplate challengeTemplate) {
+        if (challengeTemplate == null) {
+            challengeTemplates = new ArrayList<>();
         }
-        challenge.setEndpoint(this);
-        challenges.add(challenge);
+        challengeTemplate.setEndpoint(this);
+        challengeTemplates.add(challengeTemplate);
     }
 }

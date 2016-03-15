@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -57,7 +58,7 @@ public class SubmissionService {
             throw new IllegalArgumentException("result.invalid");
         }
 
-        ScheduledChallenge challenge = result.getChallenge();
+        Challenge challenge = result.getChallenge();
         if (challenge.getEndDate() != null && challenge.getEndDate().isBefore(ZonedDateTime.now())){
             throw new AccessDeniedException("challenge.ended");
         }

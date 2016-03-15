@@ -34,7 +34,7 @@ public class Organization extends IdentifiableEntity {
      * challenges owned by the organization
      */
     @OneToMany(mappedBy = "organization")
-    private Set<Challenge> challenges;
+    private Set<ChallengeTemplate> challengeTemplates;
 
     @OneToMany(mappedBy = "organization")
     private Set<Task> tasks;
@@ -63,12 +63,12 @@ public class Organization extends IdentifiableEntity {
         this.members = members;
     }
 
-    public Set<Challenge> getChallenges() {
-        return Collections.unmodifiableSet(challenges);
+    public Set<ChallengeTemplate> getChallengeTemplates() {
+        return Collections.unmodifiableSet(challengeTemplates);
     }
 
-    protected void setChallenges(Set<Challenge> challenges) {
-        this.challenges = challenges;
+    protected void setChallengeTemplates(Set<ChallengeTemplate> challengeTemplates) {
+        this.challengeTemplates = challengeTemplates;
     }
 
     public Set<Task> getTasks() {
@@ -100,14 +100,14 @@ public class Organization extends IdentifiableEntity {
         tasks.add(task);
     }
 
-    public void addChallenge(Challenge challenge) {
-        if (challenge == null) {
+    public void addChallenge(ChallengeTemplate challengeTemplate) {
+        if (challengeTemplate == null) {
             throw new IllegalArgumentException("challenge.invalid");
         }
-        if (challenges == null) {
-            challenges = new HashSet<>();
+        if (challengeTemplates == null) {
+            challengeTemplates = new HashSet<>();
         }
-        challenge.setOrganization(this);
-        challenges.add(challenge);
+        challengeTemplate.setOrganization(this);
+        challengeTemplates.add(challengeTemplate);
     }
 }

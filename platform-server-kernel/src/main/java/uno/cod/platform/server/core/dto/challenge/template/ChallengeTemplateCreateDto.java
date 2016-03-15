@@ -1,11 +1,11 @@
-package uno.cod.platform.server.core.dto.challenge;
+package uno.cod.platform.server.core.dto.challenge.template;
 
 import uno.cod.platform.server.core.dto.assignment.AssignmentCreateDto;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class ChallengeCreateDto extends AssignmentCreateDto{
+public class ChallengeTemplateCreateDto extends AssignmentCreateDto{
     @NotNull
     private List<Long> tasks;
 

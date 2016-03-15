@@ -4,56 +4,80 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-/**
- * A challenge is a sequence of tasks, the runtime
- * does not know about this, routing the user between
- * tasks will be done by the platform
- */
 @Entity
-@Table(name = "challenge")
-public class Challenge extends Assignment {
+@Table(name = "scheduled_challenge")
+public class Challenge extends IdentifiableEntity{
     @ManyToOne
-    private Endpoint endpoint;
+    private ChallengeTemplate challengeTemplate;
 
-    @ManyToOne
-    private Organization organization;
-
-    @OrderColumn
     @ManyToMany
-    private List<Task> tasks;
+    private Set<User> invitedUsers;
 
-    public Organization getOrganization() {
-        return organization;
+    @OneToMany(mappedBy = "challenge")
+    private Set<Result> results;
+
+    /**
+     * Start of the challenge, users can already be invited before
+     */
+    private ZonedDateTime startDate;
+
+    /**
+     * End of the challenge, the challenge is read only afterwards
+     */
+    private ZonedDateTime endDate;
+
+    public Set<User> getInvitedUsers() {
+        return invitedUsers;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setInvitedUsers(Set<User> invitedUsers) {
+        this.invitedUsers = invitedUsers;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public ZonedDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setStartDate(ZonedDateTime startDate) {
+        this.startDate = startDate;
     }
 
-    public Endpoint getEndpoint() {
-        return endpoint;
+    public ZonedDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setEndpoint(Endpoint endpoint) {
-        this.endpoint = endpoint;
+    public void setEndDate(ZonedDateTime endDate) {
+        this.endDate = endDate;
     }
 
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException("task.invalid");
+    public Set<Result> getResults() {
+        return Collections.unmodifiableSet(results);
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
+
+    protected void addInvitedUser(User user) {
+        if (invitedUsers == null) {
+            invitedUsers = new HashSet<>();
         }
-        if (tasks == null) {
-            tasks = new ArrayList<>();
+        invitedUsers.add(user);
+    }
+
+    public void addResult(Result result) {
+        if (results == null) {
+            results = new HashSet<>();
         }
-        task.addChallenge(this);
-        tasks.add(task);
+        results.add(result);
+        result.setChallenge(this);
+    }
+
+    public ChallengeTemplate getChallengeTemplate() {
+        return challengeTemplate;
+    }
+
+    public void setChallengeTemplate(ChallengeTemplate challengeTemplate) {
+        this.challengeTemplate = challengeTemplate;
     }
 }

@@ -11,7 +11,7 @@ import java.util.*;
 @Table(name = "task")
 public class Task extends Assignment {
     @ManyToMany(mappedBy = "tasks")
-    private List<Challenge> challenges;
+    private List<ChallengeTemplate> challengeTemplates;
 
     @ManyToOne
     private Endpoint endpoint;
@@ -38,12 +38,12 @@ public class Task extends Assignment {
     @ManyToOne(fetch = FetchType.EAGER)
     private Runner runner;
 
-    public List<Challenge> getChallenges() {
-        return Collections.unmodifiableList(challenges);
+    public List<ChallengeTemplate> getChallengeTemplates() {
+        return Collections.unmodifiableList(challengeTemplates);
     }
 
-    protected void setChallenges(List<Challenge> challenges) {
-        this.challenges = challenges;
+    protected void setChallengeTemplates(List<ChallengeTemplate> challengeTemplates) {
+        this.challengeTemplates = challengeTemplates;
     }
 
     public Endpoint getEndpoint() {
@@ -102,11 +102,11 @@ public class Task extends Assignment {
         this.runner = runner;
     }
 
-    protected void addChallenge(Challenge challenge) {
-        if (challenges == null) {
-            challenges = new ArrayList<>();
+    protected void addChallenge(ChallengeTemplate challengeTemplate) {
+        if (challengeTemplates == null) {
+            challengeTemplates = new ArrayList<>();
         }
-        challenges.add(challenge);
+        challengeTemplates.add(challengeTemplate);
     }
 
     public void addSubmission(Submission submission) {

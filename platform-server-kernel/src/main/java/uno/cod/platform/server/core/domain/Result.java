@@ -15,7 +15,7 @@ public class Result extends IdentifiableEntity {
     private User user;
 
     @ManyToOne
-    private ScheduledChallenge challenge;
+    private Challenge challenge;
 
     @OrderColumn
     @ElementCollection
@@ -36,11 +36,11 @@ public class Result extends IdentifiableEntity {
         this.user = user;
     }
 
-    public ScheduledChallenge getChallenge() {
+    public Challenge getChallenge() {
         return challenge;
     }
 
-    public void setChallenge(ScheduledChallenge challenge) {
+    public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
     }
 

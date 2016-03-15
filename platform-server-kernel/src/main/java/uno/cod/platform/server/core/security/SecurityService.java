@@ -76,7 +76,7 @@ public class SecurityService {
             return false;
         }
 
-        for(ScheduledChallenge challenge: user.getInvitedChallenges()){
+        for(Challenge challenge: user.getInvitedChallenges()){
             if(challenge.getId().equals(scheduledChallengeId)){
                 return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
             }

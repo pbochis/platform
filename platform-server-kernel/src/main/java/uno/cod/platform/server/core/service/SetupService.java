@@ -30,13 +30,13 @@ public class SetupService {
     private final TaskRepository taskRepository;
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
-    private final ChallengeRepository challengeRepository;
+    private final ChallengeTemplateRepository challengeTemplateRepository;
     private final RunnerRepository runnerRepository;
     private final TestRepository testRepository;
     private final TemplateRepository templateRepository;
 
     @Autowired
-    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeRepository challengeRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
+    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
         this.environment = environment;
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -45,7 +45,7 @@ public class SetupService {
         this.taskRepository = taskRepository;
         this.organizationRepository = organizationRepository;
         this.organizationMemberRepository = organizationMemberRepository;
-        this.challengeRepository = challengeRepository;
+        this.challengeTemplateRepository = challengeTemplateRepository;
         this.runnerRepository = runnerRepository;
         this.testRepository = testRepository;
         this.templateRepository = templateRepository;
@@ -117,16 +117,16 @@ public class SetupService {
         createTemplate(fizzBuzzTask, Language.PYTHON, "default/app.py");
         createTemplate(fizzBuzzTask, Language.JAVA, "default/Application.java");
 
-        Challenge challenge = new Challenge();
-        challenge.setName("Coduno test");
-        challenge.setInstructions("Instructions for Coduno test");
-        challenge.setDescription("Description for Coduno test");
-        challenge.setOrganization(organizationRepository.findByNick("coduno"));
-        challenge.setEndpoint(sequentialChallengeEndpoint);
-        challenge.addTask(helloWorldTask);
-        challenge.addTask(fizzBuzzTask);
-        challenge.setDuration(Duration.ofMinutes(30));
-        challengeRepository.save(challenge);
+        ChallengeTemplate challengeTemplate = new ChallengeTemplate();
+        challengeTemplate.setName("Coduno test");
+        challengeTemplate.setInstructions("Instructions for Coduno test");
+        challengeTemplate.setDescription("Description for Coduno test");
+        challengeTemplate.setOrganization(organizationRepository.findByNick("coduno"));
+        challengeTemplate.setEndpoint(sequentialChallengeEndpoint);
+        challengeTemplate.addTask(helloWorldTask);
+        challengeTemplate.addTask(fizzBuzzTask);
+        challengeTemplate.setDuration(Duration.ofMinutes(30));
+        challengeTemplateRepository.save(challengeTemplate);
 
 
         initCCC(cccTestRunner, cccNormalRunner, cccChallengeEndpoint, cccTaskEndpoint);
@@ -219,7 +219,7 @@ public class SetupService {
         params.put(Test.PATH, "helloworld/helloworld");
         createTest(levelSeven, cccTestRunner, params);
 
-        Challenge ccc = new Challenge();
+        ChallengeTemplate ccc = new ChallengeTemplate();
         ccc.setName("Catalysts Coding Contest");
         ccc.setDescription("## Description");
         ccc.setInstructions("## Instructions for Catalysts Coding Contest");
@@ -233,7 +233,8 @@ public class SetupService {
         ccc.addTask(levelSix);
         ccc.addTask(levelSeven);
         ccc.setDuration(Duration.ofHours(4));
-        challengeRepository.save(ccc);
+        challengeTemplateRepository.save(ccc);
+
     }
 
     private Runner createRunner(String name){
