@@ -2,6 +2,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.session:spring-session"
     compile project(':platform-server-kernel')
+    compile project(':platform-codingcontest-sync')
 
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 

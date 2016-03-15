@@ -1,5 +1,6 @@
 package uno.cod.platform.server.rest.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import uno.cod.platform.server.core.Profiles;
 @Configuration
 @ComponentScan({"uno.cod.platform.server.rest"})
 public class RestConfig {
+    @Value("${coduno.codingcontest_url}")
+    private String codingContestUrl;
 
     @Bean(name = "exceptionMessageSource")
     public ResourceBundleMessageSource exceptionMessageSource() {
@@ -40,6 +43,9 @@ public class RestConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("https://app.cod.uno");
+                registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl);
+                registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl);
+                registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl);
             }
         };
     }
