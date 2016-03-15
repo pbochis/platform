@@ -1,8 +1,11 @@
 include ':platform-server-kernel'
 include ':platform-server-rest'
+include ':platform-server-websocket'
 include ':platform-server'
 
 include ':platform-codingcontest-sync'
+
+include ':platform-runtime-client'
 
 include ':platform-storage-api'
 include ':platform-storage-gcs'

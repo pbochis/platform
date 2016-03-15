@@ -14,6 +14,9 @@ import uno.cod.platform.server.core.Profiles;
 @Configuration
 @ComponentScan({"uno.cod.platform.server.rest"})
 public class RestConfig {
+    @Value("${coduno.url}")
+    private String codunoUrl;
+
     @Value("${coduno.codingcontest_url}")
     private String codingContestUrl;
 
@@ -42,7 +45,7 @@ public class RestConfig {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://app.cod.uno");
+                registry.addMapping("/**").allowedOrigins(codunoUrl);
                 registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl);
                 registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl);
                 registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl);

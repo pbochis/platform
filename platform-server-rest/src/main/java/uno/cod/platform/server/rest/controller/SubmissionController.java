@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.service.SubmissionService;
-import uno.cod.platform.server.core.service.WebSocketService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.io.IOException;
-import java.security.Principal;
 
 @RestController
 public class SubmissionController {

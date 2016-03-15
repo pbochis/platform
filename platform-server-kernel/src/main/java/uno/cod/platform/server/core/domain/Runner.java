@@ -7,9 +7,6 @@ import javax.persistence.Table;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
 @Entity
 @Table(name = "runner")
 public class Runner extends IdentifiableEntity{

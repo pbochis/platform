@@ -4,6 +4,7 @@
 dependencies {
     compile project(':platform-server-kernel')
     compile project(':platform-server-rest')
+    compile project(':platform-server-websocket')
 
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-core"

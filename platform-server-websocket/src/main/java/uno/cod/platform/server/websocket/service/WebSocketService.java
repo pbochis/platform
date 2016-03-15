@@ -1,49 +1,51 @@
-package uno.cod.platform.server.core.service;
+package uno.cod.platform.server.websocket.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import uno.cod.platform.server.core.repository.UserRepository;
+import uno.cod.platform.server.core.service.IClientPushConnection;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by vbalan on 2/23/2016.
- */
 @Service
-public class WebSocketService {
+public class WebSocketService implements IClientPushConnection {
+    static final Logger LOGGER = LoggerFactory.getLogger(WebSocketService.class);
+
     private Map<Long, WebSocketSession> sessions;
     private final UserRepository userRepository;
 
     @Autowired
-    public WebSocketService(UserRepository userRepository){
+    public WebSocketService(UserRepository userRepository) {
         this.userRepository = userRepository;
         sessions = new HashMap<>();
     }
 
-    public void addSession(Long userId, WebSocketSession session){
-        if(userRepository.findOne(userId)==null){
+    public void addSession(Long userId, WebSocketSession session) {
+        if(userRepository.findOne(userId) == null){
             try {
                 session.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.info("can not close socket", e);
             }
             return;
         }
         sessions.put(userId, session);
     }
 
-    public void send(Long userId, String message){
-        if(sessions.get(userId)==null){
+    public void send(Long userId, String message) {
+        if(sessions.get(userId) == null){
             return;
         }
         try {
             sessions.get(userId).sendMessage(new TextMessage(message));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.info("can not send to socket", e);
         }
     }
 }

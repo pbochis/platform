@@ -1,11 +1,9 @@
 dependencies {
     compile project(":platform-storage-gcs")
+    compile project(":platform-runtime-client")
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-security"
-
-    compile "org.springframework.boot:spring-boot-starter-websocket"
-    compile "org.springframework:spring-messaging"
 
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-core"

@@ -5,14 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import uno.cod.platform.runtime.RuntimeClient;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.SubmissionRepository;
@@ -31,9 +28,8 @@ public class SubmissionService {
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-    private final WebSocketService webSocketService;
+    private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
-    private final ObjectMapper objectMapper;
 
     @Value("${coduno.storage.gcs.buckets.submissions}")
     private String bucket;
@@ -47,14 +43,13 @@ public class SubmissionService {
                              TaskRepository taskRepository,
                              UserRepository userRepository,
                              PlatformStorage platformStorage,
-                             WebSocketService webSocketService) {
+                             IClientPushConnection appClientConnection) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.platformStorage = platformStorage;
-        this.webSocketService = webSocketService;
-        this.objectMapper = new ObjectMapper();
+        this.appClientConnection = appClientConnection;
     }
 
     public void create(User user, Long resultId, Long taskId, MultipartFile file, String language) throws IOException {
@@ -98,7 +93,7 @@ public class SubmissionService {
         form.add("language", language);
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
 
-        webSocketService.send(userId, postToRuntime(runner, form).toString());
+        appClientConnection.send(userId, RuntimeClient.postToRuntime(runtimeUrl, runner.getName(), form).toString());
     }
 
     private void runTest(Long userId, String filePath, String language, Test test) throws IOException {
@@ -111,22 +106,8 @@ public class SubmissionService {
                 form.add(param.getKey(), param.getValue());
             }
         }
-        JsonNode obj = postToRuntime(test.getRunner(), form);
+        JsonNode obj = RuntimeClient.postToRuntime(runtimeUrl, test.getRunner().getName(), form);
         ((ObjectNode) obj).put("Test", test.getId());
-        webSocketService.send(userId, obj.toString());
+        appClientConnection.send(userId, obj.toString());
     }
-
-    private JsonNode postToRuntime(Runner runner, MultiValueMap<String, Object> form) throws IOException {
-        JsonNode obj;
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            ResponseEntity<String> response = restTemplate.postForEntity(runtimeUrl + "/" + runner.getName(), form, String.class);
-            obj = objectMapper.readValue(response.getBody(), JsonNode.class);
-        } catch (HttpClientErrorException e) {
-            obj = objectMapper.createObjectNode();
-            ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
-        }
-        return obj;
-    }
-
 }
