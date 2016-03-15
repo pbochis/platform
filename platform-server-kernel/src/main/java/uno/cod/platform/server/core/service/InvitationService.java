@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
-import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.InvitationRepository;
+import uno.cod.platform.server.core.repository.ScheduledChallengeRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 import uno.cod.platform.server.core.service.mail.MailService;
 
@@ -32,8 +32,8 @@ public class InvitationService {
 
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
-    private final ChallengeRepository challengeRepository;
 
+    private final ScheduledChallengeService scheduledChallengeService;
     private final MailService mailService;
     private final UserService userService;
 
@@ -43,23 +43,21 @@ public class InvitationService {
     @Autowired
     public InvitationService(UserRepository userRepository,
                              InvitationRepository invitationRepository,
-                             ChallengeRepository challengeRepository,
+                             ScheduledChallengeService scheduledChallengeService,
                              UserService userService,
                              MailService mailService) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
-        this.challengeRepository = challengeRepository;
+        this.scheduledChallengeService = scheduledChallengeService;
         this.userService = userService;
         this.mailService = mailService;
     }
 
     public void invite(InvitationDto dto, String from) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
-        Challenge challenge = challengeRepository.findOneWithOrganization(dto.getChallengeId());
-        if (challenge == null) {
-            throw new IllegalArgumentException("challenge.invalid");
-        }
-        Organization organization = challenge.getOrganization();
+        ScheduledChallenge scheduledChallenge = scheduledChallengeService.findOrCreate(dto.getChallengeId(), dto.getStartDate());
+
+        Organization organization = scheduledChallenge.getChallenge().getOrganization();
         boolean ok = false;
         for (OrganizationMember organizationMember : invitingUser.getOrganizations()) {
             if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organization.getId())) {
@@ -74,7 +72,7 @@ public class InvitationService {
         String token = new BigInteger(130, random).toString(32);
 
         Invitation invitation = new Invitation();
-        invitation.setChallenge(challenge);
+        invitation.setChallenge(scheduledChallenge);
         invitation.setEmail(dto.getEmail());
         invitation.setExpire(ZonedDateTime.now().plus(duration));
         invitation.setToken(token);
@@ -84,6 +82,8 @@ public class InvitationService {
         Map<String, Object> params = new HashMap<>();
         params.put("organization", organization.getName());
         params.put("token", token);
+        params.put("startDate", dto.getStartDate());
+        params.put("duration", scheduledChallenge.getChallenge().getDuration());
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
 
@@ -110,10 +110,10 @@ public class InvitationService {
         }
 
         /* invite to challenge if not already invited*/
-        Challenge challenge = invite.getChallenge();
-        if (!challenge.getInvitedUsers().contains(user)) {
-            user.addInvitedChallenge(challenge);
-            challengeRepository.save(challenge);
+        ScheduledChallenge scheduledChallenge = invite.getChallenge();
+        if (!scheduledChallenge.getInvitedUsers().contains(user)) {
+            user.addInvitedChallenge(scheduledChallenge);
+            scheduledChallengeService.save(scheduledChallenge);
             user = userRepository.save(user);
         }
 
@@ -121,7 +121,7 @@ public class InvitationService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return challenge.getId();
+        return scheduledChallenge.getId();
     }
 
     @Scheduled(fixedRate = 5000)

@@ -2,11 +2,9 @@ package uno.cod.platform.server.core.security;
 
 
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.OrganizationMember;
-import uno.cod.platform.server.core.domain.TeamMember;
-import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.core.domain.*;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 /**
@@ -73,6 +71,19 @@ public class SecurityService {
         return false;
     }
 
+    public boolean canAccessScheduledChallengeChallenge(User user, Long scheduledChallengeId){
+        if (user == null || scheduledChallengeId == null) {
+            return false;
+        }
+
+        for(ScheduledChallenge challenge: user.getInvitedChallenges()){
+            if(challenge.getId().equals(scheduledChallengeId)){
+                return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
+            }
+        }
+        return false;
+    }
+
     public boolean canAccessChallenge(User user, Long challengeId) {
         if (user == null || challengeId == null) {
             return false;
@@ -81,13 +92,6 @@ public class SecurityService {
         // TODO add organization check
         if(user.getOrganizations() != null){
             return true;
-        }
-
-        /* grant access to user if he is invited */
-        for(Challenge challenge: user.getInvitedChallenges()){
-            if(challenge.getId().equals(challengeId)){
-                return true;
-            }
         }
         return false;
     }

@@ -18,25 +18,9 @@ public class Challenge extends Assignment {
     @ManyToOne
     private Organization organization;
 
-    @ManyToMany
-    private Set<User> invitedUsers;
-
     @OrderColumn
     @ManyToMany
     private List<Task> tasks;
-
-    @OneToMany(mappedBy = "challenge")
-    private Set<Result> results;
-
-    /**
-     * Start of the challenge, users can already be invited before
-     */
-    private ZonedDateTime startDate;
-
-    /**
-     * End of the challenge, the challenge is read only afterwards
-     */
-    private ZonedDateTime endDate;
 
     public Organization getOrganization() {
         return organization;
@@ -44,14 +28,6 @@ public class Challenge extends Assignment {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
-    }
-
-    public Set<User> getInvitedUsers() {
-        return invitedUsers;
-    }
-
-    public void setInvitedUsers(Set<User> invitedUsers) {
-        this.invitedUsers = invitedUsers;
     }
 
     public List<Task> getTasks() {
@@ -62,36 +38,12 @@ public class Challenge extends Assignment {
         this.tasks = tasks;
     }
 
-    public ZonedDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(ZonedDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public ZonedDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(ZonedDateTime endDate) {
-        this.endDate = endDate;
-    }
-
     public Endpoint getEndpoint() {
         return endpoint;
     }
 
     public void setEndpoint(Endpoint endpoint) {
         this.endpoint = endpoint;
-    }
-
-    public Set<Result> getResults() {
-        return Collections.unmodifiableSet(results);
-    }
-
-    public void setResults(Set<Result> results) {
-        this.results = results;
     }
 
     public void addTask(Task task) {
@@ -103,20 +55,5 @@ public class Challenge extends Assignment {
         }
         task.addChallenge(this);
         tasks.add(task);
-    }
-
-    protected void addInvitedUser(User user) {
-        if (invitedUsers == null) {
-            invitedUsers = new HashSet<>();
-        }
-        invitedUsers.add(user);
-   }
-
-    public void addResult(Result result) {
-        if (results == null) {
-            results = new HashSet<>();
-        }
-        results.add(result);
-        result.setChallenge(this);
     }
 }

@@ -23,7 +23,7 @@ public class Invitation {
     private String email;
 
     @ManyToOne(optional = false)
-    private Challenge challenge;
+    private ScheduledChallenge challenge;
 
     @NotNull
     private ZonedDateTime expire;
@@ -44,11 +44,11 @@ public class Invitation {
         this.email = email;
     }
 
-    public Challenge getChallenge() {
+    public ScheduledChallenge getChallenge() {
         return challenge;
     }
 
-    public void setChallenge(Challenge challenge) {
+    public void setChallenge(ScheduledChallenge challenge) {
         this.challenge = challenge;
     }
 
