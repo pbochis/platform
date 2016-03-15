@@ -31,10 +31,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        if(env.acceptsProfiles(Profiles.PRODUCTION))
+        if(env.acceptsProfiles(Profiles.PRODUCTION)) {
             registry.addHandler(new SocketHandler(), "/ws").setAllowedOrigins(codunoUrl);
-        else
+        } else {
             registry.addHandler(new SocketHandler(), "/ws").setAllowedOrigins("*");
+        }
     }
 
     private class SocketHandler extends TextWebSocketHandler {

@@ -27,7 +27,7 @@ public class GcsStorageDriver implements PlatformStorage {
     private PrivateKey signingKey;
     private String accountId;
 
-    public GcsStorageDriver(String accountId,File p12key) throws GeneralSecurityException, IOException {
+    public GcsStorageDriver(String accountId, File p12key) throws GeneralSecurityException, IOException {
         GoogleCredential credential = new GoogleCredential.Builder().
                 setTransport(new NetHttpTransport()).
                 setJsonFactory(new JacksonFactory()).
@@ -107,8 +107,9 @@ public class GcsStorageDriver implements PlatformStorage {
     }
 
     private String signString(String stringToSign) throws GeneralSecurityException, UnsupportedEncodingException {
-        if (signingKey == null)
+        if (signingKey == null) {
             throw new IllegalArgumentException("Private Key not initalized");
+        }
         Signature signer = Signature.getInstance("SHA256withRSA");
         signer.initSign(signingKey);
         signer.update(stringToSign.getBytes("UTF-8"));

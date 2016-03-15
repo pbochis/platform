@@ -47,7 +47,7 @@ public class ResultService {
     public void startTask(Long resultId, Long taskId){
         Result result = repository.findOneWithChallenge(resultId);
         List<Task> tasks =result.getChallenge().getTasks();
-        for(int i=0; i<tasks.size();i++){
+        for(int i=0; i < tasks.size(); i++) {
             if(tasks.get(i).getId() == taskId){
                 if(result.start(i)) {
                     repository.save(result);

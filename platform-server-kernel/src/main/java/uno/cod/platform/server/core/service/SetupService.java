@@ -181,7 +181,7 @@ public class SetupService {
         return catalysts;
     }
 
-    private void initCCC(Runner cccTestRunner,Runner cccNormalRunner, Endpoint cccChallengeEndpoint, Endpoint cccEndpoint){
+    private void initCCC(Runner cccTestRunner, Runner cccNormalRunner, Endpoint cccChallengeEndpoint, Endpoint cccEndpoint) {
         Organization catalysts = initCatalysts();
 
         Task levelOne = createTask("Level 1", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
@@ -197,7 +197,7 @@ public class SetupService {
         Task levelThree = createTask("Level 3", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
         params = new HashMap<>();
         params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelThree, cccTestRunner, params);;
+        createTest(levelThree, cccTestRunner, params);
 
         Task levelFour = createTask("Level 4", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
         params = new HashMap<>();
@@ -234,7 +234,6 @@ public class SetupService {
         ccc.addTask(levelSeven);
         ccc.setDuration(Duration.ofHours(4));
         challengeRepository.save(ccc);
-
     }
 
     private Runner createRunner(String name){
