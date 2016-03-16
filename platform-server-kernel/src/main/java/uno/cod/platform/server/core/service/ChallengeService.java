@@ -58,7 +58,9 @@ public class ChallengeService {
             challenge = new Challenge();
             challenge.setChallengeTemplate(challengeTemplate);
             challenge.setStartDate(startDate);
-            challenge.setEndDate(startDate.plus(challengeTemplate.getDuration()));
+            if(startDate!=null) {
+                challenge.setEndDate(startDate.plus(challengeTemplate.getDuration()));
+            }
             //TODO: maybe set a default name, or in the future force organizations to input a name
             //TODO: even for "default" challenges
             challenge = repository.save(challenge);
