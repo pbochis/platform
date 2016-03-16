@@ -44,11 +44,11 @@ public class ChallengeService {
         repository.save(challenge);
     }
 
-    public Challenge findOrCreate(Long templateId, ZonedDateTime startDate){
+    public Challenge findOrCreateByTemplateAndStartDateAndOrganization(Long templateId, ZonedDateTime startDate, Long organizationId){
         if (templateId == null){
             throw new IllegalArgumentException("challenge.invalid");
         }
-        Challenge challenge = repository.findOneByTemplateAndStartDateWithOrganization(templateId, startDate);
+        Challenge challenge = repository.findOneByTemplateAndStartDateAndOrganization(templateId, startDate, organizationId);
         if (challenge == null){
             ChallengeTemplate challengeTemplate = challengeTemplateRepository.findOne(templateId);
             if (challengeTemplate == null){
@@ -69,9 +69,5 @@ public class ChallengeService {
 
     public void save(Challenge challenge){
         repository.save(challenge);
-    }
-
-    public ChallengeTemplateShowDto findChallenge(Long scheduledChallengeId){
-        return ChallengeTemplateMapper.map(repository.findOneByIdWithTemplate(scheduledChallengeId).getChallengeTemplate());
     }
 }

@@ -9,6 +9,9 @@ import java.util.List;
 
 public class ResultMapper {
     public static ResultShowDto map(Result result) {
+        if(result == null){
+            return null;
+        }
         List<Long> startTimes = new ArrayList<>();
         if (result.getStartTimes() != null) {
             for (ZonedDateTime time : result.getStartTimes()) {

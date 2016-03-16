@@ -33,4 +33,10 @@ public class ResultController {
     public ResponseEntity<ResultShowDto> findOne(@PathVariable Long id) {
         return new ResponseEntity<>(service.findOne(id), HttpStatus.OK);
     }
+
+    @RequestMapping(value = RestUrls.RESULTS_CHALLENGE_ID_MY, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ResultShowDto> findMyResultForChallenge(@PathVariable Long id, @AuthenticationPrincipal User principal) {
+        return new ResponseEntity<>(service.findOneByUserAndChallenge(principal.getId(), id), HttpStatus.OK);
+    }
 }

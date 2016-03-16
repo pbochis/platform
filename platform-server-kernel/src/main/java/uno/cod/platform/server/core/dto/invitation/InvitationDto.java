@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 public class InvitationDto {
     @NotNull
     private String email;
+
     @NotNull
     private Long challengeId;
 

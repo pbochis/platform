@@ -12,11 +12,13 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long>{
     @Query("SELECT challenge FROM Challenge challenge " +
             "JOIN FETCH challenge.challengeTemplate challengeTemplate " +
             "LEFT JOIN FETCH challengeTemplate.organization organization " +
-            "WHERE challengeTemplate.id=:templateId AND challenge.startDate=:startDate")
-    Challenge findOneByTemplateAndStartDateWithOrganization(@Param("templateId") Long challengeTemplate, @Param("startDate")ZonedDateTime startDate);
+            "WHERE challengeTemplate.id=:templateId AND challenge.startDate=:startDate AND organization.id=:organizationId")
+    Challenge findOneByTemplateAndStartDateAndOrganization(@Param("templateId") Long challengeTemplate,
+                                                           @Param("startDate")ZonedDateTime startDate,
+                                                           @Param("organizationId") Long organizationId);
 
     @Query("SELECT challenge FROM Challenge challenge " +
             "JOIN FETCH challenge.challengeTemplate template " +
             "WHERE challenge.id=:id")
-    Challenge findOneByIdWithTemplate(@Param("id") Long id);
+    Challenge findOneWithTemplate(@Param("id") Long id);
 }

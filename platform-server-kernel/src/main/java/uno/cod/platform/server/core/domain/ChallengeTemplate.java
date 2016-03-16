@@ -34,7 +34,7 @@ public class ChallengeTemplate extends Assignment {
     }
 
     public List<Task> getTasks() {
-        return tasks;
+        return Collections.unmodifiableList(tasks);
     }
 
     public void setTasks(List<Task> tasks) {
@@ -61,7 +61,7 @@ public class ChallengeTemplate extends Assignment {
     }
 
     public List<Challenge> getChallenges() {
-        return challenges;
+        return Collections.unmodifiableList(challenges);
     }
 
     public void setChallenges(List<Challenge> challenges) {

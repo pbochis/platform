@@ -52,9 +52,9 @@ public class InvitationService {
         this.mailService = mailService;
     }
 
-    public void invite(InvitationDto dto, String from) throws MessagingException {
+    public void invite(InvitationDto dto, String from, Long organizationId) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
-        Challenge challenge = challengeService.findOrCreate(dto.getChallengeId(), dto.getStartDate());
+        Challenge challenge = challengeService.findOrCreateByTemplateAndStartDateAndOrganization(dto.getChallengeId(), dto.getStartDate(), organizationId);
 
         Organization organization = challenge.getChallengeTemplate().getOrganization();
         boolean ok = false;
