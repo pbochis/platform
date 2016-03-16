@@ -31,7 +31,7 @@ public class ResultService {
         }
         Result result = repository.findOneByUserAndChallenge(user.getId(), challengeId);
         if(result!=null){
-            return ResultMapper.map(result);
+            throw new IllegalArgumentException("challenge.completed");
         }
         result = new Result();
         challenge.addResult(result);
@@ -56,5 +56,9 @@ public class ResultService {
 
     public ResultShowDto findOne(Long id){
         return ResultMapper.map(repository.findOne(id));
+    }
+
+    public ResultShowDto findOneByUserAndChallenge(Long userId, Long challengeId){
+        return ResultMapper.map(repository.findOneByUserAndChallenge(userId, challengeId));
     }
 }
