@@ -1,13 +1,12 @@
 package uno.cod.platform.server.core.service;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.domain.Challenge;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
-import uno.cod.platform.server.core.mapper.ChallengeMapper;
+import uno.cod.platform.server.core.mapper.ChallengeTemplateMapper;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 
@@ -73,6 +72,6 @@ public class ChallengeService {
     }
 
     public ChallengeTemplateShowDto findChallenge(Long scheduledChallengeId){
-        return ChallengeMapper.map(repository.findOneByIdWithTemplate(scheduledChallengeId).getChallengeTemplate());
+        return ChallengeTemplateMapper.map(repository.findOneByIdWithTemplate(scheduledChallengeId).getChallengeTemplate());
     }
 }

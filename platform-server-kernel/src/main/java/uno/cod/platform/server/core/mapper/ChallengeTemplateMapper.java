@@ -6,7 +6,7 @@ import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShow
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChallengeMapper {
+public class ChallengeTemplateMapper {
     public static ChallengeTemplateShowDto map(ChallengeTemplate challengeTemplate){
         if(challengeTemplate ==null){
             return null;

@@ -7,7 +7,7 @@ import uno.cod.platform.server.core.domain.Endpoint;
 import uno.cod.platform.server.core.domain.Organization;
 import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateCreateDto;
 import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
-import uno.cod.platform.server.core.mapper.ChallengeMapper;
+import uno.cod.platform.server.core.mapper.ChallengeTemplateMapper;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 import uno.cod.platform.server.core.repository.EndpointRepository;
 import uno.cod.platform.server.core.repository.OrganizationRepository;
@@ -56,10 +56,10 @@ public class ChallengeTemplateService {
     }
 
     public ChallengeTemplateShowDto findById(Long id) {
-        return ChallengeMapper.map(repository.findOneWithEndpointAndTasks(id));
+        return ChallengeTemplateMapper.map(repository.findOneWithEndpointAndTasks(id));
     }
 
     public List<ChallengeTemplateShowDto> findAll(Long organizationId) {
-        return ChallengeMapper.map(repository.findAllWithTasks(organizationId));
+        return ChallengeTemplateMapper.map(repository.findAllWithTasks(organizationId));
     }
 }
