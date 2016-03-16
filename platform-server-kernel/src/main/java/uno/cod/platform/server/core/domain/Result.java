@@ -19,6 +19,7 @@ public class Result extends IdentifiableEntity {
 
     @OrderColumn
     @ElementCollection
+    @CollectionTable(name = "result_starttimes")
     private List<ZonedDateTime> startTimes;
 
     private ZonedDateTime started;

@@ -2,11 +2,12 @@ package uno.cod.platform.server.core.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-public class Template extends IdentifiableEntity implements StoredObject{
+@Table(name = "template")
+public class Template extends IdentifiableEntity implements StoredObject {
     private Language language;
-
     private String fileName;
 
     @ManyToOne

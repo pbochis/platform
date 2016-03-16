@@ -3,10 +3,6 @@ package uno.cod.platform.server.core.domain;
 import javax.persistence.*;
 import java.util.Map;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
-
 @Entity
 @Table(name = "test")
 public class Test extends IdentifiableEntity {
@@ -20,6 +16,7 @@ public class Test extends IdentifiableEntity {
     private Task task;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "test_params")
     @Lob
     private Map<String, String> params;
 
