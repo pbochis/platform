@@ -16,4 +16,9 @@ public interface TestRepository extends JpaRepository<Test, Long> {
             "LEFT JOIN FETCH test.task task " +
             "WHERE task.id = :taskId")
     List<Test> findByTask(@Param("taskId") Long taskId);
+
+    @Query("SELECT test FROM Test test " +
+            "LEFT JOIN FETCH test.runner " +
+            "WHERE test.id = :id")
+    Test findOneWithRunner(@Param("id") Long id);
 }

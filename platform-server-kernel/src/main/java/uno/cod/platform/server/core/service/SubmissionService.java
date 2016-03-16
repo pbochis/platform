@@ -10,10 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.runtime.RuntimeClient;
 import uno.cod.platform.server.core.domain.*;
-import uno.cod.platform.server.core.repository.ResultRepository;
-import uno.cod.platform.server.core.repository.SubmissionRepository;
-import uno.cod.platform.server.core.repository.TaskRepository;
-import uno.cod.platform.server.core.repository.UserRepository;
+import uno.cod.platform.server.core.repository.*;
 import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
@@ -26,6 +23,7 @@ public class SubmissionService {
     private final SubmissionRepository repository;
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
+    private final TestRepository testRepository;
     private final UserRepository userRepository;
     private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
@@ -40,12 +38,13 @@ public class SubmissionService {
     public SubmissionService(SubmissionRepository repository,
                              ResultRepository resultRepository,
                              TaskRepository taskRepository,
-                             UserRepository userRepository,
+                             TestRepository testRepository, UserRepository userRepository,
                              PlatformStorage platformStorage,
                              IClientPushConnection appClientConnection) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
+        this.testRepository = testRepository;
         this.userRepository = userRepository;
         this.platformStorage = platformStorage;
         this.appClientConnection = appClientConnection;
@@ -85,6 +84,21 @@ public class SubmissionService {
         }
         // TODO update submission with results
         run(user.getId(), file, language, task.getRunner());
+    }
+
+    public boolean testOutput(User user, Long resultId, Long testId, MultipartFile file) throws IOException {
+        Test test = testRepository.findOneWithRunner(testId);
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+        form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
+        form.add("output_test", "true");
+        Map<String, String> params = test.getParams();
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                form.add(param.getKey(), param.getValue());
+            }
+        }
+        JsonNode obj = RuntimeClient.postToRuntime(runtimeUrl, test.getRunner().getName(), form);
+        return obj.get("Failed").booleanValue();
     }
 
     private void run(Long userId, MultipartFile file, String language, Runner runner) throws IOException {

@@ -33,11 +33,21 @@ public class SubmissionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @RequestMapping(value = RestUrls.RESULTS_TESTS_OUTPUT, method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> testOutput(@PathVariable Long resultId,
+                                             @PathVariable Long testId,
+                                             @RequestParam("file") MultipartFile file,
+                                             @AuthenticationPrincipal User principal) throws IOException {
+        return new ResponseEntity<>(service.testOutput(principal, resultId, testId, file) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
     @RequestMapping(value = RestUrls.TASKS_ID_RUN, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> runtask(@PathVariable Long taskId,
-                                         @RequestParam("language") String language,
-                                         @RequestParam("file") MultipartFile file,
+                                          @RequestParam("language") String language,
+                                          @RequestParam("file") MultipartFile file,
                                           @AuthenticationPrincipal User principal) throws IOException {
         service.run(principal, taskId, file, language);
         return new ResponseEntity<>(HttpStatus.OK);
