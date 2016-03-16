@@ -18,10 +18,9 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     @Query("SELECT result FROM Result result " +
             "LEFT JOIN FETCH result.challenge challenge " +
-            "LEFT JOIN FETCH challenge.challengeTemplate template " +
             "LEFT JOIN FETCH result.user user " +
-            "WHERE user.id = :user AND template.id = :template")
-    Result findOneByUserAndChallenge(@Param("user") Long userId, @Param("template") Long templateId);
+            "WHERE user.id = :user AND challenge.id = :challenge")
+    Result findOneByUserAndChallenge(@Param("user") Long userId, @Param("challenge") Long challengeId);
 
     @Query("SELECT result FROM Result result " +
             "JOIN result.challenge challenge " +
