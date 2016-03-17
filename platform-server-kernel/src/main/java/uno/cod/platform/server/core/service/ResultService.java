@@ -2,11 +2,14 @@ package uno.cod.platform.server.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.domain.Challenge;
+import uno.cod.platform.server.core.domain.Result;
+import uno.cod.platform.server.core.domain.Task;
+import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
-import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
+import uno.cod.platform.server.core.repository.ResultRepository;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
@@ -41,11 +44,11 @@ public class ResultService {
         return ResultMapper.map(repository.save(result));
     }
 
-    public void startTask(Long resultId, Long taskId){
+    public void startTask(Long resultId, Long taskId) {
         Result result = repository.findOneWithChallenge(resultId);
         List<Task> tasks =result.getChallenge().getChallengeTemplate().getTasks();
-        for(int i=0; i<tasks.size();i++){
-            if(tasks.get(i).getId().equals(taskId)){
+        for(int i=0; i<tasks.size(); i++) {
+            if(tasks.get(i).getId().equals(taskId)) {
                 if(result.start(i)) {
                     repository.save(result);
                 }

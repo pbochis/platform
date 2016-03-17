@@ -2,13 +2,11 @@ package uno.cod.platform.server.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.domain.Challenge;
+import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
-import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
-import uno.cod.platform.server.core.mapper.ChallengeTemplateMapper;
-import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
+import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 
 import java.time.ZonedDateTime;
 

@@ -2,7 +2,10 @@ package uno.cod.platform.server.core.security;
 
 
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.domain.Challenge;
+import uno.cod.platform.server.core.domain.OrganizationMember;
+import uno.cod.platform.server.core.domain.TeamMember;
+import uno.cod.platform.server.core.domain.User;
 
 import java.time.ZonedDateTime;
 import java.util.Set;

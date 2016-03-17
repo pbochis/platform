@@ -1,8 +1,10 @@
 package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A challenge is a sequence of tasks, the runtime

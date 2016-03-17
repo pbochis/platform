@@ -2,7 +2,9 @@ package uno.cod.platform.server.core.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "challenge")

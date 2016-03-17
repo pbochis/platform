@@ -7,7 +7,7 @@ import uno.cod.platform.server.core.domain.Challenge;
 
 import java.time.ZonedDateTime;
 
-public interface ChallengeRepository extends JpaRepository<Challenge, Long>{
+public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query("SELECT challenge FROM Challenge challenge " +
             "JOIN FETCH challenge.challengeTemplate challengeTemplate " +
