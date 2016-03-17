@@ -40,8 +40,8 @@ public class TaskController {
 
     @RequestMapping(value = RestUrls.RESULTS_ID_TASK_ID, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> start(@PathVariable("id") Long id, @PathVariable("taskId") Long taskId) {
-        resultService.startTask(id, taskId);
+    public ResponseEntity<String> start(@PathVariable("id") Long resultId, @PathVariable("taskId") Long taskId) {
+        resultService.startTask(resultId, taskId);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 

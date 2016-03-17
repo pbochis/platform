@@ -1,10 +1,12 @@
 package uno.cod.platform.server.core.dto.invitation;
 
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 
 public class InvitationDto {
     @NotNull
     private String email;
+
     @NotNull
     private Long challengeId;
 

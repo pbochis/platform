@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,6 +16,7 @@ import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Service
@@ -55,11 +57,16 @@ public class SubmissionService {
         if (result == null) {
             throw new IllegalArgumentException("result.invalid");
         }
+
+        Challenge challenge = result.getChallenge();
+        if (challenge.getEndDate() != null && challenge.getEndDate().isBefore(ZonedDateTime.now())){
+            throw new AccessDeniedException("challenge.ended");
+        }
+
         Task task = taskRepository.findOneWithTests(taskId);
         if (task == null) {
             throw new IllegalArgumentException("task.invalid");
         }
-        // TODO save files with the code and put a reference in the submission
 
         Submission submission = new Submission();
         result.addSubmission(submission);

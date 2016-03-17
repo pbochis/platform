@@ -3,30 +3,22 @@ package uno.cod.platform.server.core.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import uno.cod.platform.server.core.domain.Challenge;
 
-import java.util.List;
+import java.time.ZonedDateTime;
 
-@Repository
-public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
-
-    @Query("SELECT challenge FROM Challenge challenge " +
-            "LEFT JOIN FETCH challenge.organization " +
-            "WHERE challenge.id = :id")
-    Challenge findOneWithOrganization(@Param("id") Long id);
+public interface ChallengeRepository extends JpaRepository<Challenge, Long>{
 
     @Query("SELECT challenge FROM Challenge challenge " +
-            "LEFT JOIN FETCH challenge.endpoint " +
-            "LEFT JOIN FETCH challenge.tasks task " +
-            "LEFT JOIN FETCH task.endpoint " +
-            "WHERE challenge.id = :id")
-    Challenge findOneWithEndpointAndTasks(@Param("id") Long id);
+            "JOIN FETCH challenge.challengeTemplate challengeTemplate " +
+            "LEFT JOIN FETCH challengeTemplate.organization organization " +
+            "WHERE challengeTemplate.id=:templateId AND challenge.startDate=:startDate AND organization.id=:organizationId")
+    Challenge findOneByTemplateAndStartDateAndOrganization(@Param("templateId") Long challengeTemplate,
+                                                           @Param("startDate")ZonedDateTime startDate,
+                                                           @Param("organizationId") Long organizationId);
 
-    @Query("SELECT distinct challenge FROM Challenge challenge " +
-            "JOIN FETCH challenge.organization organization " +
-            "JOIN FETCH challenge.tasks tasks "+
-            "WHERE organization.id = :organizationId AND challenge.tasks IS NOT EMPTY")
-    List<Challenge> findAllWithTasks(@Param("organizationId") Long organizationId);
+    @Query("SELECT challenge FROM Challenge challenge " +
+            "JOIN FETCH challenge.challengeTemplate template " +
+            "WHERE challenge.id=:id")
+    Challenge findOneWithTemplate(@Param("id") Long id);
 }
-

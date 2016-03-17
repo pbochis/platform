@@ -4,29 +4,25 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-/**
- * A challenge is a sequence of tasks, the runtime
- * does not know about this, routing the user between
- * tasks will be done by the platform
- */
 @Entity
 @Table(name = "challenge")
-public class Challenge extends Assignment {
-    @ManyToOne
-    private Endpoint endpoint;
+public class Challenge extends IdentifiableEntity{
+
+    @Column(name = "challenge_name")
+    private String name;
+    @Column(name = "canonical_name")
+    private String canonicalName;
 
     @ManyToOne
-    private Organization organization;
+    private ChallengeTemplate challengeTemplate;
 
     @ManyToMany
     private Set<User> invitedUsers;
 
-    @OrderColumn
-    @ManyToMany
-    private List<Task> tasks;
-
     @OneToMany(mappedBy = "challenge")
     private Set<Result> results;
+
+    private boolean inviteOnly = true;
 
     /**
      * Start of the challenge, users can already be invited before
@@ -38,28 +34,12 @@ public class Challenge extends Assignment {
      */
     private ZonedDateTime endDate;
 
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
     public Set<User> getInvitedUsers() {
         return invitedUsers;
     }
 
     public void setInvitedUsers(Set<User> invitedUsers) {
         this.invitedUsers = invitedUsers;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
     }
 
     public ZonedDateTime getStartDate() {
@@ -78,14 +58,6 @@ public class Challenge extends Assignment {
         this.endDate = endDate;
     }
 
-    public Endpoint getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(Endpoint endpoint) {
-        this.endpoint = endpoint;
-    }
-
     public Set<Result> getResults() {
         return Collections.unmodifiableSet(results);
     }
@@ -94,15 +66,12 @@ public class Challenge extends Assignment {
         this.results = results;
     }
 
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException("task.invalid");
-        }
-        if (tasks == null) {
-            tasks = new ArrayList<>();
-        }
-        task.addChallenge(this);
-        tasks.add(task);
+    public boolean isInviteOnly() {
+        return inviteOnly;
+    }
+
+    public void setInviteOnly(boolean inviteOnly) {
+        this.inviteOnly = inviteOnly;
     }
 
     protected void addInvitedUser(User user) {
@@ -110,7 +79,7 @@ public class Challenge extends Assignment {
             invitedUsers = new HashSet<>();
         }
         invitedUsers.add(user);
-   }
+    }
 
     public void addResult(Result result) {
         if (results == null) {
@@ -118,5 +87,29 @@ public class Challenge extends Assignment {
         }
         results.add(result);
         result.setChallenge(this);
+    }
+
+    public ChallengeTemplate getChallengeTemplate() {
+        return challengeTemplate;
+    }
+
+    public void setChallengeTemplate(ChallengeTemplate challengeTemplate) {
+        this.challengeTemplate = challengeTemplate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 }

@@ -32,8 +32,8 @@ public class InvitationService {
 
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
-    private final ChallengeRepository challengeRepository;
 
+    private final ChallengeRepository challengeRepository;
     private final MailService mailService;
     private final UserService userService;
 
@@ -53,13 +53,11 @@ public class InvitationService {
         this.mailService = mailService;
     }
 
-    public void invite(InvitationDto dto, String from) throws MessagingException {
+    public void invite(InvitationDto dto, String from, Long organizationId) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
-        Challenge challenge = challengeRepository.findOneWithOrganization(dto.getChallengeId());
-        if (challenge == null) {
-            throw new IllegalArgumentException("challenge.invalid");
-        }
-        Organization organization = challenge.getOrganization();
+        Challenge challenge = challengeRepository.findOne(dto.getChallengeId());
+
+        Organization organization = challenge.getChallengeTemplate().getOrganization();
         boolean ok = false;
         for (OrganizationMember organizationMember : invitingUser.getOrganizations()) {
             if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organization.getId())) {
@@ -76,7 +74,11 @@ public class InvitationService {
         Invitation invitation = new Invitation();
         invitation.setChallenge(challenge);
         invitation.setEmail(dto.getEmail());
-        invitation.setExpire(ZonedDateTime.now().plus(duration));
+        if (challenge.getStartDate() != null){
+            invitation.setExpire(challenge.getStartDate().plus(challenge.getChallengeTemplate().getDuration()));
+        }else{
+            invitation.setExpire(ZonedDateTime.now().plus(duration));
+        }
         invitation.setToken(token);
 
         invitationRepository.save(invitation);
@@ -84,6 +86,8 @@ public class InvitationService {
         Map<String, Object> params = new HashMap<>();
         params.put("organization", organization.getName());
         params.put("token", token);
+        params.put("startDate", challenge.getStartDate());
+        params.put("duration", challenge.getChallengeTemplate().getDuration());
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
 

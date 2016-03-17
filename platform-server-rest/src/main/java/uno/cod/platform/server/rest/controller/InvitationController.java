@@ -24,8 +24,10 @@ public class InvitationController {
 
     @RequestMapping(value = RestUrls.INVITE, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> invite(@Valid @RequestBody InvitationDto dto, Principal principal) throws MessagingException {
-        service.invite(dto, principal.getName());
+    public ResponseEntity<String> invite(@Valid @RequestBody InvitationDto dto,
+                                         Principal principal,
+                                         @RequestParam(name = "organization") Long organizationId) throws MessagingException {
+        service.invite(dto, principal.getName(), organizationId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -2,64 +2,72 @@ package uno.cod.platform.server.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.Endpoint;
-import uno.cod.platform.server.core.domain.Organization;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
-import uno.cod.platform.server.core.dto.challenge.ChallengeShowDto;
-import uno.cod.platform.server.core.mapper.ChallengeMapper;
+import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
+import uno.cod.platform.server.core.mapper.ChallengeTemplateMapper;
+import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
-import uno.cod.platform.server.core.repository.EndpointRepository;
-import uno.cod.platform.server.core.repository.OrganizationRepository;
-import uno.cod.platform.server.core.repository.TaskRepository;
 
-import javax.transaction.Transactional;
-import java.util.List;
+import java.time.ZonedDateTime;
 
 @Service
-@Transactional
 public class ChallengeService {
-    private final ChallengeRepository repository;
-    private final TaskRepository taskRepository;
-    private final OrganizationRepository organizationRepository;
-    private final EndpointRepository endpointRepository;
+    private ChallengeTemplateRepository challengeTemplateRepository;
+    private ChallengeRepository repository;
 
     @Autowired
-    public ChallengeService(ChallengeRepository repository, TaskRepository taskRepository, OrganizationRepository organizationRepository, EndpointRepository endpointRepository) {
+    public ChallengeService(ChallengeRepository repository, ChallengeTemplateRepository challengeTemplateRepository){
         this.repository = repository;
-        this.taskRepository = taskRepository;
-        this.organizationRepository = organizationRepository;
-        this.endpointRepository = endpointRepository;
+        this.challengeTemplateRepository = challengeTemplateRepository;
     }
 
-    public Long save(ChallengeCreateDto dto) {
-        Organization organization = organizationRepository.findOne(dto.getOrganizationId());
-        if(organization==null){
-            throw new IllegalArgumentException("organization.invalid");
+    public void createFromDto(Long templateId, ChallengeCreateDto dto){
+        if (templateId == null){
+            throw new IllegalArgumentException("challenge.invalid");
         }
-        Endpoint endpoint = endpointRepository.findOne(dto.getEndpointId());
-        if (endpoint == null) {
-            throw new IllegalArgumentException("endpoint.invalid");
+
+        ChallengeTemplate template = challengeTemplateRepository.findOne(templateId);
+        if (template == null){
+            throw new IllegalArgumentException("challenge.invalid");
         }
         Challenge challenge = new Challenge();
+        challenge.setChallengeTemplate(template);
         challenge.setName(dto.getName());
-        challenge.setDescription(dto.getDescription());
-        challenge.setInstructions(dto.getInstructions());
-        challenge.setDuration(dto.getDuration());
-        for (Long taskId : dto.getTasks()) {
-            challenge.addTask(taskRepository.getOne(taskId));
+        challenge.setCanonicalName(dto.getCanonicalName());
+        if (dto.getStartDate() != null){
+            challenge.setStartDate(dto.getStartDate());
+            challenge.setEndDate(dto.getStartDate().plus(template.getDuration()));
         }
-        organization.addChallenge(challenge);
-        endpoint.addChallenge(challenge);
-
-        return repository.save(challenge).getId();
+        challenge.setInviteOnly(dto.isInviteOnly());
+        repository.save(challenge);
     }
 
-    public ChallengeShowDto findById(Long id) {
-        return ChallengeMapper.map(repository.findOneWithEndpointAndTasks(id));
+    public Challenge findOrCreateByTemplateAndStartDateAndOrganization(Long templateId, ZonedDateTime startDate, Long organizationId){
+        if (templateId == null){
+            throw new IllegalArgumentException("challenge.invalid");
+        }
+        Challenge challenge = repository.findOneByTemplateAndStartDateAndOrganization(templateId, startDate, organizationId);
+        if (challenge == null){
+            ChallengeTemplate challengeTemplate = challengeTemplateRepository.findOne(templateId);
+            if (challengeTemplate == null){
+                throw new IllegalArgumentException("challenge.invalid");
+            }
+            challenge = new Challenge();
+            challenge.setChallengeTemplate(challengeTemplate);
+            challenge.setStartDate(startDate);
+            if(startDate!=null) {
+                challenge.setEndDate(startDate.plus(challengeTemplate.getDuration()));
+            }
+            //TODO: maybe set a default name, or in the future force organizations to input a name
+            //TODO: even for "default" challenges
+            challenge = repository.save(challenge);
+        }
+        return challenge;
     }
 
-    public List<ChallengeShowDto> findAll(Long organizationId) {
-        return ChallengeMapper.map(repository.findAllWithTasks(organizationId));
+    public void save(Challenge challenge){
+        repository.save(challenge);
     }
 }

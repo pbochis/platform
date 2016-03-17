@@ -1,19 +1,44 @@
 package uno.cod.platform.server.core.dto.challenge;
 
-import uno.cod.platform.server.core.dto.assignment.AssignmentCreateDto;
-
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.ZonedDateTime;
 
-public class ChallengeCreateDto extends AssignmentCreateDto{
+public class ChallengeCreateDto {
     @NotNull
-    private List<Long> tasks;
+    private String name;
+    private String canonicalName;
+    private boolean inviteOnly;
+    private ZonedDateTime startDate;
 
-    public List<Long> getTasks() {
-        return tasks;
+    public String getName() {
+        return name;
     }
 
-    public void setTasks(List<Long> tasks) {
-        this.tasks = tasks;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isInviteOnly() {
+        return inviteOnly;
+    }
+
+    public void setInviteOnly(boolean inviteOnly) {
+        this.inviteOnly = inviteOnly;
+    }
+
+    public ZonedDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(ZonedDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 }

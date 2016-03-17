@@ -6,36 +6,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
-import uno.cod.platform.server.core.dto.challenge.ChallengeShowDto;
+import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
 import uno.cod.platform.server.core.service.ChallengeService;
+import uno.cod.platform.server.core.service.ChallengeTemplateService;
 import uno.cod.platform.server.rest.RestUrls;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 public class ChallengeController {
-    private final ChallengeService service;
+
+    private ChallengeService service;
+    private ChallengeTemplateService challengeTemplateService;
 
     @Autowired
-    public ChallengeController(ChallengeService service) {
-        this.service = service;
-    }
-
-    @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #dto.organizationId)")
-    public ResponseEntity<Long> create(@RequestBody ChallengeCreateDto dto) {
-        return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #organizationId)")
-    public ResponseEntity<List<ChallengeShowDto>> list(@RequestParam("organization") Long organizationId) {
-        return new ResponseEntity<>(service.findAll(organizationId), HttpStatus.OK);
+    public ChallengeController(ChallengeService challengeService, ChallengeTemplateService challengeTemplateService){
+        this.service = challengeService;
+        this.challengeTemplateService = challengeTemplateService;
     }
 
     @RequestMapping(value = RestUrls.CHALLENGES_ID, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessScheduledChallengeChallenge(principal, #id)")
+    public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable Long id) {
+        return new ResponseEntity<>(challengeTemplateService.findByChallengeId(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES_CHALLENGE, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
-    public ResponseEntity<ChallengeShowDto> get(@PathVariable Long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity createChallenge(@PathVariable Long id, @Valid @RequestBody ChallengeCreateDto dto){
+        service.createFromDto(id, dto);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
