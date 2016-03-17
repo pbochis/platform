@@ -24,57 +24,58 @@ DROP TABLE IF EXISTS `challenge`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `challenge` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `canonical_name` varchar(255) DEFAULT NULL,
+  `endDate` datetime DEFAULT NULL,
+  `inviteOnly` bit(1) NOT NULL,
+  `challenge_name` varchar(255) DEFAULT NULL,
+  `startDate` datetime DEFAULT NULL,
+  `challengeTemplate_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKhcqo7gruoaecf5mmkloq5ldct` (`challengeTemplate_id`),
+  CONSTRAINT `FKhcqo7gruoaecf5mmkloq5ldct` FOREIGN KEY (`challengeTemplate_id`) REFERENCES `challenge_template` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `challenge_template`
+--
+
+DROP TABLE IF EXISTS `challenge_template`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `challenge_template` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` longtext NOT NULL,
   `duration` bigint(20) NOT NULL,
   `instructions` longtext NOT NULL,
   `name` varchar(255) NOT NULL,
-  `endDate` datetime DEFAULT NULL,
-  `startDate` datetime DEFAULT NULL,
   `endpoint_id` bigint(20) DEFAULT NULL,
   `organization_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKtg3qaxnt595wbby9m5pfxvy62` (`endpoint_id`),
-  KEY `FKh2yhyxa8em0xb8dgl0j3vs34n` (`organization_id`),
-  CONSTRAINT `FKh2yhyxa8em0xb8dgl0j3vs34n` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
-  CONSTRAINT `FKtg3qaxnt595wbby9m5pfxvy62` FOREIGN KEY (`endpoint_id`) REFERENCES `endpoint` (`id`)
+  KEY `FKd5j69ht6utnlqcwat8q6nk8wq` (`endpoint_id`),
+  KEY `FKtayntwqmm8ntlot76mmoonfio` (`organization_id`),
+  CONSTRAINT `FKd5j69ht6utnlqcwat8q6nk8wq` FOREIGN KEY (`endpoint_id`) REFERENCES `endpoint` (`id`),
+  CONSTRAINT `FKtayntwqmm8ntlot76mmoonfio` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `challenge`
+-- Table structure for table `challenge_template_task`
 --
 
-LOCK TABLES `challenge` WRITE;
-/*!40000 ALTER TABLE `challenge` DISABLE KEYS */;
-/*!40000 ALTER TABLE `challenge` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `challenge_task`
---
-
-DROP TABLE IF EXISTS `challenge_task`;
+DROP TABLE IF EXISTS `challenge_template_task`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `challenge_task` (
-  `challenges_id` bigint(20) NOT NULL,
+CREATE TABLE `challenge_template_task` (
+  `challengeTemplates_id` bigint(20) NOT NULL,
   `tasks_id` bigint(20) NOT NULL,
   `tasks_ORDER` int(11) NOT NULL,
-  PRIMARY KEY (`challenges_id`,`tasks_ORDER`),
-  KEY `FKcs2x9cy33pk2w7nd60o8w3v2u` (`tasks_id`),
-  CONSTRAINT `FK4xqd99o2n49i3nqi1v5fx46b7` FOREIGN KEY (`challenges_id`) REFERENCES `challenge` (`id`),
-  CONSTRAINT `FKcs2x9cy33pk2w7nd60o8w3v2u` FOREIGN KEY (`tasks_id`) REFERENCES `task` (`id`)
+  PRIMARY KEY (`challengeTemplates_id`,`tasks_ORDER`),
+  KEY `FKr1xioakulcpwam6vtrhdv3hx8` (`tasks_id`),
+  CONSTRAINT `FKpm5h2fhdqxbqcyoboajp8sm2l` FOREIGN KEY (`challengeTemplates_id`) REFERENCES `challenge_template` (`id`),
+  CONSTRAINT `FKr1xioakulcpwam6vtrhdv3hx8` FOREIGN KEY (`tasks_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `challenge_task`
---
-
-LOCK TABLES `challenge_task` WRITE;
-/*!40000 ALTER TABLE `challenge_task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `challenge_task` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `challenge_user`
@@ -94,15 +95,6 @@ CREATE TABLE `challenge_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `challenge_user`
---
-
-LOCK TABLES `challenge_user` WRITE;
-/*!40000 ALTER TABLE `challenge_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `challenge_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `coderprofile`
 --
 
@@ -115,15 +107,6 @@ CREATE TABLE `coderprofile` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `coderprofile`
---
-
-LOCK TABLES `coderprofile` WRITE;
-/*!40000 ALTER TABLE `coderprofile` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coderprofile` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `coderprofile_skillmap`
@@ -142,15 +125,6 @@ CREATE TABLE `coderprofile_skillmap` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `coderprofile_skillmap`
---
-
-LOCK TABLES `coderprofile_skillmap` WRITE;
-/*!40000 ALTER TABLE `coderprofile_skillmap` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coderprofile_skillmap` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `endpoint`
 --
 
@@ -165,15 +139,6 @@ CREATE TABLE `endpoint` (
   UNIQUE KEY `UK_94ygu9u957rtltu5sxjonfejc` (`component`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `endpoint`
---
-
-LOCK TABLES `endpoint` WRITE;
-/*!40000 ALTER TABLE `endpoint` DISABLE KEYS */;
-/*!40000 ALTER TABLE `endpoint` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `invitation`
@@ -194,15 +159,6 @@ CREATE TABLE `invitation` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `invitation`
---
-
-LOCK TABLES `invitation` WRITE;
-/*!40000 ALTER TABLE `invitation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `invitation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `organization`
 --
 
@@ -217,15 +173,6 @@ CREATE TABLE `organization` (
   UNIQUE KEY `UK_oyl3rdscpk4622gyovnhddo6k` (`nick`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `organization`
---
-
-LOCK TABLES `organization` WRITE;
-/*!40000 ALTER TABLE `organization` DISABLE KEYS */;
-/*!40000 ALTER TABLE `organization` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `organization_member`
@@ -245,15 +192,6 @@ CREATE TABLE `organization_member` (
   CONSTRAINT `FKs7b5ea4u5y4ds9vebvq7pxpa8` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `organization_member`
---
-
-LOCK TABLES `organization_member` WRITE;
-/*!40000 ALTER TABLE `organization_member` DISABLE KEYS */;
-/*!40000 ALTER TABLE `organization_member` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `result`
@@ -277,15 +215,6 @@ CREATE TABLE `result` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `result`
---
-
-LOCK TABLES `result` WRITE;
-/*!40000 ALTER TABLE `result` DISABLE KEYS */;
-/*!40000 ALTER TABLE `result` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `result_starttimes`
 --
 
@@ -302,15 +231,6 @@ CREATE TABLE `result_starttimes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `result_starttimes`
---
-
-LOCK TABLES `result_starttimes` WRITE;
-/*!40000 ALTER TABLE `result_starttimes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `result_starttimes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `runner`
 --
 
@@ -324,14 +244,6 @@ CREATE TABLE `runner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `runner`
---
-
-LOCK TABLES `runner` WRITE;
-/*!40000 ALTER TABLE `runner` DISABLE KEYS */;
-/*!40000 ALTER TABLE `runner` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `submission`
@@ -352,15 +264,6 @@ CREATE TABLE `submission` (
   CONSTRAINT `FKh66q0hdbqk19lop36gyg3hvg0` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `submission`
---
-
-LOCK TABLES `submission` WRITE;
-/*!40000 ALTER TABLE `submission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `submission` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `task`
@@ -390,15 +293,6 @@ CREATE TABLE `task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `task`
---
-
-LOCK TABLES `task` WRITE;
-/*!40000 ALTER TABLE `task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `task` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `task_skillmap`
 --
 
@@ -415,15 +309,6 @@ CREATE TABLE `task_skillmap` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `task_skillmap`
---
-
-LOCK TABLES `task_skillmap` WRITE;
-/*!40000 ALTER TABLE `task_skillmap` DISABLE KEYS */;
-/*!40000 ALTER TABLE `task_skillmap` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `team`
 --
 
@@ -437,15 +322,6 @@ CREATE TABLE `team` (
   UNIQUE KEY `UK_g2l9qqsoeuynt4r5ofdt1x2td` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `team`
---
-
-LOCK TABLES `team` WRITE;
-/*!40000 ALTER TABLE `team` DISABLE KEYS */;
-/*!40000 ALTER TABLE `team` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `team_member`
@@ -467,15 +343,6 @@ CREATE TABLE `team_member` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `team_member`
---
-
-LOCK TABLES `team_member` WRITE;
-/*!40000 ALTER TABLE `team_member` DISABLE KEYS */;
-/*!40000 ALTER TABLE `team_member` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `template`
 --
 
@@ -492,15 +359,6 @@ CREATE TABLE `template` (
   CONSTRAINT `FKhxka5mfo042a51q4c79yfhl27` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `template`
---
-
-LOCK TABLES `template` WRITE;
-/*!40000 ALTER TABLE `template` DISABLE KEYS */;
-/*!40000 ALTER TABLE `template` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `test`
@@ -522,15 +380,6 @@ CREATE TABLE `test` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `test`
---
-
-LOCK TABLES `test` WRITE;
-/*!40000 ALTER TABLE `test` DISABLE KEYS */;
-/*!40000 ALTER TABLE `test` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `test_params`
 --
 
@@ -545,15 +394,6 @@ CREATE TABLE `test_params` (
   CONSTRAINT `FKdfmjm368bkaw1knkqq7mxpiqh` FOREIGN KEY (`Test_id`) REFERENCES `test` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `test_params`
---
-
-LOCK TABLES `test_params` WRITE;
-/*!40000 ALTER TABLE `test_params` DISABLE KEYS */;
-/*!40000 ALTER TABLE `test_params` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`
@@ -579,15 +419,6 @@ CREATE TABLE `user` (
   CONSTRAINT `FKmh1qpwl7m9ht39vgkf37jbd7g` FOREIGN KEY (`coder_profile`) REFERENCES `coderprofile` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -598,4 +429,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-15 16:18:48
+-- Dump completed on 2016-03-17 19:10:57
