@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" filepath="$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" filepath="$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" filepath="$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform-storage-nyi/platform-storage-nyi.iml" filepath="$PROJECT_DIR$/platform-storage-nyi/platform-storage-nyi.iml" />
     </modules>
   </component>
 </project>

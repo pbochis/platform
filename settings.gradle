@@ -9,4 +9,5 @@ include ':platform-runtime-client'
 
 include ':platform-storage-api'
 include ':platform-storage-gcs'
+include ':platform-storage-nyi'
 

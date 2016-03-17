@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import uno.cod.platform.server.core.Profiles;
 import uno.cod.storage.PlatformStorage;
 import uno.cod.storage.gcs.GcsStorageDriver;
+import uno.cod.storage.gcs.NyiStorageDriver;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,5 +30,9 @@ public class StorageConfig {
                 new File(storageProperties.getGcs().getPkcs12()));
     }
 
-
+    @Bean
+    @Profile({Profiles.TEST})
+    public PlatformStorage testPlatformStorage() {
+        return new NyiStorageDriver();
+    }
 }

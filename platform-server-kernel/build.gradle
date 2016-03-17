@@ -1,5 +1,6 @@
 dependencies {
     compile project(":platform-storage-gcs")
+    compile project(":platform-storage-nyi")
     compile project(":platform-runtime-client")
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
