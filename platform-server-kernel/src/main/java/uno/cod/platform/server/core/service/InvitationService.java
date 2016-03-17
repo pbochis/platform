@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
+import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.InvitationRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 import uno.cod.platform.server.core.service.mail.MailService;
@@ -32,7 +33,7 @@ public class InvitationService {
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
 
-    private final ChallengeService challengeService;
+    private final ChallengeRepository challengeRepository;
     private final MailService mailService;
     private final UserService userService;
 
@@ -42,19 +43,19 @@ public class InvitationService {
     @Autowired
     public InvitationService(UserRepository userRepository,
                              InvitationRepository invitationRepository,
-                             ChallengeService challengeService,
+                             ChallengeRepository challengeRepository,
                              UserService userService,
                              MailService mailService) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
-        this.challengeService = challengeService;
+        this.challengeRepository = challengeRepository;
         this.userService = userService;
         this.mailService = mailService;
     }
 
     public void invite(InvitationDto dto, String from, Long organizationId) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
-        Challenge challenge = challengeService.findOrCreateByTemplateAndStartDateAndOrganization(dto.getChallengeId(), dto.getStartDate(), organizationId);
+        Challenge challenge = challengeRepository.findOne(dto.getChallengeId());
 
         Organization organization = challenge.getChallengeTemplate().getOrganization();
         boolean ok = false;
@@ -73,7 +74,11 @@ public class InvitationService {
         Invitation invitation = new Invitation();
         invitation.setChallenge(challenge);
         invitation.setEmail(dto.getEmail());
-        invitation.setExpire(ZonedDateTime.now().plus(duration));
+        if (challenge.getStartDate() != null){
+            invitation.setExpire(challenge.getStartDate().plus(challenge.getChallengeTemplate().getDuration()));
+        }else{
+            invitation.setExpire(ZonedDateTime.now().plus(duration));
+        }
         invitation.setToken(token);
 
         invitationRepository.save(invitation);
@@ -81,7 +86,7 @@ public class InvitationService {
         Map<String, Object> params = new HashMap<>();
         params.put("organization", organization.getName());
         params.put("token", token);
-        params.put("startDate", dto.getStartDate());
+        params.put("startDate", challenge.getStartDate());
         params.put("duration", challenge.getChallengeTemplate().getDuration());
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
@@ -112,7 +117,7 @@ public class InvitationService {
         Challenge challenge = invite.getChallenge();
         if (!challenge.getInvitedUsers().contains(user)) {
             user.addInvitedChallenge(challenge);
-            challengeService.save(challenge);
+            challengeRepository.save(challenge);
             user = userRepository.save(user);
         }
 

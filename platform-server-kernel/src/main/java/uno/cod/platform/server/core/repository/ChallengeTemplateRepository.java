@@ -16,12 +16,13 @@ public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemp
             "WHERE challenge.id = :id")
     ChallengeTemplate findOneWithOrganization(@Param("id") Long id);
 
-    @Query("SELECT challenge FROM ChallengeTemplate challenge " +
-            "LEFT JOIN FETCH challenge.endpoint " +
-            "LEFT JOIN FETCH challenge.tasks task " +
+    @Query("SELECT challengeTemplate FROM ChallengeTemplate challengeTemplate " +
+            "LEFT JOIN FETCH challengeTemplate.endpoint " +
+            "LEFT JOIN FETCH challengeTemplate.tasks task " +
+            "LEFT JOIN FETCH challengeTemplate.challenges challenge " +
             "LEFT JOIN FETCH task.endpoint " +
-            "WHERE challenge.id = :id")
-    ChallengeTemplate findOneWithEndpointAndTasks(@Param("id") Long id);
+            "WHERE challengeTemplate.id = :id")
+    ChallengeTemplate findOneWithEndpointAndTasksAndChallenges(@Param("id") Long id);
 
     @Query("SELECT distinct challenge FROM ChallengeTemplate challenge " +
             "JOIN FETCH challenge.organization organization " +

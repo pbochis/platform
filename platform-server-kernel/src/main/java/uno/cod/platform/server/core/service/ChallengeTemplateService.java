@@ -59,7 +59,7 @@ public class ChallengeTemplateService {
     }
 
     public ChallengeTemplateShowDto findById(Long id) {
-        return ChallengeTemplateMapper.map(repository.findOneWithEndpointAndTasks(id));
+        return ChallengeTemplateMapper.map(repository.findOneWithEndpointAndTasksAndChallenges(id));
     }
 
     public List<ChallengeTemplateShowDto> findAll(Long organizationId) {

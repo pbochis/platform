@@ -10,8 +10,6 @@ public class InvitationDto {
     @NotNull
     private Long challengeId;
 
-    private ZonedDateTime startDate;
-
     public String getEmail() {
         return email;
     }
@@ -26,13 +24,5 @@ public class InvitationDto {
 
     public void setChallengeId(Long challengeId) {
         this.challengeId = challengeId;
-    }
-
-    public ZonedDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(ZonedDateTime startDate) {
-        this.startDate = startDate;
     }
 }

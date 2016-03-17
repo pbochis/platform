@@ -1,11 +1,10 @@
 package uno.cod.platform.server.core.dto.challenge;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
-/**
- * Created by Paul on 3/15/2016.
- */
 public class ChallengeCreateDto {
+    @NotNull
     private String name;
     private String canonicalName;
     private boolean inviteOnly;

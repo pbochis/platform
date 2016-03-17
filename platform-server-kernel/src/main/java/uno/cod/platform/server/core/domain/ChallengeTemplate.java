@@ -23,7 +23,7 @@ public class ChallengeTemplate extends Assignment {
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "challengeTemplate")
-    private List<Challenge> challenges;
+    private Set<Challenge> challenges;
 
     public Organization getOrganization() {
         return organization;
@@ -60,11 +60,11 @@ public class ChallengeTemplate extends Assignment {
         tasks.add(task);
     }
 
-    public List<Challenge> getChallenges() {
-        return Collections.unmodifiableList(challenges);
+    public Set<Challenge> getChallenges() {
+        return Collections.unmodifiableSet(challenges);
     }
 
-    public void setChallenges(List<Challenge> challenges) {
+    public void setChallenges(Set<Challenge> challenges) {
         this.challenges = challenges;
     }
 }
