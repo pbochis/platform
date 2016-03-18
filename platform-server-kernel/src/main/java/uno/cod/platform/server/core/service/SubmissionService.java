@@ -96,6 +96,8 @@ public class SubmissionService {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
         form.add("output_test", "true");
+        // TODO quickfix for runtime fault
+        form.add("language", "py");
         Map<String, String> params = test.getParams();
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
@@ -103,7 +105,10 @@ public class SubmissionService {
             }
         }
         JsonNode obj = RuntimeClient.postToRuntime(runtimeUrl, test.getRunner().getName(), form);
-        return obj.get("Failed").booleanValue();
+        if(obj.get("Failed")==null){
+            return false;
+        }
+        return !obj.get("Failed").booleanValue();
     }
 
     private void run(Long userId, MultipartFile file, String language, Runner runner) throws IOException {
