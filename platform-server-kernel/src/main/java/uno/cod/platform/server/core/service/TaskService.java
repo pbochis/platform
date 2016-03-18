@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.Endpoint;
 import uno.cod.platform.server.core.domain.Organization;
+import uno.cod.platform.server.core.domain.Runner;
 import uno.cod.platform.server.core.domain.Task;
 import uno.cod.platform.server.core.dto.task.TaskCreateDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
 import uno.cod.platform.server.core.mapper.TaskMapper;
 import uno.cod.platform.server.core.repository.EndpointRepository;
 import uno.cod.platform.server.core.repository.OrganizationRepository;
+import uno.cod.platform.server.core.repository.RunnerRepository;
 import uno.cod.platform.server.core.repository.TaskRepository;
 
 import javax.transaction.Transactional;
@@ -21,12 +23,14 @@ public class TaskService {
     private final TaskRepository repository;
     private final EndpointRepository endpointRepository;
     private final OrganizationRepository organizationRepository;
+    private final RunnerRepository runnerRepository;
 
     @Autowired
-    public TaskService(TaskRepository repository, EndpointRepository endpointRepository, OrganizationRepository organizationRepository) {
+    public TaskService(TaskRepository repository, EndpointRepository endpointRepository, OrganizationRepository organizationRepository, RunnerRepository runnerRepository) {
         this.repository = repository;
         this.endpointRepository = endpointRepository;
         this.organizationRepository = organizationRepository;
+        this.runnerRepository = runnerRepository;
     }
 
     public void save(TaskCreateDto dto) {
@@ -37,6 +41,10 @@ public class TaskService {
         Organization organization= organizationRepository.findOne(dto.getOrganizationId());
         if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
+        }
+        Runner runner = null;
+        if(dto.getRunnerId()!=null){
+            runner = runnerRepository.findOne(dto.getRunnerId());
         }
         double skillSum = 0;
         for (Double skill: dto.getSkillMap().values()){
@@ -52,6 +60,7 @@ public class TaskService {
         task.setPublic(dto.isPublic());
         task.setDuration(dto.getDuration());
         task.setSkillMap(dto.getSkillMap());
+        task.setRunner(runner);
         endpoint.addTask(task);
         organization.addTask(task);
         repository.save(task);
