@@ -28,6 +28,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/setup",
                         "/organizations",
                         "/users",
+                        "/ip",
                         "/invite/auth/*",
                         "/ws/**").permitAll()
                 .anyRequest().authenticated()
