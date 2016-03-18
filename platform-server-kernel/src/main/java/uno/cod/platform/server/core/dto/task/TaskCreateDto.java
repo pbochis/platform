@@ -14,6 +14,16 @@ public class TaskCreateDto extends AssignmentCreateDto{
     @NotEmpty
     private Map<CodingSkill, Double> skillMap;
 
+    private Long runnerId;
+
+    public Long getRunnerId() {
+        return runnerId;
+    }
+
+    public void setRunnerId(Long runnerId) {
+        this.runnerId = runnerId;
+    }
+
     public boolean isPublic() {
         return isPublic;
     }
