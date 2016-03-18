@@ -63,6 +63,7 @@ public class SetupService {
 
     private void initDevelopmentDatabase() {
         this.initCoduno();
+        initCatalysts();
         Runner simpleRunner = createRunner("simple");
         Runner diffRunner = createRunner("diff");
         Runner ioRunner = createRunner("io");
@@ -125,8 +126,6 @@ public class SetupService {
         challengeTemplate.setDuration(Duration.ofMinutes(30));
         challengeTemplateRepository.save(challengeTemplate);
 
-
-        initCCC(cccTestRunner, cccNormalRunner, cccChallengeEndpoint, cccTaskEndpoint);
     }
 
     private void initCoduno(){
@@ -155,7 +154,7 @@ public class SetupService {
 
     private Organization initCatalysts(){
         User victor = new User();
-        victor.setUsername("catavbalan");
+        victor.setUsername("vbalan_catalysts");
         victor.setEmail("victor.balan@catalysts.cc");
         victor.setPassword(this.passwordEncoder.encode("password"));
         victor.setAdmin(true);
@@ -176,62 +175,6 @@ public class SetupService {
         victorCatalysts.setAdmin(true);
         victorCatalysts = organizationMemberRepository.save(victorCatalysts);
         return catalysts;
-    }
-
-    private void initCCC(Runner cccTestRunner, Runner cccNormalRunner, Endpoint cccChallengeEndpoint, Endpoint cccEndpoint) {
-        Organization catalysts = initCatalysts();
-
-        Task levelOne = createTask("Level 1", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        Map<String, String> params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelOne, cccTestRunner, params);
-
-        Task levelTwo = createTask("Level 2", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelTwo, cccTestRunner, params);
-
-        Task levelThree = createTask("Level 3", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelThree, cccTestRunner, params);
-
-        Task levelFour = createTask("Level 4", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelFour, cccTestRunner, params);
-
-        Task levelFive = createTask("Level 5", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelFive, cccTestRunner, params);
-
-        Task levelSix = createTask("Level 6", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelSix, cccTestRunner, params);
-
-        Task levelSeven = createTask("Level 7", "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), catalysts);
-        params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(levelSeven, cccTestRunner, params);
-
-        ChallengeTemplate ccc = new ChallengeTemplate();
-        ccc.setName("Catalysts Coding Contest");
-        ccc.setDescription("## Description");
-        ccc.setInstructions("## Instructions for Catalysts Coding Contest");
-        ccc.setOrganization(catalysts);
-        ccc.setEndpoint(cccChallengeEndpoint);
-        ccc.addTask(levelOne);
-        ccc.addTask(levelTwo);
-        ccc.addTask(levelThree);
-        ccc.addTask(levelFour);
-        ccc.addTask(levelFive);
-        ccc.addTask(levelSix);
-        ccc.addTask(levelSeven);
-        ccc.setDuration(Duration.ofHours(4));
-        challengeTemplateRepository.save(ccc);
-
     }
 
     private Runner createRunner(String name){
