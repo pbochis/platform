@@ -42,4 +42,6 @@ public class RestUrls {
 
     public static final String ENDPOINTS = "/endpoints";
 
+    public static final String TESTS = "/tests";
+
 }
