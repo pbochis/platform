@@ -8,7 +8,6 @@ import uno.cod.platform.server.core.domain.TeamMember;
 import uno.cod.platform.server.core.domain.User;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 /**
  * even if this does not need to be a spring bean, it is designed as
