@@ -23,7 +23,6 @@ public class SecurityService {
             return false;
         }
 
-        Set<TeamMember> teams = user.getTeams();
         for (TeamMember teamMember : user.getTeams()) {
             if (teamMember.getKey().getTeam().getId().equals(teamId)) {
                 return true;
@@ -37,7 +36,6 @@ public class SecurityService {
             return false;
         }
 
-        Set<TeamMember> teams = user.getTeams();
         for (TeamMember teamMember : user.getTeams()) {
             if (teamMember.isAdmin() && teamMember.getKey().getTeam().getId().equals(teamId)) {
                 return true;
@@ -51,7 +49,6 @@ public class SecurityService {
             return false;
         }
 
-        Set<OrganizationMember> organizations = user.getOrganizations();
         for (OrganizationMember organizationMember : user.getOrganizations()) {
             if (organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;
@@ -65,7 +62,6 @@ public class SecurityService {
             return false;
         }
 
-        Set<OrganizationMember> organizations = user.getOrganizations();
         for (OrganizationMember organizationMember : user.getOrganizations()) {
             if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;

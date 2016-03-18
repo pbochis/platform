@@ -26,7 +26,6 @@ public class SubmissionService {
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
     private final TestRepository testRepository;
-    private final UserRepository userRepository;
     private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
 
@@ -40,14 +39,13 @@ public class SubmissionService {
     public SubmissionService(SubmissionRepository repository,
                              ResultRepository resultRepository,
                              TaskRepository taskRepository,
-                             TestRepository testRepository, UserRepository userRepository,
+                             TestRepository testRepository,
                              PlatformStorage platformStorage,
                              IClientPushConnection appClientConnection) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.testRepository = testRepository;
-        this.userRepository = userRepository;
         this.platformStorage = platformStorage;
         this.appClientConnection = appClientConnection;
     }
@@ -93,7 +91,7 @@ public class SubmissionService {
         run(user.getId(), file, language, task.getRunner());
     }
 
-    public boolean testOutput(User user, Long resultId, Long testId, MultipartFile file) throws IOException {
+    public boolean testOutput(Long testId, MultipartFile file) throws IOException {
         Test test = testRepository.findOneWithRunner(testId);
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));

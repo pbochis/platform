@@ -40,7 +40,7 @@ public class SubmissionController {
                                              @PathVariable Long testId,
                                              @RequestParam("file") MultipartFile file,
                                              @AuthenticationPrincipal User principal) throws IOException {
-        return new ResponseEntity<>(service.testOutput(principal, resultId, testId, file) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(service.testOutput(testId, file) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID_RUN, method = RequestMethod.POST)

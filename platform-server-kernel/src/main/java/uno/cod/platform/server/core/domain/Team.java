@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "team")
 public class Team extends IdentifiableEntity {
-    @Column(unique = true, nullable = false, length = 255)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "key.team")

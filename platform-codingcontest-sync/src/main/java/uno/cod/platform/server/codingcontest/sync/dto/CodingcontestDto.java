@@ -28,7 +28,7 @@ public class CodingcontestDto {
     private int durationHours;
     private int durationMinutes;
 
-    List<ParticipationDto> participations;
+    private List<ParticipationDto> participations;
 
     public String getUuid() {
         return uuid;

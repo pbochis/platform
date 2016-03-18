@@ -24,6 +24,6 @@ public class TaskMapper {
     }
 
     public static List<TaskShowDto> map(List<Task> tasks) {
-        return tasks.stream().map(e -> map(e)).collect(Collectors.toList());
+        return tasks.stream().map(TaskMapper::map).collect(Collectors.toList());
     }
 }

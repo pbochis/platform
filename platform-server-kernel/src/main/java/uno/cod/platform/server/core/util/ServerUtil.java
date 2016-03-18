@@ -3,7 +3,7 @@ package uno.cod.platform.server.core.util;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerUtil {
-    private static AtomicBoolean applicationInitialized = new AtomicBoolean(false);
+    private static final AtomicBoolean applicationInitialized = new AtomicBoolean(false);
 
     public static boolean isApplicationInitialized() {
         return applicationInitialized.get();

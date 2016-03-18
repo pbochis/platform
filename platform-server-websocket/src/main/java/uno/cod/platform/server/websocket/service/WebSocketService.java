@@ -15,9 +15,9 @@ import java.util.Map;
 
 @Service
 public class WebSocketService implements IClientPushConnection {
-    static final Logger LOGGER = LoggerFactory.getLogger(WebSocketService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketService.class);
 
-    private Map<Long, WebSocketSession> sessions;
+    private final Map<Long, WebSocketSession> sessions;
     private final UserRepository userRepository;
 
     @Autowired

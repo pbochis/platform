@@ -15,6 +15,6 @@ public class OrganizationMapper {
     }
 
     public static List<OrganizationShowDto> map(List<Organization> organizations){
-        return organizations.stream().map(e -> map(e)).collect(Collectors.toList());
+        return organizations.stream().map(OrganizationMapper::map).collect(Collectors.toList());
     }
 }

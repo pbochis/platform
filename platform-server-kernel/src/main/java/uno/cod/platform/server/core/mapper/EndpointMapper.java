@@ -12,6 +12,6 @@ public class EndpointMapper {
     }
 
     public static List<EndpointShowDto> map(List<Endpoint> endpoints) {
-        return endpoints.stream().map(e -> map(e)).collect(Collectors.toList());
+        return endpoints.stream().map(EndpointMapper::map).collect(Collectors.toList());
     }
 }

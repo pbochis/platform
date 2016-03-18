@@ -27,7 +27,7 @@ public class InvitationController {
     public ResponseEntity<String> invite(@Valid @RequestBody InvitationDto dto,
                                          Principal principal,
                                          @RequestParam(name = "organization") Long organizationId) throws MessagingException {
-        service.invite(dto, principal.getName(), organizationId);
+        service.invite(dto, principal.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

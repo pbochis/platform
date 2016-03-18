@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.Profiles;
@@ -20,12 +19,11 @@ import java.util.Map;
 @Service
 @Transactional
 public class SetupService {
-    static final Logger LOGGER = LoggerFactory.getLogger(SetupService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetupService.class);
     private static final String TAG = SetupService.class.getSimpleName();
-    private Environment environment;
-    private JdbcTemplate jdbcTemplate;
-    private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
+    private final Environment environment;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final EndpointRepository endpointRepository;
     private final TaskRepository taskRepository;
     private final OrganizationRepository organizationRepository;
@@ -36,9 +34,8 @@ public class SetupService {
     private final TemplateRepository templateRepository;
 
     @Autowired
-    public SetupService(Environment environment, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
+    public SetupService(Environment environment, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
         this.environment = environment;
-        this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.endpointRepository = endpointRepository;

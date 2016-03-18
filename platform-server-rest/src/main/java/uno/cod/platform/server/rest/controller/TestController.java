@@ -14,9 +14,6 @@ import uno.cod.platform.server.rest.RestUrls;
 
 import java.util.List;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
 @RestController
 public class TestController {
     private final TestService testService;
@@ -29,6 +26,6 @@ public class TestController {
     @RequestMapping(value = RestUrls.TASKS_ID_TESTS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TestShowDto>> findByTaskId(@PathVariable Long id) {
-        return new ResponseEntity<List<TestShowDto>>(testService.findByTaskId(id), HttpStatus.OK);
+        return new ResponseEntity<>(testService.findByTaskId(id), HttpStatus.OK);
     }
 }

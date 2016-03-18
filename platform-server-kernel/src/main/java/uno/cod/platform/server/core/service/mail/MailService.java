@@ -22,8 +22,8 @@ public class MailService {
     @Value("${coduno.mail.from}")
     private String fromMail;
 
-    private SpringTemplateEngine templateEngine;
-    private JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
+    private final JavaMailSender mailSender;
 
     @Autowired
     public MailService(SpringTemplateEngine templateEngine, JavaMailSender mailSender) {

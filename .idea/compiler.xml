@@ -18,5 +18,25 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="platform-codingcontest-sync_main" target="1.8" />
+      <module name="platform-codingcontest-sync_test" target="1.8" />
+      <module name="platform-runtime-client_main" target="1.8" />
+      <module name="platform-runtime-client_test" target="1.8" />
+      <module name="platform-server-kernel_main" target="1.8" />
+      <module name="platform-server-kernel_test" target="1.8" />
+      <module name="platform-server-rest_main" target="1.8" />
+      <module name="platform-server-rest_test" target="1.8" />
+      <module name="platform-server-websocket_main" target="1.8" />
+      <module name="platform-server-websocket_test" target="1.8" />
+      <module name="platform-server_main" target="1.8" />
+      <module name="platform-server_test" target="1.8" />
+      <module name="platform-storage-api_main" target="1.8" />
+      <module name="platform-storage-api_test" target="1.8" />
+      <module name="platform-storage-gcs_main" target="1.8" />
+      <module name="platform-storage-gcs_test" target="1.8" />
+      <module name="platform-storage-nyi_main" target="1.8" />
+      <module name="platform-storage-nyi_test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

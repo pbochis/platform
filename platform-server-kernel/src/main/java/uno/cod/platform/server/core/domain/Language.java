@@ -6,5 +6,5 @@ public enum Language {
     CSHARP,
     JAVA,
     JAVASCRIPT,
-    PYTHON;
+    PYTHON
 }

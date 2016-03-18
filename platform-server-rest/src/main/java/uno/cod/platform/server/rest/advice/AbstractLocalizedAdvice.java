@@ -9,7 +9,7 @@ import org.springframework.web.context.request.WebRequest;
 
 public abstract class AbstractLocalizedAdvice {
     @Autowired
-    private ResourceBundleMessageSource messageSource;
+    private final ResourceBundleMessageSource messageSource;
 
     public AbstractLocalizedAdvice(@Qualifier("exceptionMessageSource") ResourceBundleMessageSource messageSource) {
         this.messageSource = messageSource;

@@ -38,7 +38,7 @@ public class InvitationService {
     private final UserService userService;
 
     private Logger log = Logger.getLogger(InvitationService.class.getName());
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Autowired
     public InvitationService(UserRepository userRepository,
@@ -53,7 +53,7 @@ public class InvitationService {
         this.mailService = mailService;
     }
 
-    public void invite(InvitationDto dto, String from, Long organizationId) throws MessagingException {
+    public void invite(InvitationDto dto, String from) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
         Challenge challenge = challengeRepository.findOne(dto.getChallengeId());
 

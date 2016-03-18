@@ -16,8 +16,8 @@ import javax.validation.Valid;
 @RestController
 public class ChallengeController {
 
-    private ChallengeService service;
-    private ChallengeTemplateService challengeTemplateService;
+    private final ChallengeService service;
+    private final ChallengeTemplateService challengeTemplateService;
 
     @Autowired
     public ChallengeController(ChallengeService challengeService, ChallengeTemplateService challengeTemplateService){

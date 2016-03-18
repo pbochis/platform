@@ -21,7 +21,7 @@ public class Organization extends IdentifiableEntity {
     @Pattern(regexp = "^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$")
     private String nick;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String name;
 
     /**

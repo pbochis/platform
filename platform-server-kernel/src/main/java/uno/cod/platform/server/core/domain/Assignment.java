@@ -11,7 +11,7 @@ import java.time.Duration;
  */
 @MappedSuperclass
 public abstract class Assignment extends IdentifiableEntity{
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)

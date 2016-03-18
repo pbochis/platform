@@ -12,7 +12,11 @@ dependencies {
 
     compile "org.slf4j:jcl-over-slf4j"
     compile "ch.qos.logback:logback-classic"
+
+    optional "org.springframework.boot:spring-boot-configuration-processor"
 }
+
+compileJava.dependsOn(processResources)
 
 bootRepackage {
     mainClass = 'uno.cod.platform.server.Server'

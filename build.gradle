@@ -9,12 +9,14 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.spring.io/libs-release" }
+        maven { url 'https://repo.spring.io/plugins-release' }
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
         classpath 'com.google.appengine:gradle-appengine-plugin:1.9.30'
     }
 }
@@ -25,6 +27,9 @@ subprojects { proj ->
     apply plugin: 'spring-boot'
     apply plugin: 'jacoco'
     apply plugin: 'checkstyle'
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

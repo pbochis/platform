@@ -22,20 +22,20 @@ import java.util.*;
                 @NamedAttributeNode("invitedChallenges")
         })
 public class User extends IdentifiableEntity implements UserDetails {
-    @Column(unique = true, nullable = false, length = 255)
+    @Column(unique = true, nullable = false)
     @NotNull
     private String username;
 
-    @Column(unique = true, nullable = false, length = 255)
+    @Column(unique = true, nullable = false)
     @Email
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String password;
 
-    boolean enabled;
+    private boolean enabled;
 
-    boolean admin;
+    private boolean admin;
 
     /**
      * The current coding profile, represents his skills

@@ -12,8 +12,8 @@ import java.time.ZonedDateTime;
 
 @Service
 public class ChallengeService {
-    private ChallengeTemplateRepository challengeTemplateRepository;
-    private ChallengeRepository repository;
+    private final ChallengeTemplateRepository challengeTemplateRepository;
+    private final ChallengeRepository repository;
 
     @Autowired
     public ChallengeService(ChallengeRepository repository, ChallengeTemplateRepository challengeTemplateRepository){

@@ -19,9 +19,9 @@ import java.util.List;
 @Service
 @Transactional
 public class OrganizationService {
-    private OrganizationRepository organizationRepository;
-    private OrganizationMemberRepository organizationMemberRepository;
-    private UserRepository userRepository;
+    private final OrganizationRepository organizationRepository;
+    private final OrganizationMemberRepository organizationMemberRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public OrganizationService(OrganizationRepository organizationRepository,

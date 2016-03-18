@@ -2,16 +2,34 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/platform.iml" filepath="$PROJECT_DIR$/platform.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-codingcontest-sync/platform-codingcontest-sync.iml" filepath="$PROJECT_DIR$/platform-codingcontest-sync/platform-codingcontest-sync.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-runtime-client/platform-runtime-client.iml" filepath="$PROJECT_DIR$/platform-runtime-client/platform-runtime-client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-server/platform-server.iml" filepath="$PROJECT_DIR$/platform-server/platform-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-server-kernel/platform-server-kernel.iml" filepath="$PROJECT_DIR$/platform-server-kernel/platform-server-kernel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-server-rest/platform-server-rest.iml" filepath="$PROJECT_DIR$/platform-server-rest/platform-server-rest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" filepath="$PROJECT_DIR$/platform-server-websocket/platform-server-websocket.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" filepath="$PROJECT_DIR$/platform-storage-api/platform-storage-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" filepath="$PROJECT_DIR$/platform-storage-gcs/platform-storage-gcs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/platform-storage-nyi/platform-storage-nyi.iml" filepath="$PROJECT_DIR$/platform-storage-nyi/platform-storage-nyi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform.iml" filepath="$PROJECT_DIR$/.idea/modules/platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync.iml" group="platform-codingcontest-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_main.iml" group="platform-codingcontest-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_test.iml" group="platform-codingcontest-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client.iml" group="platform-runtime-client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client_main.iml" group="platform-runtime-client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-runtime-client/platform-runtime-client_test.iml" group="platform-runtime-client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server/platform-server.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server/platform-server.iml" group="platform-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel.iml" group="platform-server-kernel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel_main.iml" group="platform-server-kernel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-kernel/platform-server-kernel_test.iml" group="platform-server-kernel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest.iml" group="platform-server-rest" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest_main.iml" group="platform-server-rest" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-rest/platform-server-rest_test.iml" group="platform-server-rest" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket.iml" group="platform-server-websocket" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket_main.iml" group="platform-server-websocket" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server-websocket/platform-server-websocket_test.iml" group="platform-server-websocket" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server/platform-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server/platform-server_main.iml" group="platform-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-server/platform-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-server/platform-server_test.iml" group="platform-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api.iml" group="platform-storage-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api_main.iml" group="platform-storage-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-api/platform-storage-api_test.iml" group="platform-storage-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs.iml" group="platform-storage-gcs" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs_main.iml" group="platform-storage-gcs" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-gcs/platform-storage-gcs_test.iml" group="platform-storage-gcs" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi.iml" group="platform-storage-nyi" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi_main.iml" group="platform-storage-nyi" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-storage-nyi/platform-storage-nyi_test.iml" group="platform-storage-nyi" />
     </modules>
   </component>
 </project>

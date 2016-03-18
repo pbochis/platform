@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 public class OrganizationController {
-    private OrganizationService organizationService;
+    private final OrganizationService organizationService;
 
     @Autowired
     public OrganizationController(OrganizationService organizationService) {

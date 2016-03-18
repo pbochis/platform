@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "coduno.url",
+      "type": "java.lang.String",
+      "description": "Url of Coduno webfrontend."
+    },
+    {
+      "name": "coduno.runtime_url",
+      "type": "java.lang.String",
+      "description": "Url of the runtime."
+    },
+    {
+      "name": "coduno.codingcontest_url",
+      "type": "java.lang.String",
+      "description": "Url to the legacy codingcontest platform."
+    },
+    {
+      "name": "coduno.mail.from",
+      "type": "java.lang.String",
+      "description": "Invitation mails of Coduno are sent by this address."
+    }
+  ]
+}

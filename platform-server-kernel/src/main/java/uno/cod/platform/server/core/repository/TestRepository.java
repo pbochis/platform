@@ -7,9 +7,6 @@ import uno.cod.platform.server.core.domain.Test;
 
 import java.util.List;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
 public interface TestRepository extends JpaRepository<Test, Long> {
 
     @Query("SELECT test FROM Test test " +

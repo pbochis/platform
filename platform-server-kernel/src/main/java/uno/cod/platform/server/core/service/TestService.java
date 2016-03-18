@@ -9,9 +9,6 @@ import uno.cod.platform.server.core.repository.TestRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
 @Service
 @Transactional
 public class TestService {
@@ -23,6 +20,6 @@ public class TestService {
     }
 
     public List<TestShowDto> findByTaskId(Long taskId){
-        return testRepository.findByTask(taskId).stream().map(e -> new TestShowDto(e)).collect(Collectors.toList());
+        return testRepository.findByTask(taskId).stream().map(TestShowDto::new).collect(Collectors.toList());
     }
 }

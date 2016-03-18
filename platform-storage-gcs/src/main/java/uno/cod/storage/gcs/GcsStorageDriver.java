@@ -46,7 +46,7 @@ public class GcsStorageDriver implements PlatformStorage {
 
     @Override
     public List<String> listFiles(String bucket, String path) throws IOException {
-        List<String> allItems = new LinkedList<String>();
+        List<String> allItems = new LinkedList<>();
         Objects response = storage.objects().list(bucket).
                 setPrefix(path).execute();
         for (StorageObject obj: response.getItems()) {

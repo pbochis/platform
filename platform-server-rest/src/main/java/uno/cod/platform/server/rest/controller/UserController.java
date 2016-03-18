@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -38,6 +38,6 @@ public class UserController {
 
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.GET)
     public ResponseEntity<UserShowDto> get(Principal principal) {
-        return new ResponseEntity<UserShowDto>(userService.findByUsername(principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
     }
 }

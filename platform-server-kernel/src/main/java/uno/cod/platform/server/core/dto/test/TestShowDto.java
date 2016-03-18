@@ -2,9 +2,6 @@ package uno.cod.platform.server.core.dto.test;
 
 import uno.cod.platform.server.core.domain.Test;
 
-/**
- * Created by vbalan on 2/25/2016.
- */
 public class TestShowDto {
     private Long id;
 
