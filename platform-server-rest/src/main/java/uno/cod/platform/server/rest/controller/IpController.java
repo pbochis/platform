@@ -32,7 +32,9 @@ public class IpController {
 
         for(InetAddress inetAddress : addrList) {
             if(inetAddress.isSiteLocalAddress()) {
-                return new ResponseEntity<>(inetAddress.getHostAddress(), HttpStatus.OK);
+                if(inetAddress.getHostAddress().startsWith("10.")) {
+                    return new ResponseEntity<>(inetAddress.getHostAddress(), HttpStatus.OK);
+                }
             }
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
