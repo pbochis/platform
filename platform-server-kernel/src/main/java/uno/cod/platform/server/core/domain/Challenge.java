@@ -1,6 +1,9 @@
 package uno.cod.platform.server.core.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,7 +15,10 @@ public class Challenge extends IdentifiableEntity{
 
     @Column(name = "challenge_name")
     private String name;
-    @Column(name = "canonical_name")
+
+    @NotNull
+    @NotEmpty
+    @Column(name = "canonical_name", unique = true)
     private String canonicalName;
 
     @ManyToOne
@@ -113,5 +119,24 @@ public class Challenge extends IdentifiableEntity{
 
     public void setCanonicalName(String canonicalName) {
         this.canonicalName = canonicalName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Challenge challenge = (Challenge) o;
+
+        return canonicalName.equals(challenge.canonicalName);
+    }
+
+    @Override
+    public int hashCode() {
+        return canonicalName.hashCode();
     }
 }

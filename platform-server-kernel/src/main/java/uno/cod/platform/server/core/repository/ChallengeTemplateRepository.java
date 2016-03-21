@@ -12,6 +12,8 @@ import java.util.UUID;
 @Repository
 public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemplate, UUID> {
 
+    ChallengeTemplate findOneByName(String name);
+
     @Query("SELECT challenge FROM ChallengeTemplate challenge " +
             "LEFT JOIN FETCH challenge.organization " +
             "WHERE challenge.id = :id")

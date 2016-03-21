@@ -11,9 +11,8 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class IdentifiableEntity {
     @Id
-
     @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uno.cod.platform.server.core.config.UseExistingOrGenerateUuidGenerator")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
@@ -24,4 +23,5 @@ public abstract class IdentifiableEntity {
     public void setId(UUID id) {
         this.id = id;
     }
+
 }
