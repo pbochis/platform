@@ -12,3 +12,6 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.8
 
+network:
+  forwarded_ports:
+  - 8090
