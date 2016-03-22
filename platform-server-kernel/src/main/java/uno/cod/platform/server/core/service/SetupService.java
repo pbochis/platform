@@ -12,9 +12,7 @@ import uno.cod.platform.server.core.repository.*;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -72,8 +70,12 @@ public class SetupService {
         java = languageRepository.save(java);
         Language python = new Language();
         python.setName("Python");
-        python.setTag("python");
+        python.setTag("py");
         python = languageRepository.save(python);
+        Language javascript = new Language();
+        javascript.setName("JavaScript");
+        javascript.setTag("js");
+        javascript = languageRepository.save(javascript);
 
         Runner simpleRunner = createRunner("simple");
         Runner diffRunner = createRunner("diff");
@@ -91,10 +93,14 @@ public class SetupService {
         Endpoint cccTaskEndpoint = createEndpoint("CCC drone task", "ccc-drone-task");
         Endpoint cccChallengeEndpoint = createEndpoint("CCC challenge", "ccc-challenge");
 
+        Set<Language> languages = new HashSet<>();
+        languages.add(python);
+        languages.add(java);
+        languages.add(javascript);
         Task helloWorldTask = createTask(
                 "Hello, world!", "This is a welcome task to our platform. It is the easiest one so you can learn the ui and the workflow.",
                 "Create a program that outputs 'Hello, world!' in a language of your preference.",
-                outputMatchTaskEndpoint, simpleRunner, Duration.ofMinutes(30));
+                outputMatchTaskEndpoint, simpleRunner, Duration.ofMinutes(30), languages);
 
         Map<String, String> params = new HashMap<>();
         params.put(Test.PATH, "helloworld/helloworld");
@@ -110,7 +116,7 @@ public class SetupService {
                 "Your job is to create the 'fizzbuzz(int n)' function.\n" +
                         "The n parameter represents the max number to wich you need to generate the fizzbuzz data.\n" +
                         "The output needs to be separated by '\\n'.",
-                outputMatchTaskEndpoint, null, Duration.ofMinutes(30)
+                outputMatchTaskEndpoint, null, Duration.ofMinutes(30), languages
         );
 
         params = new HashMap<>();
@@ -136,7 +142,6 @@ public class SetupService {
         challengeTemplate.addTask(fizzBuzzTask);
         challengeTemplate.setDuration(Duration.ofMinutes(30));
         challengeTemplateRepository.save(challengeTemplate);
-
     }
 
     private void initCoduno(){
@@ -201,11 +206,11 @@ public class SetupService {
         return endpointRepository.save(outputMatchEndpoint);
     }
 
-    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration){
-        return createTask(name, description, instructions, endpoint, runner, duration, null);
+    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Set<Language> languages){
+        return createTask(name, description, instructions, endpoint, runner, duration, null, languages);
     }
 
-    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization){
+    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages){
         Task task = new Task();
         task.setName(name);
         task.setDescription(description);
@@ -215,6 +220,7 @@ public class SetupService {
         task.setRunner(runner);
         task.addSkill(CodingSkill.CODING_SPEED, 1D);
         task.setOrganization(organization);
+        task.setLanguages(languages);
         return taskRepository.save(task);
     }
 
