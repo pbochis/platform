@@ -41,6 +41,7 @@ public class RestUrls {
     public static final String SETUP = "/setup";
 
     public static final String ENDPOINTS = "/endpoints";
+    public static final String RUNNERS = "/runners";
 
     public static final String TESTS = "/tests";
 

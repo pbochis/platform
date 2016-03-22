@@ -27,9 +27,8 @@ public class TaskController {
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #dto.organizationId)")
-    public ResponseEntity<String> create(@Valid @RequestBody TaskCreateDto dto) {
-        taskService.save(dto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Long> create(@Valid @RequestBody TaskCreateDto dto) {
+        return new ResponseEntity<>(taskService.save(dto), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID, method = RequestMethod.GET)

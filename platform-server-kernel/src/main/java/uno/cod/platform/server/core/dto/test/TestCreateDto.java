@@ -2,9 +2,6 @@ package uno.cod.platform.server.core.dto.test;
 
 import java.util.Map;
 
-/**
- * Created by vbalan on 3/18/2016.
- */
 public class TestCreateDto {
     private Long runnerId;
     private Long taskId;

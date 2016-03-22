@@ -33,7 +33,7 @@ public class TaskService {
         this.runnerRepository = runnerRepository;
     }
 
-    public void save(TaskCreateDto dto) {
+    public Long save(TaskCreateDto dto) {
         Endpoint endpoint = endpointRepository.findOne(dto.getEndpointId());
         if (endpoint == null) {
             throw new IllegalArgumentException("endpoint.invalid");
@@ -63,7 +63,7 @@ public class TaskService {
         task.setRunner(runner);
         endpoint.addTask(task);
         organization.addTask(task);
-        repository.save(task);
+        return repository.save(task).getId();
     }
 
     public TaskShowDto findById(Long id) {
