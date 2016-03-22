@@ -67,7 +67,7 @@ public class TaskService {
     }
 
     public TaskShowDto findById(Long id) {
-        return TaskMapper.map(repository.findOne(id));
+        return TaskMapper.map(repository.findOneWithLanguages(id));
     }
 
     public List<TaskShowDto> findAll(Long organizationId) {
