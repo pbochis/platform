@@ -32,9 +32,10 @@ public class SetupService {
     private final RunnerRepository runnerRepository;
     private final TestRepository testRepository;
     private final TemplateRepository templateRepository;
+    private final LanguageRepository languageRepository;
 
     @Autowired
-    public SetupService(Environment environment, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository) {
+    public SetupService(Environment environment, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository, LanguageRepository languageRepository) {
         this.environment = environment;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
@@ -46,6 +47,7 @@ public class SetupService {
         this.runnerRepository = runnerRepository;
         this.testRepository = testRepository;
         this.templateRepository = templateRepository;
+        this.languageRepository = languageRepository;
     }
 
     public void init(String username, String password, String email) {
@@ -64,6 +66,15 @@ public class SetupService {
     private void initDevelopmentDatabase() {
         this.initCoduno();
         initCatalysts();
+        Language java = new Language();
+        java.setName("Java");
+        java.setTag("java");
+        java = languageRepository.save(java);
+        Language python = new Language();
+        python.setName("Python");
+        python.setTag("python");
+        python = languageRepository.save(python);
+
         Runner simpleRunner = createRunner("simple");
         Runner diffRunner = createRunner("diff");
         Runner ioRunner = createRunner("io");
@@ -89,8 +100,8 @@ public class SetupService {
         params.put(Test.PATH, "helloworld/helloworld");
         createTest(helloWorldTask, diffRunner, params);
 
-        createTemplate(helloWorldTask, Language.PYTHON, "default/app.py");
-        createTemplate(helloWorldTask, Language.JAVA, "default/Application.java");
+        createTemplate(helloWorldTask, python, "default/app.py");
+        createTemplate(helloWorldTask, java, "default/Application.java");
 
         Task fizzBuzzTask = createTask(
                 "Fizz Buzz", "Fizz buzz is a group word game for children to teach them about division.\n" +
@@ -112,8 +123,8 @@ public class SetupService {
         params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^3");
         createTest(fizzBuzzTask, ioRunner, params);
 
-        createTemplate(fizzBuzzTask, Language.PYTHON, "default/app.py");
-        createTemplate(fizzBuzzTask, Language.JAVA, "default/Application.java");
+        createTemplate(fizzBuzzTask, python, "default/app.py");
+        createTemplate(fizzBuzzTask, java, "default/Application.java");
 
         ChallengeTemplate challengeTemplate = new ChallengeTemplate();
         challengeTemplate.setName("Coduno test");

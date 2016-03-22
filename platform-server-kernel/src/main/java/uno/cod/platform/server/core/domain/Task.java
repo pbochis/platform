@@ -39,6 +39,9 @@ public class Task extends Assignment {
     @JoinColumn(name = "runner_id")
     private Runner runner;
 
+    @ManyToMany
+    private Set<Language> languages;
+
     public List<ChallengeTemplate> getChallengeTemplates() {
         return Collections.unmodifiableList(challengeTemplates);
     }
@@ -103,6 +106,14 @@ public class Task extends Assignment {
         this.runner = runner;
     }
 
+    public Set<Language> getLanguages() {
+        return Collections.unmodifiableSet(languages);
+    }
+
+    public void setLanguages(Set<Language> languages) {
+        this.languages = languages;
+    }
+
     protected void addChallenge(ChallengeTemplate challengeTemplate) {
         if (challengeTemplates == null) {
             challengeTemplates = new ArrayList<>();
@@ -146,6 +157,13 @@ public class Task extends Assignment {
             templates = new ArrayList<>();
         }
         templates.add(template);
+    }
+
+    public void addLanguage(Language language){
+        if(languages == null){
+            languages = new HashSet<>();
+        }
+        languages.add(language);
     }
 }
 

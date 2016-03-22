@@ -7,6 +7,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "template")
 public class Template extends IdentifiableEntity implements StoredObject {
+    @ManyToOne
     private Language language;
     private String fileName;
 
