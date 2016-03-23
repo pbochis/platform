@@ -10,7 +10,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "submission")
-public class Submission extends IdentifiableEntity implements StoredObject{
+public class Submission extends IdentifiableEntity implements StoredObject {
     @ManyToOne
     private Result result;
 

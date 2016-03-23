@@ -11,6 +11,7 @@ import uno.cod.platform.server.core.service.ChallengeTemplateService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class ChallengeTemplateController {
@@ -23,19 +24,19 @@ public class ChallengeTemplateController {
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #dto.organizationId)")
-    public ResponseEntity<Long> create(@RequestBody ChallengeTemplateCreateDto dto) {
+    public ResponseEntity<UUID> create(@RequestBody ChallengeTemplateCreateDto dto) {
         return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #organizationId)")
-    public ResponseEntity<List<ChallengeTemplateShowDto>> list(@RequestParam("organization") Long organizationId) {
+    public ResponseEntity<List<ChallengeTemplateShowDto>> list(@RequestParam("organization") UUID organizationId) {
         return new ResponseEntity<>(service.findAll(organizationId), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
-    public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable Long id) {
+    public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable UUID id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 }

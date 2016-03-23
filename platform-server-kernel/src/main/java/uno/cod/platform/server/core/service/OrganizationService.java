@@ -15,6 +15,7 @@ import uno.cod.platform.server.core.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -51,7 +52,7 @@ public class OrganizationService {
         organizationMemberRepository.save(organizationMember);
     }
 
-    public OrganizationShowDto findById(long id){
+    public OrganizationShowDto findById(UUID id){
         return OrganizationMapper.map(organizationRepository.findOne(id));
     }
 

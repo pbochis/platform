@@ -12,6 +12,7 @@ import uno.cod.platform.server.core.service.ChallengeTemplateService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 public class ChallengeController {
@@ -27,13 +28,13 @@ public class ChallengeController {
 
     @RequestMapping(value = RestUrls.CHALLENGES_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessScheduledChallengeChallenge(principal, #id)")
-    public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable Long id) {
+    public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable UUID id) {
         return new ResponseEntity<>(challengeTemplateService.findByChallengeId(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES_CHALLENGE, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
-    public ResponseEntity createChallenge(@PathVariable Long id, @Valid @RequestBody ChallengeCreateDto dto){
+    public ResponseEntity createChallenge(@PathVariable UUID id, @Valid @RequestBody ChallengeCreateDto dto){
         service.createFromDto(id, dto);
         return new ResponseEntity(HttpStatus.CREATED);
     }

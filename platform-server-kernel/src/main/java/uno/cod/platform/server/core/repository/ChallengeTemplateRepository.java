@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 import uno.cod.platform.server.core.domain.ChallengeTemplate;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemplate, Long> {
+public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemplate, UUID> {
 
     @Query("SELECT challenge FROM ChallengeTemplate challenge " +
             "LEFT JOIN FETCH challenge.organization " +
             "WHERE challenge.id = :id")
-    ChallengeTemplate findOneWithOrganization(@Param("id") Long id);
+    ChallengeTemplate findOneWithOrganization(@Param("id") UUID id);
 
     @Query("SELECT challengeTemplate FROM ChallengeTemplate challengeTemplate " +
             "LEFT JOIN FETCH challengeTemplate.endpoint " +
@@ -22,12 +23,12 @@ public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemp
             "LEFT JOIN FETCH challengeTemplate.challenges challenge " +
             "LEFT JOIN FETCH task.endpoint " +
             "WHERE challengeTemplate.id = :id")
-    ChallengeTemplate findOneWithEndpointAndTasksAndChallenges(@Param("id") Long id);
+    ChallengeTemplate findOneWithEndpointAndTasksAndChallenges(@Param("id") UUID id);
 
     @Query("SELECT distinct challenge FROM ChallengeTemplate challenge " +
             "JOIN FETCH challenge.organization organization " +
             "JOIN FETCH challenge.tasks tasks "+
             "WHERE organization.id = :organizationId AND challenge.tasks IS NOT EMPTY")
-    List<ChallengeTemplate> findAllWithTasks(@Param("organizationId") Long organizationId);
+    List<ChallengeTemplate> findAllWithTasks(@Param("organizationId") UUID organizationId);
 }
 

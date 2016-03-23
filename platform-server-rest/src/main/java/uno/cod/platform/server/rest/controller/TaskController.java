@@ -13,6 +13,7 @@ import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class TaskController {
@@ -27,26 +28,26 @@ public class TaskController {
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #dto.organizationId)")
-    public ResponseEntity<Long> create(@Valid @RequestBody TaskCreateDto dto) {
+    public ResponseEntity<UUID> create(@Valid @RequestBody TaskCreateDto dto) {
         return new ResponseEntity<>(taskService.save(dto), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessTask(principal, #id)")
-    public ResponseEntity<TaskShowDto> findById(@PathVariable Long id) {
+    public ResponseEntity<TaskShowDto> findById(@PathVariable UUID id) {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.RESULTS_ID_TASK_ID, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> start(@PathVariable("id") Long resultId, @PathVariable("taskId") Long taskId) {
+    public ResponseEntity<String> start(@PathVariable("id") UUID resultId, @PathVariable("taskId") UUID taskId) {
         resultService.startTask(resultId, taskId);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #organizationId)")
-    public ResponseEntity<List<TaskShowDto>> findAll(@RequestParam("organization") Long organizationId) {
+    public ResponseEntity<List<TaskShowDto>> findAll(@RequestParam("organization") UUID organizationId) {
         return new ResponseEntity<>(taskService.findAll(organizationId), HttpStatus.OK);
     }
 }

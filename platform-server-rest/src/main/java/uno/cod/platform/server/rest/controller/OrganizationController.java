@@ -13,6 +13,7 @@ import uno.cod.platform.server.rest.RestUrls;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class OrganizationController {
@@ -37,13 +38,13 @@ public class OrganizationController {
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationMember(principal, #id)")
-    public ResponseEntity<OrganizationShowDto> get(@PathVariable Long id) {
+    public ResponseEntity<OrganizationShowDto> get(@PathVariable UUID id) {
         return new ResponseEntity<>(organizationService.findById(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.ORGANIZATIONS_ID, method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #organizationId)")
-    public String delete(@PathVariable("id") Long organizationId) {
+    public String delete(@PathVariable("id") UUID organizationId) {
         return "";
     }
 

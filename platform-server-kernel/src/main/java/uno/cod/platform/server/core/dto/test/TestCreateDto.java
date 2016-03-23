@@ -1,25 +1,26 @@
 package uno.cod.platform.server.core.dto.test;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TestCreateDto {
-    private Long runnerId;
-    private Long taskId;
+    private UUID runnerId;
+    private UUID taskId;
     private Map<String, String> params;
 
-    public Long getRunnerId() {
+    public UUID getRunnerId() {
         return runnerId;
     }
 
-    public void setRunnerId(Long runnerId) {
+    public void setRunnerId(UUID runnerId) {
         this.runnerId = runnerId;
     }
 
-    public Long getTaskId() {
+    public UUID getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(Long taskId) {
+    public void setTaskId(UUID taskId) {
         this.taskId = taskId;
     }
 

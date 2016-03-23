@@ -6,6 +6,7 @@ import uno.cod.platform.server.core.dto.assignment.AssignmentCreateDto;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.UUID;
 
 public class TaskCreateDto extends AssignmentCreateDto{
     private boolean isPublic;
@@ -14,13 +15,13 @@ public class TaskCreateDto extends AssignmentCreateDto{
     @NotEmpty
     private Map<CodingSkill, Double> skillMap;
 
-    private Long runnerId;
+    private UUID runnerId;
 
-    public Long getRunnerId() {
+    public UUID getRunnerId() {
         return runnerId;
     }
 
-    public void setRunnerId(Long runnerId) {
+    public void setRunnerId(UUID runnerId) {
         this.runnerId = runnerId;
     }
 

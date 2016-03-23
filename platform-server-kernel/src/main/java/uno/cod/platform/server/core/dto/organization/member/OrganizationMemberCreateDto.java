@@ -1,17 +1,18 @@
 package uno.cod.platform.server.core.dto.organization.member;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 public class OrganizationMemberCreateDto {
     @NotNull
-    private Long userId;
+    private UUID userId;
     private boolean isAdmin;
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 

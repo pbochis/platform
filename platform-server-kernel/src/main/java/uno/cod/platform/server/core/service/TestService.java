@@ -13,6 +13,7 @@ import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.TestRepository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +46,7 @@ public class TestService {
         testRepository.save(test);
     }
 
-    public List<TestShowDto> findByTaskId(Long taskId){
+    public List<TestShowDto> findByTaskId(UUID taskId){
         return testRepository.findByTask(taskId).stream().map(TestShowDto::new).collect(Collectors.toList());
     }
 }

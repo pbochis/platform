@@ -12,12 +12,13 @@ import uno.cod.platform.server.core.service.IClientPushConnection;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class WebSocketService implements IClientPushConnection {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketService.class);
 
-    private final Map<Long, WebSocketSession> sessions;
+    private final Map<UUID, WebSocketSession> sessions;
     private final UserRepository userRepository;
 
     @Autowired
@@ -26,7 +27,7 @@ public class WebSocketService implements IClientPushConnection {
         sessions = new HashMap<>();
     }
 
-    public void addSession(Long userId, WebSocketSession session) {
+    public void addSession(UUID userId, WebSocketSession session) {
         if(userRepository.findOne(userId) == null){
             try {
                 session.close();
@@ -38,7 +39,7 @@ public class WebSocketService implements IClientPushConnection {
         sessions.put(userId, session);
     }
 
-    public void send(Long userId, String message) {
+    public void send(UUID userId, String message) {
         if(sessions.get(userId) == null){
             return;
         }

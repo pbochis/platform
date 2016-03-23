@@ -3,19 +3,21 @@ package uno.cod.platform.server.core.dto.user;
 import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.User;
 
+import java.util.UUID;
+
 public class UserShowDto {
-    private Long id;
+    private UUID id;
     private String username;
 
     public UserShowDto(User user) {
         BeanUtils.copyProperties(user, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
