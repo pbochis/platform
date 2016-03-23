@@ -5,13 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.service.ResultService;
 import uno.cod.platform.server.rest.RestUrls;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @RestController
@@ -23,9 +25,9 @@ public class ResultController {
         this.service = service;
     }
 
-    @RequestMapping(value = RestUrls.RESULTS, method = RequestMethod.POST)
+    @RequestMapping(value = RestUrls.RESULTS_ID, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResultShowDto> create(@RequestBody @NotNull UUID challengeId, @AuthenticationPrincipal User principal) {
+    public ResponseEntity<ResultShowDto> create(@PathVariable("id") UUID challengeId, @AuthenticationPrincipal User principal) {
         return new ResponseEntity<>(service.save(challengeId, principal), HttpStatus.OK);
     }
 
