@@ -13,6 +13,7 @@ import uno.cod.platform.server.core.repository.OrganizationRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class OrganizationMemberService {
         this.organizationRepository = organizationRepository;
     }
 
-    public void save(OrganizationMemberCreateDto dto, Long organizationId) {
+    public void save(OrganizationMemberCreateDto dto, UUID organizationId) {
         User user = userRepository.findOne(dto.getUserId());
         if (user == null) {
             throw new IllegalArgumentException("user.invalid");
@@ -51,7 +52,7 @@ public class OrganizationMemberService {
         organization.addOrganizationMember(member);
     }
 
-    public void delete(OrganizationMemberCreateDto dto, Long organizationId) {
+    public void delete(OrganizationMemberCreateDto dto, UUID organizationId) {
         User user = userRepository.findOne(dto.getUserId());
         if (user == null) {
             throw new IllegalArgumentException("user.invalid");

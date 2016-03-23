@@ -8,6 +8,7 @@ import uno.cod.platform.server.core.domain.TeamMember;
 import uno.cod.platform.server.core.domain.User;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /**
  * even if this does not need to be a spring bean, it is designed as
@@ -17,7 +18,7 @@ import java.time.ZonedDateTime;
  */
 @Service
 public class SecurityService {
-    public boolean isTeamMember(User user, Long teamId) {
+    public boolean isTeamMember(User user, UUID teamId) {
         if (user == null || teamId == null) {
             return false;
         }
@@ -30,7 +31,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean isTeamAdmin(User user, Long teamId) {
+    public boolean isTeamAdmin(User user, UUID teamId) {
         if (user == null || teamId == null) {
             return false;
         }
@@ -43,7 +44,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean isOrganizationMember(User user, Long organizationId) {
+    public boolean isOrganizationMember(User user, UUID organizationId) {
         if (user == null || organizationId == null) {
             return false;
         }
@@ -56,7 +57,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean isOrganizationAdmin(User user, Long organizationId) {
+    public boolean isOrganizationAdmin(User user, UUID organizationId) {
         if (user == null || organizationId == null) {
             return false;
         }
@@ -69,7 +70,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canAccessScheduledChallengeChallenge(User user, Long scheduledChallengeId){
+    public boolean canAccessScheduledChallengeChallenge(User user, UUID scheduledChallengeId){
         if (user == null || scheduledChallengeId == null) {
             return false;
         }
@@ -82,7 +83,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canAccessChallenge(User user, Long challengeId) {
+    public boolean canAccessChallenge(User user, UUID challengeId) {
         if (user == null || challengeId == null) {
             return false;
         }
@@ -94,7 +95,7 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canAccessTask(User user, Long taskId) {
+    public boolean canAccessTask(User user, UUID taskId) {
         if (user == null || taskId == null) {
             return false;
         }

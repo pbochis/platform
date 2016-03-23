@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "language")
-public class Language extends IdentifiableEntity{
+public class Language extends IdentifiableEntity {
     private String name;
     private String tag;
 

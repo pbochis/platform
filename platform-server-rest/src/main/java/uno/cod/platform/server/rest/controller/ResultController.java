@@ -12,6 +12,7 @@ import uno.cod.platform.server.core.service.ResultService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @RestController
 public class ResultController {
@@ -24,19 +25,19 @@ public class ResultController {
 
     @RequestMapping(value = RestUrls.RESULTS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResultShowDto> create(@RequestBody @NotNull Long challengeId, @AuthenticationPrincipal User principal) {
+    public ResponseEntity<ResultShowDto> create(@RequestBody @NotNull UUID challengeId, @AuthenticationPrincipal User principal) {
         return new ResponseEntity<>(service.save(challengeId, principal), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.RESULTS_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResultShowDto> findOne(@PathVariable Long id) {
+    public ResponseEntity<ResultShowDto> findOne(@PathVariable UUID id) {
         return new ResponseEntity<>(service.findOne(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.RESULTS_CHALLENGE_ID_MY, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResultShowDto> findMyResultForChallenge(@PathVariable Long id, @AuthenticationPrincipal User principal) {
+    public ResponseEntity<ResultShowDto> findMyResultForChallenge(@PathVariable UUID id, @AuthenticationPrincipal User principal) {
         return new ResponseEntity<>(service.findOneByUserAndChallenge(principal.getId(), id), HttpStatus.OK);
     }
 }

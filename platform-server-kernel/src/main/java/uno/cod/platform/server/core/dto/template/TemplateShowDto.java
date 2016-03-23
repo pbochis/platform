@@ -3,18 +3,20 @@ package uno.cod.platform.server.core.dto.template;
 import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.Template;
 
+import java.util.UUID;
+
 public class TemplateShowDto {
     public TemplateShowDto(Template template) {
         BeanUtils.copyProperties(template, this);
     }
 
-    private Long id;
+    private UUID id;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }

@@ -20,10 +20,7 @@ import javax.mail.MessagingException;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class InvitationService {
@@ -91,7 +88,7 @@ public class InvitationService {
         mailService.sendMail("user", dto.getEmail(), "Challenge invitation", "challenge-invite.html", params, Locale.ENGLISH);
     }
 
-    public Long authByToken(String token) {
+    public UUID authByToken(String token) {
         Invitation invite = invitationRepository.findOne(token);
         if (invite == null) {
             throw new AccessDeniedException("invite.token.invalid");

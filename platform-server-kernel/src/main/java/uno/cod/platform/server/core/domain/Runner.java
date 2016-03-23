@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "runner")
-public class Runner extends IdentifiableEntity{
+public class Runner extends IdentifiableEntity {
     @Column
     private String name;
 

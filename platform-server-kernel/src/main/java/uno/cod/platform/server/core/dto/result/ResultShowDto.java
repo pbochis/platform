@@ -2,17 +2,18 @@ package uno.cod.platform.server.core.dto.result;
 
 
 import java.util.List;
+import java.util.UUID;
 
 public class ResultShowDto {
-    private final Long id;
+    private final UUID id;
     private final List<Long> startTimes;
 
-    public ResultShowDto(Long id, List<Long> startTimes){
+    public ResultShowDto(UUID id, List<Long> startTimes){
         this.id = id;
         this.startTimes = startTimes;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

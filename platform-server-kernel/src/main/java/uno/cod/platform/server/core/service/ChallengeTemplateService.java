@@ -12,6 +12,7 @@ import uno.cod.platform.server.core.repository.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -35,7 +36,7 @@ public class ChallengeTemplateService {
         this.endpointRepository = endpointRepository;
     }
 
-    public Long save(ChallengeTemplateCreateDto dto) {
+    public UUID save(ChallengeTemplateCreateDto dto) {
         Organization organization = organizationRepository.findOne(dto.getOrganizationId());
         if(organization==null){
             throw new IllegalArgumentException("organization.invalid");
@@ -49,7 +50,7 @@ public class ChallengeTemplateService {
         challengeTemplate.setDescription(dto.getDescription());
         challengeTemplate.setInstructions(dto.getInstructions());
         challengeTemplate.setDuration(dto.getDuration());
-        for (Long taskId : dto.getTasks()) {
+        for (UUID taskId : dto.getTasks()) {
             challengeTemplate.addTask(taskRepository.getOne(taskId));
         }
         organization.addChallenge(challengeTemplate);
@@ -58,15 +59,15 @@ public class ChallengeTemplateService {
         return repository.save(challengeTemplate).getId();
     }
 
-    public ChallengeTemplateShowDto findById(Long id) {
+    public ChallengeTemplateShowDto findById(UUID id) {
         return ChallengeTemplateMapper.map(repository.findOneWithEndpointAndTasksAndChallenges(id));
     }
 
-    public List<ChallengeTemplateShowDto> findAll(Long organizationId) {
+    public List<ChallengeTemplateShowDto> findAll(UUID organizationId) {
         return ChallengeTemplateMapper.map(repository.findAllWithTasks(organizationId));
     }
 
-    public ChallengeTemplateShowDto findByChallengeId(Long challengeId){
+    public ChallengeTemplateShowDto findByChallengeId(UUID challengeId){
         return ChallengeTemplateMapper.map(challengeRepository.findOneWithTemplate(challengeId).getChallengeTemplate());
     }
 }

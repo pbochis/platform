@@ -10,6 +10,7 @@ import uno.cod.platform.server.core.service.OrganizationMemberService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 public class OrganizationMemberController {
@@ -22,7 +23,7 @@ public class OrganizationMemberController {
 
     @RequestMapping(value = RestUrls.ORGANIZATION_MEMBERS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #id)")
-    public ResponseEntity<String> create(@PathVariable Long id, @Valid @RequestBody OrganizationMemberCreateDto dto) {
+    public ResponseEntity<String> create(@PathVariable UUID id, @Valid @RequestBody OrganizationMemberCreateDto dto) {
         service.save(dto, id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -30,7 +31,7 @@ public class OrganizationMemberController {
 
     @RequestMapping(value = RestUrls.ORGANIZATION_MEMBERS, method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #id)")
-    public ResponseEntity<String> delete(@PathVariable Long id, @Valid @RequestBody OrganizationMemberCreateDto dto) {
+    public ResponseEntity<String> delete(@PathVariable UUID id, @Valid @RequestBody OrganizationMemberCreateDto dto) {
         service.delete(dto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
