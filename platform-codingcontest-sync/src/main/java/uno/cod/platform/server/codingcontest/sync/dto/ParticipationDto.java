@@ -4,6 +4,7 @@ public class ParticipationDto {
     private String uuid;
     private String name;
     private String password;
+    private String email;
     private boolean disabled;
 
     public String getUuid() {
@@ -36,5 +37,13 @@ public class ParticipationDto {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
