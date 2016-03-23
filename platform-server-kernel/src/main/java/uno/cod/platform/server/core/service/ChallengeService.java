@@ -24,7 +24,7 @@ public class ChallengeService {
         this.challengeTemplateRepository = challengeTemplateRepository;
     }
 
-    public void createFromDto(ChallengeCreateDto dto){
+    public UUID createFromDto(ChallengeCreateDto dto){
         ChallengeTemplate template = challengeTemplateRepository.findOne(dto.getTemplateId());
         if (template == null){
             throw new IllegalArgumentException("challenge.invalid");
@@ -38,7 +38,7 @@ public class ChallengeService {
             challenge.setEndDate(dto.getStartDate().plus(template.getDuration()));
         }
         challenge.setInviteOnly(dto.isInviteOnly());
-        repository.save(challenge);
+        return repository.save(challenge).getId();
     }
 
     public ChallengeDto findOneById(UUID challengeId){

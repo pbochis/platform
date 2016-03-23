@@ -26,13 +26,12 @@ public class ChallengeController {
     @RequestMapping(value = RestUrls.CHALLENGES_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
     public ResponseEntity<ChallengeDto> get(@PathVariable UUID id){
-        return new ResponseEntity<>(service.findOneById(id), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.findOneById(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
-    public ResponseEntity createChallenge(@Valid @RequestBody ChallengeCreateDto dto){
-        service.createFromDto(dto);
-        return new ResponseEntity(HttpStatus.CREATED);
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #dto.templateId)")
+    public ResponseEntity<UUID> createChallenge(@Valid @RequestBody ChallengeCreateDto dto){
+        return new ResponseEntity(service.createFromDto(dto), HttpStatus.CREATED);
     }
 }
