@@ -2,11 +2,12 @@ package uno.cod.platform.server.core.dto.challenge;
 
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class ChallengeCreateDto {
 
     @NotNull
-    private Long templateId;
+    private UUID templateId;
 
     @NotNull
     private String name;
@@ -46,11 +47,11 @@ public class ChallengeCreateDto {
         this.canonicalName = canonicalName;
     }
 
-    public Long getTemplateId() {
+    public UUID getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(Long templateId) {
+    public void setTemplateId(UUID templateId) {
         this.templateId = templateId;
     }
 }

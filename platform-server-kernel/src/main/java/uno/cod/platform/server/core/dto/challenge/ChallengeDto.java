@@ -6,9 +6,10 @@ import uno.cod.platform.server.core.dto.user.UserShowDto;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class ChallengeDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String canonicalName;
     private ZonedDateTime startDate;
@@ -20,15 +21,15 @@ public class ChallengeDto {
 
     private List<UserShowDto> invitedUsers;
 
-    public ChallengeDto(Challenge challenge){
+    public ChallengeDto(Challenge challenge) {
         BeanUtils.copyProperties(challenge, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

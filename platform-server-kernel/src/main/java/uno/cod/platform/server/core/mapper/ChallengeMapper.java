@@ -6,9 +6,6 @@ import uno.cod.platform.server.core.dto.user.UserShowDto;
 
 import java.util.stream.Collectors;
 
-/**
- * Created by Paul on 3/22/2016.
- */
 public class ChallengeMapper {
 
     public static ChallengeDto map(Challenge challenge){
