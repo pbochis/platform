@@ -10,7 +10,7 @@ import java.time.Duration;
  * must do in order to fulfill a task or challenge.
  */
 @MappedSuperclass
-public abstract class Assignment extends IdentifiableEntity{
+public abstract class Assignment extends IdentifiableEntity {
     @Column(nullable = false)
     private String name;
 

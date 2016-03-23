@@ -15,6 +15,7 @@ import uno.cod.storage.PlatformStorage;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 @RestController
 public class TemplateController {
@@ -31,7 +32,7 @@ public class TemplateController {
     }
 
     @RequestMapping(path = RestUrls.TEMPLATES_ID, method = RequestMethod.GET)
-    public ResponseEntity<String> getTemplateUrl(@PathVariable Long id) throws GeneralSecurityException, UnsupportedEncodingException {
+    public ResponseEntity<String> getTemplateUrl(@PathVariable UUID id) throws GeneralSecurityException, UnsupportedEncodingException {
         Template template = templateRepository.findOne(id);
         //set expiration time to 2 hours
         Long expiration = (System.currentTimeMillis() / 1000) + 7200;

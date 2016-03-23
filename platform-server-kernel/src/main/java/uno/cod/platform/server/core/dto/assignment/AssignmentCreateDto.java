@@ -3,6 +3,7 @@ package uno.cod.platform.server.core.dto.assignment;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Duration;
+import java.util.UUID;
 
 public abstract class AssignmentCreateDto {
     @NotNull
@@ -18,13 +19,13 @@ public abstract class AssignmentCreateDto {
     private String instructions;
 
     @NotNull
-    private Long endpointId;
+    private UUID endpointId;
 
     @NotNull
     private Duration duration;
 
     @NotNull
-    private Long organizationId;
+    private UUID organizationId;
 
     public String getName() {
         return name;
@@ -50,11 +51,11 @@ public abstract class AssignmentCreateDto {
         this.instructions = instructions;
     }
 
-    public Long getEndpointId() {
+    public UUID getEndpointId() {
         return endpointId;
     }
 
-    public void setEndpointId(Long endpointId) {
+    public void setEndpointId(UUID endpointId) {
         this.endpointId = endpointId;
     }
 
@@ -66,11 +67,11 @@ public abstract class AssignmentCreateDto {
         this.duration = duration;
     }
 
-    public Long getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(Long organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 }

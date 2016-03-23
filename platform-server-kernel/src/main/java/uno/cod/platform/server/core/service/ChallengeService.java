@@ -9,6 +9,7 @@ import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Service
 public class ChallengeService {
@@ -21,7 +22,7 @@ public class ChallengeService {
         this.challengeTemplateRepository = challengeTemplateRepository;
     }
 
-    public void createFromDto(Long templateId, ChallengeCreateDto dto){
+    public void createFromDto(UUID templateId, ChallengeCreateDto dto){
         if (templateId == null){
             throw new IllegalArgumentException("challenge.invalid");
         }
@@ -42,7 +43,7 @@ public class ChallengeService {
         repository.save(challenge);
     }
 
-    public Challenge findOrCreateByTemplateAndStartDateAndOrganization(Long templateId, ZonedDateTime startDate, Long organizationId){
+    public Challenge findOrCreateByTemplateAndStartDateAndOrganization(UUID templateId, ZonedDateTime startDate, UUID organizationId){
         if (templateId == null){
             throw new IllegalArgumentException("challenge.invalid");
         }

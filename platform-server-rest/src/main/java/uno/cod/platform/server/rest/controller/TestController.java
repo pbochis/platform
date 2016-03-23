@@ -12,6 +12,7 @@ import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class TestController {
@@ -31,7 +32,7 @@ public class TestController {
 
     @RequestMapping(value = RestUrls.TASKS_ID_TESTS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<TestShowDto>> findByTaskId(@PathVariable Long id) {
+    public ResponseEntity<List<TestShowDto>> findByTaskId(@PathVariable UUID id) {
         return new ResponseEntity<>(testService.findByTaskId(id), HttpStatus.OK);
     }
 }

@@ -14,6 +14,7 @@ import uno.cod.platform.server.core.repository.ResultRepository;
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -27,7 +28,7 @@ public class ResultService {
         this.challengeRepository = challengeRepository;
     }
 
-    public ResultShowDto save(Long challengeId, User user){
+    public ResultShowDto save(UUID challengeId, User user){
         Challenge challenge = challengeRepository.findOne(challengeId);
         if (challenge == null){
             throw new IllegalArgumentException("challenge.invalid");
@@ -44,7 +45,7 @@ public class ResultService {
         return ResultMapper.map(repository.save(result));
     }
 
-    public void startTask(Long resultId, Long taskId) {
+    public void startTask(UUID resultId, UUID taskId) {
         Result result = repository.findOneWithChallenge(resultId);
         List<Task> tasks =result.getChallenge().getChallengeTemplate().getTasks();
         for(int i=0; i<tasks.size(); i++) {
@@ -57,11 +58,11 @@ public class ResultService {
         }
     }
 
-    public ResultShowDto findOne(Long id){
+    public ResultShowDto findOne(UUID id){
         return ResultMapper.map(repository.findOne(id));
     }
 
-    public ResultShowDto findOneByUserAndChallenge(Long userId, Long challengeId){
+    public ResultShowDto findOneByUserAndChallenge(UUID userId, UUID challengeId){
         return ResultMapper.map(repository.findOneByUserAndChallenge(userId, challengeId));
     }
 }

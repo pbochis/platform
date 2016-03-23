@@ -4,9 +4,10 @@ import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.Challenge;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class ChallengeShortShowDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String canonicalName;
     private ZonedDateTime startDate;
@@ -15,11 +16,11 @@ public class ChallengeShortShowDto {
         BeanUtils.copyProperties(challenge, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

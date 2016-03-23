@@ -3,8 +3,10 @@ package uno.cod.platform.server.core.dto.endpoint;
 import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.Endpoint;
 
+import java.util.UUID;
+
 public class EndpointShowDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String component;
 
@@ -12,11 +14,11 @@ public class EndpointShowDto {
         BeanUtils.copyProperties(endpoint, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

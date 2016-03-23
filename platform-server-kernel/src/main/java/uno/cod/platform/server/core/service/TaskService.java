@@ -16,6 +16,7 @@ import uno.cod.platform.server.core.repository.TaskRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -33,7 +34,7 @@ public class TaskService {
         this.runnerRepository = runnerRepository;
     }
 
-    public Long save(TaskCreateDto dto) {
+    public UUID save(TaskCreateDto dto) {
         Endpoint endpoint = endpointRepository.findOne(dto.getEndpointId());
         if (endpoint == null) {
             throw new IllegalArgumentException("endpoint.invalid");
@@ -66,11 +67,11 @@ public class TaskService {
         return repository.save(task).getId();
     }
 
-    public TaskShowDto findById(Long id) {
+    public TaskShowDto findById(UUID id) {
         return TaskMapper.map(repository.findOneWithLanguages(id));
     }
 
-    public List<TaskShowDto> findAll(Long organizationId) {
+    public List<TaskShowDto> findAll(UUID organizationId) {
         return TaskMapper.map(repository.findAllWithEndpoints(organizationId));
     }
 }

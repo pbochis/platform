@@ -2,18 +2,20 @@ package uno.cod.platform.server.core.dto.test;
 
 import uno.cod.platform.server.core.domain.Test;
 
+import java.util.UUID;
+
 public class TestShowDto {
-    private Long id;
+    private UUID id;
 
     public TestShowDto(Test test){
         this.id = test.getId();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }

@@ -12,6 +12,7 @@ import uno.cod.platform.server.rest.RestUrls;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 public class InvitationController {
@@ -25,14 +26,13 @@ public class InvitationController {
     @RequestMapping(value = RestUrls.INVITE, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> invite(@Valid @RequestBody InvitationDto dto,
-                                         Principal principal,
-                                         @RequestParam(name = "organization") Long organizationId) throws MessagingException {
+                                         Principal principal) throws MessagingException {
         service.invite(dto, principal.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.INVITE_AUTH_TOKEN, method = RequestMethod.GET)
-    public ResponseEntity<Long> authByToken(@PathVariable String token) {
+    public ResponseEntity<UUID> authByToken(@PathVariable String token) {
         return new ResponseEntity<>(service.authByToken(token), HttpStatus.OK);
     }
 

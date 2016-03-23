@@ -12,6 +12,7 @@ import uno.cod.platform.server.core.service.SubmissionService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 public class SubmissionController {
@@ -24,8 +25,8 @@ public class SubmissionController {
 
     @RequestMapping(value = RestUrls.RESULTS_TASKS_SUBMISSIONS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> create(@PathVariable Long resultId,
-                                         @PathVariable Long taskId,
+    public ResponseEntity<String> create(@PathVariable UUID resultId,
+                                         @PathVariable UUID taskId,
                                          @RequestParam("language") String language,
                                          @RequestParam("file") MultipartFile file,
                                          @AuthenticationPrincipal User principal) throws IOException {
@@ -36,8 +37,8 @@ public class SubmissionController {
 
     @RequestMapping(value = RestUrls.RESULTS_TESTS_OUTPUT, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> testOutput(@PathVariable Long resultId,
-                                             @PathVariable Long testId,
+    public ResponseEntity<String> testOutput(@PathVariable UUID resultId,
+                                             @PathVariable UUID testId,
                                              @RequestParam("file") MultipartFile file,
                                              @AuthenticationPrincipal User principal) throws IOException {
         return new ResponseEntity<>(service.testOutput(testId, file) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
@@ -45,7 +46,7 @@ public class SubmissionController {
 
     @RequestMapping(value = RestUrls.TASKS_ID_RUN, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> runtask(@PathVariable Long taskId,
+    public ResponseEntity<String> runtask(@PathVariable UUID taskId,
                                           @RequestParam("language") String language,
                                           @RequestParam("file") MultipartFile file,
                                           @AuthenticationPrincipal User principal) throws IOException {

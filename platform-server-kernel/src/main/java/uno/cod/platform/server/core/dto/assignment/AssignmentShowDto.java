@@ -3,20 +3,21 @@ package uno.cod.platform.server.core.dto.assignment;
 import uno.cod.platform.server.core.dto.endpoint.EndpointShowDto;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public abstract class AssignmentShowDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private String instructions;
     private EndpointShowDto endpoint;
     private Duration duration;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
