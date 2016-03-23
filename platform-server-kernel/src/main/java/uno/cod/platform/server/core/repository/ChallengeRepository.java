@@ -22,4 +22,9 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
             "JOIN FETCH challenge.challengeTemplate template " +
             "WHERE challenge.id=:id")
     Challenge findOneWithTemplate(@Param("id") UUID id);
+
+    @Query("SELECT challenge FROM Challenge challenge " +
+            "JOIN FETCH challenge.invitedUsers " +
+            "WHERE challenge.id=:id")
+    Challenge findOneWithUsers(@Param("id") UUID id);
 }

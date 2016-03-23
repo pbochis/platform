@@ -2,8 +2,13 @@ package uno.cod.platform.server.core.dto.challenge;
 
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class ChallengeCreateDto {
+
+    @NotNull
+    private UUID templateId;
+
     @NotNull
     private String name;
     private String canonicalName;
@@ -40,5 +45,13 @@ public class ChallengeCreateDto {
 
     public void setCanonicalName(String canonicalName) {
         this.canonicalName = canonicalName;
+    }
+
+    public UUID getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(UUID templateId) {
+        this.templateId = templateId;
     }
 }
