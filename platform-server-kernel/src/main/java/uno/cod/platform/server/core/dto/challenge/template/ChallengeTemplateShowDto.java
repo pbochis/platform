@@ -4,15 +4,15 @@ import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.ChallengeTemplate;
 import uno.cod.platform.server.core.dto.assignment.AssignmentShowDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeShortShowDto;
-import uno.cod.platform.server.core.dto.task.TaskShowDto;
 
 import java.util.List;
+import java.util.UUID;
 
-public class ChallengeTemplateShowDto extends AssignmentShowDto{
-    private List<TaskShowDto> tasks;
+public class ChallengeTemplateShowDto extends AssignmentShowDto {
+    private List<UUID> tasks;
     private List<ChallengeShortShowDto> challenges;
 
-    public ChallengeTemplateShowDto(ChallengeTemplate challengeTemplate){
+    public ChallengeTemplateShowDto(ChallengeTemplate challengeTemplate) {
         BeanUtils.copyProperties(challengeTemplate, this);
     }
 
@@ -24,11 +24,11 @@ public class ChallengeTemplateShowDto extends AssignmentShowDto{
         this.challenges = challenges;
     }
 
-    public List<TaskShowDto> getTasks() {
+    public List<UUID> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<TaskShowDto> tasks) {
+    public void setTasks(List<UUID> tasks) {
         this.tasks = tasks;
     }
 }
