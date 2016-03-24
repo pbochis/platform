@@ -1,6 +1,7 @@
 coduno:
   url: https://app.cod.uno
-  runtime_url: https://runtime.cod.uno
+  runtime:
+    url: https://runtime.cod.uno
   codingcontest_url: https://codingcontest.catalysts.cc
   mail:
     from: noreply@cod.uno
