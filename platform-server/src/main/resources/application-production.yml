@@ -1,0 +1,5 @@
+server:
+  session:
+    cookie:
+      domain: .cod.uno
+      secure: true

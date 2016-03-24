@@ -38,3 +38,10 @@ spring:
 flyway:
   sql-migration-prefix: ""
   out-of-order: true
+
+server:
+  session:
+    cookie:
+      name: IDOFDEATH
+      http-only: true
+      path: /
