@@ -4,7 +4,7 @@ package uno.cod.platform.server.rest;
 public class RestUrls {
     public static final String CHALLENGE_TEMPLATES = "/challenges/templates";
     public static final String CHALLENGE_TEMPLATES_ID = "/challenges/templates/{id}";
-    public static final String CHALLENGE_TEMPLATES_CHALLENGE = "/challenges/templates/challenge/{id}";
+    public static final String CHALLENGE_ID_TEMPLATE = "/challenges/{id}/template";
     public static final String CHALLENGE_TEMPLATES_ID_CHALLENGE = "/challenges/templates/{id}/challenges";
 
     public static final String CHALLENGES_ID = "/challenges/{id}";

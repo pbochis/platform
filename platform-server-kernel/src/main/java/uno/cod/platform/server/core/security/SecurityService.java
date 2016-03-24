@@ -92,6 +92,11 @@ public class SecurityService {
         if(user.getOrganizations() != null){
             return true;
         }
+        for(Challenge challenge: user.getInvitedChallenges()){
+            if(challenge.getId().equals(challengeId)){
+                return true;
+            }
+        }
         return false;
     }
 
