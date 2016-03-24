@@ -30,8 +30,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users",
                         "/ip",
                         "/ip2",
-                        "/invite/auth/*",
-                        "/ws/**").permitAll()
+                        "/invite/auth/*").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .sessionManagement()

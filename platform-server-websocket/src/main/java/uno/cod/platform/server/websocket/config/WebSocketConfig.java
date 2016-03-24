@@ -48,12 +48,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
         public void afterConnectionEstablished(WebSocketSession session) throws Exception {
             super.afterConnectionEstablished(session);
             if (!(session.getPrincipal() instanceof Authentication)) {
+                LOGGER.info("unauthenticated user connected with id {}, dropping", session.getId());
+                session.close(CloseStatus.POLICY_VIOLATION);
                 return;
             }
 
             Authentication auth = (Authentication) session.getPrincipal();
 
             if (!(auth.getPrincipal() instanceof User)) {
+                LOGGER.info("unauthenticated user connected with id {}, dropping", session.getId());
+                session.close(CloseStatus.POLICY_VIOLATION);
                 return;
             }
 
