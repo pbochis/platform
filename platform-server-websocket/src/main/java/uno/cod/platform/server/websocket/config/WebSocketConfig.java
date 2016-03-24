@@ -1,11 +1,14 @@
 package uno.cod.platform.server.websocket.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -20,6 +23,8 @@ import uno.cod.platform.server.websocket.service.WebSocketService;
 @EnableWebSocket
 @ComponentScan({"uno.cod.platform.server.core.service"})
 public class WebSocketConfig implements WebSocketConfigurer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketConfigurer.class);
+
     @Autowired
     Environment env;
 
@@ -40,7 +45,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private class SocketHandler extends TextWebSocketHandler {
         @Override
-        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+            super.afterConnectionEstablished(session);
             if (!(session.getPrincipal() instanceof Authentication)) {
                 return;
             }
@@ -53,6 +59,18 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
             User user = (User) auth.getPrincipal();
             webSocketService.addSession(user.getId(), session);
+        }
+
+        @Override
+        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+            /* we do not need to handle upstream messages yet, we only send stuff */
+            LOGGER.debug("discarded websocket message: {}", message);
+        }
+
+        @Override
+        public void afterConnectionClosed(WebSocketSession wsSession, CloseStatus status) throws Exception {
+            super.afterConnectionClosed(wsSession, status);
+            webSocketService.removeSession(wsSession);
         }
     }
 }
