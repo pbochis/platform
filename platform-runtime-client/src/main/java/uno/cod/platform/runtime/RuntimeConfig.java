@@ -1,5 +1,7 @@
 package uno.cod.platform.runtime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Configuration
 @EnableConfigurationProperties(RuntimeProperties.class)
 public class RuntimeConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeConfig.class);
+
     @Autowired
     private RuntimeProperties runtimeProperties;
 
@@ -27,6 +31,7 @@ public class RuntimeConfig {
 
         if(runtimeProperties.getUsername() != null &&
                 !runtimeProperties.getUsername().isEmpty()) {
+            LOGGER.info("enabled basic authentication for runtime client");
             List<ClientHttpRequestInterceptor> interceptors = Collections
                     .singletonList(new BasicAuthorizationInterceptor(runtimeProperties.getUsername(),
                                     runtimeProperties.getPassword()));
