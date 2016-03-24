@@ -1,6 +1,7 @@
 coduno:
   url: http://localhost:6060
-  runtime_url: http://localhost:8081
+  runtime:
+    url: http://localhost:8081
   codingcontest_url: https://codingcontest.lab.catalysts.cc
   mail:
     from: noreply@cod.uno

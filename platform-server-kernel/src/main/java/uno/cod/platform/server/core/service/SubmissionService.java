@@ -30,14 +30,12 @@ public class SubmissionService {
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
     private final TestRepository testRepository;
+    private final RuntimeClient runtimeClient;
     private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
 
     @Value("${coduno.storage.gcs.buckets.submissions}")
     private String bucket;
-
-    @Value("${coduno.runtime_url}")
-    private String runtimeUrl;
 
     @Autowired
     public SubmissionService(SubmissionRepository repository,
@@ -45,12 +43,14 @@ public class SubmissionService {
                              TaskRepository taskRepository,
                              TestRepository testRepository,
                              PlatformStorage platformStorage,
+                             RuntimeClient runtimeClient,
                              IClientPushConnection appClientConnection) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.testRepository = testRepository;
         this.platformStorage = platformStorage;
+        this.runtimeClient = runtimeClient;
         this.appClientConnection = appClientConnection;
     }
 
@@ -108,7 +108,7 @@ public class SubmissionService {
                 form.add(param.getKey(), param.getValue());
             }
         }
-        JsonNode obj = RuntimeClient.postToRuntime(runtimeUrl, test.getRunner().getName(), form);
+        JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
         if(obj.get("Failed")==null){
             return false;
         }
@@ -120,7 +120,7 @@ public class SubmissionService {
         form.add("language", language);
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
 
-        appClientConnection.send(userId, RuntimeClient.postToRuntime(runtimeUrl, runner.getName(), form).toString());
+        appClientConnection.send(userId, runtimeClient.postToRuntime(runner.getName(), form).toString());
     }
 
     private void runTest(UUID userId, String filePath, String language, Test test) throws IOException {
@@ -133,7 +133,7 @@ public class SubmissionService {
                 form.add(param.getKey(), param.getValue());
             }
         }
-        JsonNode obj = RuntimeClient.postToRuntime(runtimeUrl, test.getRunner().getName(), form);
+        JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
         ((ObjectNode) obj).put("Test", test.getId().toString());
         appClientConnection.send(userId, obj.toString());
     }

@@ -6,11 +6,6 @@
       "description": "Url of Coduno webfrontend."
     },
     {
-      "name": "coduno.runtime_url",
-      "type": "java.lang.String",
-      "description": "Url of the runtime."
-    },
-    {
       "name": "coduno.codingcontest_url",
       "type": "java.lang.String",
       "description": "Url to the legacy codingcontest platform."
@@ -19,6 +14,21 @@
       "name": "coduno.mail.from",
       "type": "java.lang.String",
       "description": "Invitation mails of Coduno are sent by this address."
+    },
+    {
+      "name": "coduno.runtime.url",
+      "type": "java.lang.String",
+      "description": "Url of the coduno runtime."
+    },
+    {
+      "name": "coduno.runtime.username",
+      "type": "java.lang.String",
+      "description": "Username for basic authentication of the runtime."
+    },
+    {
+      "name": "coduno.runtime.password",
+      "type": "java.lang.String",
+      "description": "Password for basic authentication of the runtime."
     }
   ]
 }
