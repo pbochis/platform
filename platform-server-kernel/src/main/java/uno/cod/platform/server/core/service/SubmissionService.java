@@ -11,10 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.runtime.RuntimeClient;
 import uno.cod.platform.server.core.domain.*;
-import uno.cod.platform.server.core.repository.ResultRepository;
-import uno.cod.platform.server.core.repository.SubmissionRepository;
-import uno.cod.platform.server.core.repository.TaskRepository;
-import uno.cod.platform.server.core.repository.TestRepository;
+import uno.cod.platform.server.core.repository.*;
 import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
@@ -33,6 +30,7 @@ public class SubmissionService {
     private final RuntimeClient runtimeClient;
     private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
+    private final TestResultRepository testResultRepository;
 
     @Value("${coduno.storage.gcs.buckets.submissions}")
     private String bucket;
@@ -44,12 +42,14 @@ public class SubmissionService {
                              TestRepository testRepository,
                              PlatformStorage platformStorage,
                              RuntimeClient runtimeClient,
+                             TestResultRepository testResultRepository,
                              IClientPushConnection appClientConnection) {
         this.repository = repository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.testRepository = testRepository;
         this.platformStorage = platformStorage;
+        this.testResultRepository = testResultRepository;
         this.runtimeClient = runtimeClient;
         this.appClientConnection = appClientConnection;
     }
@@ -82,7 +82,7 @@ public class SubmissionService {
 
         // TODO update submission with results
         for (Test test : task.getTests()) {
-            runTest(user.getId(), submission.filePath(), language, test);
+            runTest(user.getId(), submission, language, test);
         }
     }
 
@@ -123,10 +123,10 @@ public class SubmissionService {
         return !obj.get("Failed").booleanValue();
     }
 
-    private void runTest(UUID userId, String filePath, String language, Test test) throws IOException {
+    private void runTest(UUID userId, Submission submission, String language, Test test) throws IOException {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("language", language);
-        form.add("files_gcs", filePath);
+        form.add("files_gcs", submission.filePath());
         Map<String, String> params = test.getParams();
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
@@ -135,6 +135,15 @@ public class SubmissionService {
         }
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
         ((ObjectNode) obj).put("Test", test.getId().toString());
+
+        boolean failed = (obj.get("Stderr") != null && !obj.get("Stderr").asText().isEmpty()) || obj.get("Failed").booleanValue();
+
+        TestResult testResult = new TestResult();
+        testResult.setTest(test);
+        testResult.setSubmission(submission);
+        testResult.setGreen(!failed);
+        testResultRepository.save(testResult);
+        //TODO: think wether we should save the test results in the database or as a json file in gcs
         appClientConnection.send(userId, obj.toString());
     }
 }
