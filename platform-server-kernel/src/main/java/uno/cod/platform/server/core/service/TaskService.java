@@ -62,6 +62,7 @@ public class TaskService {
         task.setDuration(dto.getDuration());
         task.setSkillMap(dto.getSkillMap());
         task.setRunner(runner);
+        task.setParams(dto.getParams());
         endpoint.addTask(task);
         organization.addTask(task);
         return repository.save(task).getId();
