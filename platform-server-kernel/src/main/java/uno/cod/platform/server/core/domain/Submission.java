@@ -1,9 +1,7 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * A submission for a (task, challenge, user)
@@ -13,6 +11,9 @@ import javax.persistence.Table;
 public class Submission extends IdentifiableEntity implements StoredObject {
     @ManyToOne
     private Result result;
+
+    @OneToMany(mappedBy = "submission")
+    private List<TestResult> testResults;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "task_id", nullable = false, updatable = false)
@@ -47,5 +48,13 @@ public class Submission extends IdentifiableEntity implements StoredObject {
     @Override
     public String filePath() {
         return getId() + "/" + fileName;
+    }
+
+    public List<TestResult> getTestResults() {
+        return testResults;
+    }
+
+    public void setTestResults(List<TestResult> testResults) {
+        this.testResults = testResults;
     }
 }
