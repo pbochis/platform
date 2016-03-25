@@ -8,7 +8,7 @@ public class ResultShowDto {
     private final UUID id;
     private final List<Long> startTimes;
 
-    public ResultShowDto(UUID id, List<Long> startTimes){
+    public ResultShowDto(UUID id, List<Long> startTimes) {
         this.id = id;
         this.startTimes = startTimes;
     }

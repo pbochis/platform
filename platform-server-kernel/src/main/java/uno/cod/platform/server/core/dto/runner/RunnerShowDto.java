@@ -3,19 +3,21 @@ package uno.cod.platform.server.core.dto.runner;
 import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.Runner;
 
+import java.util.UUID;
+
 public class RunnerShowDto {
-    private Long id;
+    private UUID id;
     private String name;
 
     public RunnerShowDto(Runner runner){
         BeanUtils.copyProperties(runner, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
