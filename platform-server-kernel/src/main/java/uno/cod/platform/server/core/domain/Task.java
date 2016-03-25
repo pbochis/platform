@@ -39,6 +39,11 @@ public class Task extends Assignment {
     @JoinColumn(name = "runner_id")
     private Runner runner;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_params")
+    @Lob
+    private Map<String, String> params;
+
     @ManyToMany
     private Set<Language> languages;
 
@@ -112,6 +117,14 @@ public class Task extends Assignment {
 
     public void setLanguages(Set<Language> languages) {
         this.languages = languages;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 
     protected void addChallenge(ChallengeTemplate challengeTemplate) {

@@ -14,6 +14,7 @@ public class TaskCreateDto extends AssignmentCreateDto{
     @NotNull
     @NotEmpty
     private Map<CodingSkill, Double> skillMap;
+    private Map<String, String> params;
 
     private UUID runnerId;
 
@@ -39,5 +40,13 @@ public class TaskCreateDto extends AssignmentCreateDto{
 
     public void setSkillMap(Map<CodingSkill, Double> skillMap) {
         this.skillMap = skillMap;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 }

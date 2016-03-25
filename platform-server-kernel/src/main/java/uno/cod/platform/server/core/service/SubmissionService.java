@@ -91,8 +91,16 @@ public class SubmissionService {
         if (task == null) {
             throw new IllegalArgumentException("task.invalid");
         }
-        // TODO update submission with results
-        run(user.getId(), file, language, task.getRunner());
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+        form.add("language", language);
+        form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
+        if(task.getParams()!=null){
+            for (Map.Entry<String, String> param : task.getParams().entrySet()) {
+                form.add(param.getKey(), param.getValue());
+            }
+        }
+
+        appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getName(), form).toString());
     }
 
     public boolean testOutput(UUID testId, MultipartFile file) throws IOException {
@@ -113,14 +121,6 @@ public class SubmissionService {
             return false;
         }
         return !obj.get("Failed").booleanValue();
-    }
-
-    private void run(UUID userId, MultipartFile file, String language, Runner runner) throws IOException {
-        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
-        form.add("language", language);
-        form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
-
-        appClientConnection.send(userId, runtimeClient.postToRuntime(runner.getName(), form).toString());
     }
 
     private void runTest(UUID userId, String filePath, String language, Test test) throws IOException {
