@@ -12,14 +12,12 @@ import uno.cod.platform.server.core.service.util.EndpointTestUtil;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class EndpointServiceTest {
     private EndpointService service;
     private EndpointRepository repository;
 
     @Before
-    public void setup(){
+    public void setup() {
         this.repository = Mockito.mock(EndpointRepository.class);
         this.service = new EndpointService(repository);
     }

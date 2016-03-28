@@ -8,19 +8,17 @@ import uno.cod.platform.server.core.dto.runner.RunnerShowDto;
 import uno.cod.platform.server.core.repository.RunnerRepository;
 import uno.cod.platform.server.core.service.util.RunnerTestUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RunnerServiceTest {
     private RunnerService service;
     private RunnerRepository repository;
 
     @Before
-    public void setup(){
+    public void setup() {
         this.repository = Mockito.mock(RunnerRepository.class);
         this.service = new RunnerService(repository);
     }

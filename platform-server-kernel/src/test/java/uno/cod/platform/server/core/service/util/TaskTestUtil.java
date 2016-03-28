@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class TaskTestUtil {
-    public static Task getValidTask(){
+    public static Task getValidTask() {
         Task task = new Task();
         task.setId(UUID.randomUUID());
         task.setName("name");
@@ -24,7 +24,8 @@ public class TaskTestUtil {
         task.setRunner(RunnerTestUtil.getRunner());
         return task;
     }
-    public static Task getTask(TaskCreateDto dto){
+
+    public static Task getTask(TaskCreateDto dto) {
         Task task = new Task();
         task.setName(dto.getName());
         task.setDescription(dto.getDescription());
@@ -38,7 +39,7 @@ public class TaskTestUtil {
         return task;
     }
 
-    public static TaskCreateDto getTaskCreateDto(){
+    public static TaskCreateDto getTaskCreateDto() {
         TaskCreateDto dto = new TaskCreateDto();
         dto.setName("name");
         dto.setDescription("description");

@@ -74,7 +74,7 @@ public class TaskServiceTest {
         assertTaskEquals(task, dto);
     }
 
-    public void assertTaskEquals(Task task, TaskShowDto dto){
+    public void assertTaskEquals(Task task, TaskShowDto dto) {
         Assert.assertEquals(dto.getId(), task.getId());
         Assert.assertEquals(dto.getName(), task.getName());
         Assert.assertEquals(dto.getDescription(), task.getDescription());

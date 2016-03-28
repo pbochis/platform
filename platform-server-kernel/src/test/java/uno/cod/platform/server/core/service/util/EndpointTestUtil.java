@@ -5,11 +5,11 @@ import uno.cod.platform.server.core.domain.Endpoint;
 import java.util.UUID;
 
 public class EndpointTestUtil {
-    public static Endpoint getEndpoint(){
+    public static Endpoint getEndpoint() {
         return getEndpoint(UUID.randomUUID());
     }
 
-    public static Endpoint getEndpoint(UUID id){
+    public static Endpoint getEndpoint(UUID id) {
         Endpoint endpoint = new Endpoint();
         endpoint.setId(id);
         endpoint.setName("endpoint");

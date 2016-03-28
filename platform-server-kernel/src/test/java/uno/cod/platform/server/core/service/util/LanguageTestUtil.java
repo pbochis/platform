@@ -5,7 +5,7 @@ import uno.cod.platform.server.core.domain.Language;
 import java.util.UUID;
 
 public class LanguageTestUtil {
-    public static Language getLanguage(){
+    public static Language getLanguage() {
         Language language = new Language();
         language.setId(UUID.randomUUID());
         language.setName("Java");
