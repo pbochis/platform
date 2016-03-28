@@ -15,7 +15,9 @@ public class ResultMapper {
         List<Long> startTimes = new ArrayList<>();
         if (result.getStartTimes() != null) {
             for (ZonedDateTime time : result.getStartTimes()) {
-                startTimes.add(time.toInstant().toEpochMilli());
+                if(time != null) {
+                    startTimes.add(time.toInstant().toEpochMilli());
+                }
             }
         }
         return new ResultShowDto(result.getId(), startTimes);

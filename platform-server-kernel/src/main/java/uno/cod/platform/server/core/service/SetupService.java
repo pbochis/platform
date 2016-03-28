@@ -206,7 +206,10 @@ public class SetupService {
         ccc.setDuration(Duration.ofHours(4));
 
         for (int i = 1; i <= 7; i++) {
-            Task task = createTask("Level " + i, "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), org, languages);
+            Map<String, String> taskParams = new HashMap<>();
+            taskParams.put("level", i + "");
+            taskParams.put("test",  "1");
+            Task task = createTask("Level " + i, "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), org, languages, taskParams);
             for (int j = 1; j <= 3; j++) {
                 Map<String, String> params = new HashMap<>();
                 params.put("level", i + "");
@@ -233,10 +236,10 @@ public class SetupService {
     }
 
     private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Set<Language> languages) {
-        return createTask(name, description, instructions, endpoint, runner, duration, null, languages);
+        return createTask(name, description, instructions, endpoint, runner, duration, null, languages, null);
     }
 
-    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages) {
+    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages, Map<String, String> params) {
         Task task = new Task();
         task.setName(name);
         task.setDescription(description);
@@ -247,6 +250,7 @@ public class SetupService {
         task.addSkill(CodingSkill.CODING_SPEED, 1D);
         task.setOrganization(organization);
         task.setLanguages(languages);
+        task.setParams(params);
         return taskRepository.save(task);
     }
 
