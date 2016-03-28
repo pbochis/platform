@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.CodingSkill;
 import uno.cod.platform.server.core.domain.Task;
 import uno.cod.platform.server.core.dto.assignment.AssignmentShowDto;
+import uno.cod.platform.server.core.dto.endpoint.EndpointShowDto;
 import uno.cod.platform.server.core.dto.language.LanguageShowDto;
 import uno.cod.platform.server.core.dto.template.TemplateShowDto;
 
@@ -14,7 +15,12 @@ import java.util.stream.Collectors;
 
 public class TaskShowDto extends AssignmentShowDto{
     public TaskShowDto(Task task){
-        BeanUtils.copyProperties(task, this);
+        this.setId(task.getId());
+        this.setName(task.getName());
+        this.setDescription(task.getDescription());
+        this.setInstructions(task.getInstructions());
+        this.setDuration(task.getDuration());
+        this.setSkillMap(task.getSkillMap());
         this.normalRunAvailable = task.getRunner() != null;
         if(task.getLanguages()!=null){
             this.languages = task.getLanguages().stream().map(LanguageShowDto::new).collect(Collectors.toList());

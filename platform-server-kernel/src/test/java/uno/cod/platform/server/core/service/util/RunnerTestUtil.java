@@ -12,4 +12,11 @@ public class RunnerTestUtil {
         runner.setName(NAME);
         return runner;
     }
+
+    public static Runner getRunner(UUID id){
+        Runner runner = new Runner();
+        runner.setId(id);
+        runner.setName(NAME);
+        return runner;
+    }
 }

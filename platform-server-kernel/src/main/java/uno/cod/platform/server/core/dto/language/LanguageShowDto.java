@@ -3,8 +3,10 @@ package uno.cod.platform.server.core.dto.language;
 import org.springframework.beans.BeanUtils;
 import uno.cod.platform.server.core.domain.Language;
 
+import java.util.UUID;
+
 public class LanguageShowDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String tag;
 
@@ -12,11 +14,11 @@ public class LanguageShowDto {
         BeanUtils.copyProperties(language, this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
