@@ -10,7 +10,6 @@ import uno.cod.platform.server.core.mapper.ChallengeMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
@@ -19,21 +18,21 @@ public class ChallengeService {
     private final ChallengeRepository repository;
 
     @Autowired
-    public ChallengeService(ChallengeRepository repository, ChallengeTemplateRepository challengeTemplateRepository){
+    public ChallengeService(ChallengeRepository repository, ChallengeTemplateRepository challengeTemplateRepository) {
         this.repository = repository;
         this.challengeTemplateRepository = challengeTemplateRepository;
     }
 
-    public UUID createFromDto(ChallengeCreateDto dto){
+    public UUID createFromDto(ChallengeCreateDto dto) {
         ChallengeTemplate template = challengeTemplateRepository.findOne(dto.getTemplateId());
-        if (template == null){
+        if (template == null) {
             throw new IllegalArgumentException("challenge.invalid");
         }
         Challenge challenge = new Challenge();
         challenge.setChallengeTemplate(template);
         challenge.setName(dto.getName());
         challenge.setCanonicalName(dto.getCanonicalName());
-        if (dto.getStartDate() != null){
+        if (dto.getStartDate() != null) {
             challenge.setStartDate(dto.getStartDate());
             challenge.setEndDate(dto.getStartDate().plus(template.getDuration()));
         }
@@ -41,34 +40,8 @@ public class ChallengeService {
         return repository.save(challenge).getId();
     }
 
-    public ChallengeDto findOneById(UUID challengeId){
+    public ChallengeDto findOneById(UUID challengeId) {
         return ChallengeMapper.map(repository.findOne(challengeId));
     }
 
-    public Challenge findOrCreateByTemplateAndStartDateAndOrganization(UUID templateId, ZonedDateTime startDate, UUID organizationId){
-        if (templateId == null){
-            throw new IllegalArgumentException("challenge.invalid");
-        }
-        Challenge challenge = repository.findOneByTemplateAndStartDateAndOrganization(templateId, startDate, organizationId);
-        if (challenge == null){
-            ChallengeTemplate challengeTemplate = challengeTemplateRepository.findOne(templateId);
-            if (challengeTemplate == null){
-                throw new IllegalArgumentException("challenge.invalid");
-            }
-            challenge = new Challenge();
-            challenge.setChallengeTemplate(challengeTemplate);
-            challenge.setStartDate(startDate);
-            if(startDate!=null) {
-                challenge.setEndDate(startDate.plus(challengeTemplate.getDuration()));
-            }
-            //TODO: maybe set a default name, or in the future force organizations to input a name
-            //TODO: even for "default" challenges
-            challenge = repository.save(challenge);
-        }
-        return challenge;
-    }
-
-    public void save(Challenge challenge){
-        repository.save(challenge);
-    }
 }

@@ -158,6 +158,9 @@ public class Task extends Assignment {
     }
 
     public List<Template> getTemplates() {
+        if(templates==null){
+            return null;
+        }
         return Collections.unmodifiableList(templates);
     }
 
