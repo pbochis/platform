@@ -57,6 +57,9 @@ public class Result extends IdentifiableEntity {
     }
 
     public List<TaskResult> getTaskResults() {
+        if(taskResults == null){
+            return null;
+        }
         return Collections.unmodifiableList(taskResults);
     }
 

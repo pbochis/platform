@@ -27,7 +27,7 @@ public class TaskResultService {
     @Autowired
     public TaskResultService(TaskResultRepository taskResultRepository,
                              ResultRepository resultRepository,
-                             TaskRepository taskRepository){
+                             TaskRepository taskRepository) {
         this.taskResultRepository = taskResultRepository;
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
@@ -35,22 +35,19 @@ public class TaskResultService {
 
     public void startTask(UUID resultId, UUID taskId) throws IllegalArgumentException {
         Result result = resultRepository.findOneWithChallenge(resultId);
-        Task task = taskRepository.findOne(taskId);
-        List<Task> tasks = result.getChallenge().getChallengeTemplate().getTasks();
-        int taskOrder = tasks.indexOf(task);
-        if (taskOrder == -1) {
-            throw new IllegalArgumentException("task.invalid");
+        if (result == null) {
+            throw new AccessDeniedException("result.invalid");
         }
-        if (taskOrder != 0) {
-            Task previousTask = tasks.get(taskOrder - 1);
-            TaskResult previousTaskResult = taskResultRepository.findOneByTaskAndResult(previousTask.getId(), resultId);
-            if (previousTaskResult == null || !previousTaskResult.isGreen()){
-                throw  new AccessDeniedException("task.denied");
-            }
+        Task task = taskRepository.findOne(taskId);
+        if (task == null) {
+            throw new AccessDeniedException("task.invalid");
         }
 
         TaskResult taskResult = taskResultRepository.findOneByTaskAndResult(taskId, resultId);
         if (taskResult != null) {
+            if (taskResult.getStartTime() != null) {
+                throw new AccessDeniedException("task.denied");
+            }
             return;
         }
 
@@ -64,7 +61,7 @@ public class TaskResultService {
         taskResultRepository.save(taskResult);
     }
 
-    public void finishTaskResult(TaskResult taskResult, ZonedDateTime endTime, boolean green){
+    public void finishTaskResult(TaskResult taskResult, ZonedDateTime endTime, boolean green) {
         taskResult.setEndTime(endTime);
         taskResult.setGreen(green);
         taskResultRepository.save(taskResult);
@@ -80,7 +77,7 @@ public class TaskResultService {
         }
     }
 
-    public TaskResult findByTaskAndResult(UUID taskId, UUID resultId){
+    public TaskResult findByTaskAndResult(UUID taskId, UUID resultId) {
         return taskResultRepository.findOneByTaskAndResult(taskId, resultId);
     }
 }
