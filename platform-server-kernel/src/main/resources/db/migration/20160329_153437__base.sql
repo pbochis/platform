@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.12-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.13-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: test_platform
 -- ------------------------------------------------------
--- Server version	10.1.12-MariaDB
+-- Server version	10.1.13-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -230,22 +230,6 @@ CREATE TABLE `result` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `result_starttimes`
---
-
-DROP TABLE IF EXISTS `result_starttimes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `result_starttimes` (
-  `Result_id` binary(16) NOT NULL,
-  `startTimes` datetime DEFAULT NULL,
-  `startTimes_ORDER` int(11) NOT NULL,
-  PRIMARY KEY (`Result_id`,`startTimes_ORDER`),
-  CONSTRAINT `FKj4dnfeadwrb81rv0o2noppxqp` FOREIGN KEY (`Result_id`) REFERENCES `result` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `runner`
 --
 
@@ -259,7 +243,6 @@ CREATE TABLE `runner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `submission`
 --
@@ -270,13 +253,13 @@ DROP TABLE IF EXISTS `submission`;
 CREATE TABLE `submission` (
   `id` binary(16) NOT NULL,
   `fileName` varchar(255) DEFAULT NULL,
-  `result_id` binary(16) DEFAULT NULL,
-  `task_id` binary(16) NOT NULL,
+  `green` bit(1) NOT NULL,
+  `submissionTime` datetime DEFAULT NULL,
+  `taskResult_result_id` binary(16) NOT NULL,
+  `taskResult_task_id` binary(16) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK8cn4mdb6cxjdq2dvlaaw4et60` (`result_id`),
-  KEY `FKh66q0hdbqk19lop36gyg3hvg0` (`task_id`),
-  CONSTRAINT `FK8cn4mdb6cxjdq2dvlaaw4et60` FOREIGN KEY (`result_id`) REFERENCES `result` (`id`),
-  CONSTRAINT `FKh66q0hdbqk19lop36gyg3hvg0` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
+  KEY `FKmquolgstf98mxytbuvcgodh3c` (`taskResult_result_id`,`taskResult_task_id`),
+  CONSTRAINT `FKmquolgstf98mxytbuvcgodh3c` FOREIGN KEY (`taskResult_result_id`, `taskResult_task_id`) REFERENCES `task_result` (`result_id`, `task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -321,6 +304,42 @@ CREATE TABLE `task_language` (
   KEY `FK83xtpggmbfxcpnjda873l7imf` (`languages_id`),
   CONSTRAINT `FK83xtpggmbfxcpnjda873l7imf` FOREIGN KEY (`languages_id`) REFERENCES `language` (`id`),
   CONSTRAINT `FKbbidfslog5l20ln71ifd4byd3` FOREIGN KEY (`tasks_id`) REFERENCES `task` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task_params`
+--
+
+DROP TABLE IF EXISTS `task_params`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_params` (
+  `Task_id` binary(16) NOT NULL,
+  `params` longtext,
+  `params_KEY` varchar(255) NOT NULL,
+  PRIMARY KEY (`Task_id`,`params_KEY`),
+  CONSTRAINT `FKb8ei0q6q2udt6o5nc0rfyfggo` FOREIGN KEY (`Task_id`) REFERENCES `task` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task_result`
+--
+
+DROP TABLE IF EXISTS `task_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_result` (
+  `endTime` datetime DEFAULT NULL,
+  `green` bit(1) NOT NULL,
+  `startTime` datetime DEFAULT NULL,
+  `task_id` binary(16) NOT NULL,
+  `result_id` binary(16) NOT NULL,
+  PRIMARY KEY (`result_id`,`task_id`),
+  KEY `FKrybvdir7ojloru8l7yyfc8ucp` (`task_id`),
+  CONSTRAINT `FK8ooeckt3h28qw46q074r4qwnf` FOREIGN KEY (`result_id`) REFERENCES `result` (`id`),
+  CONSTRAINT `FKrybvdir7ojloru8l7yyfc8ucp` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -430,6 +449,26 @@ CREATE TABLE `test_params` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `test_result`
+--
+
+DROP TABLE IF EXISTS `test_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_result` (
+  `id` binary(16) NOT NULL,
+  `green` bit(1) NOT NULL,
+  `submission_id` binary(16) NOT NULL,
+  `test_id` binary(16) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKmcokumtauiop1p52ox5l19np9` (`submission_id`),
+  KEY `FKef3e8k7fgvkj4mox0lxrkf8hh` (`test_id`),
+  CONSTRAINT `FKef3e8k7fgvkj4mox0lxrkf8hh` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`),
+  CONSTRAINT `FKmcokumtauiop1p52ox5l19np9` FOREIGN KEY (`submission_id`) REFERENCES `submission` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user`
 --
 
@@ -463,4 +502,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-23 17:33:23
+-- Dump completed on 2016-03-29 16:04:03
