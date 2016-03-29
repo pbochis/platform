@@ -3,13 +3,17 @@ package uno.cod.platform.server.core.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.dto.challenge.LeaderboardEntryDto;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
+import uno.cod.platform.server.core.dto.user.UserShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,5 +52,19 @@ public class ResultService {
 
     public ResultShowDto findOneByUserAndChallenge(UUID userId, UUID challengeId){
         return ResultMapper.map(repository.findOneByUserAndChallenge(userId, challengeId));
+    }
+
+    public List<LeaderboardEntryDto> getLeaderboard(UUID challengeId) {
+        List<LeaderboardEntryDto> leaderboard = new ArrayList<>();
+        List<Object[]> results = repository.findLeaderboardForChallenge(challengeId);
+        for (Object[] resultEntry: results){
+            LeaderboardEntryDto entry = new LeaderboardEntryDto();
+            Result result = (Result)resultEntry[0];
+            entry.setUser(new UserShowDto(result.getUser()));
+            entry.setTasksCompleted((Long)resultEntry[1]);
+            entry.setLastLevelFinishDate((ZonedDateTime)resultEntry[2]);
+            leaderboard.add(entry);
+        }
+        return leaderboard;
     }
 }

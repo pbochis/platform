@@ -17,12 +17,14 @@ public class ChallengeServiceTest {
     private ChallengeService service;
     private ChallengeRepository repository;
     private ChallengeTemplateRepository challengeTemplateRepository;
+    private ResultService resultService;
 
     @Before
     public void setup() {
         repository = Mockito.mock(ChallengeRepository.class);
         challengeTemplateRepository = Mockito.mock(ChallengeTemplateRepository.class);
-        service = new ChallengeService(repository, challengeTemplateRepository);
+        resultService = Mockito.mock(ResultService.class);
+        service = new ChallengeService(repository, challengeTemplateRepository, resultService);
     }
 
     @Test

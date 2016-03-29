@@ -16,11 +16,15 @@ import java.util.UUID;
 public class ChallengeService {
     private final ChallengeTemplateRepository challengeTemplateRepository;
     private final ChallengeRepository repository;
+    private final ResultService resultService;
 
     @Autowired
-    public ChallengeService(ChallengeRepository repository, ChallengeTemplateRepository challengeTemplateRepository) {
+    public ChallengeService(ChallengeRepository repository,
+                            ChallengeTemplateRepository challengeTemplateRepository,
+                            ResultService resultService){
         this.repository = repository;
         this.challengeTemplateRepository = challengeTemplateRepository;
+        this.resultService = resultService;
     }
 
     public UUID createFromDto(ChallengeCreateDto dto) {
@@ -41,7 +45,7 @@ public class ChallengeService {
     }
 
     public ChallengeDto findOneById(UUID challengeId) {
-        return ChallengeMapper.map(repository.findOne(challengeId));
+        return ChallengeMapper.map(repository.findOne(challengeId), resultService.getLeaderboard(challengeId));
     }
 
 }
