@@ -251,6 +251,9 @@ public class SetupService {
         task.setOrganization(organization);
         task.setLanguages(languages);
         task.setParams(params);
+        if(organization == null){
+            task.setPublic(true);
+        }
         return taskRepository.save(task);
     }
 
