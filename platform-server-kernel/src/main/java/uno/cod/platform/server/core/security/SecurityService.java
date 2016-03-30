@@ -1,11 +1,11 @@
 package uno.cod.platform.server.core.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.OrganizationMember;
-import uno.cod.platform.server.core.domain.TeamMember;
-import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.repository.TaskRepository;
+import uno.cod.platform.server.core.repository.UserRepository;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -18,6 +18,15 @@ import java.util.UUID;
  */
 @Service
 public class SecurityService {
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public SecurityService(TaskRepository taskRepository, UserRepository userRepository) {
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+    }
+
     public boolean isTeamMember(User user, UUID teamId) {
         if (user == null || teamId == null) {
             return false;
@@ -105,8 +114,30 @@ public class SecurityService {
             return false;
         }
 
-        // TODO
+        // TODO extend for current organization the user is logged in
+        if(user.getOrganizations()!=null){
+            Task task = taskRepository.findOneWithOrganization(taskId);
+            if(task.isPublic()){
+                return true;
+            }
+            for(OrganizationMember membership: user.getOrganizations()){
+                if(membership.getKey().getOrganization().equals(task.getOrganization())){
+                    return true;
+                }
+            }
+        }
 
-        return true;
+        user = userRepository.findOneWithResults(user.getId());
+        for(Result result: user.getResults()){
+            if(result.getFinished()==null){
+                for(TaskResult taskResult: result.getTaskResults()){
+                    if(taskResult.getKey().getTask().getId().equals(taskId) && taskResult.getStartTime() != null){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
