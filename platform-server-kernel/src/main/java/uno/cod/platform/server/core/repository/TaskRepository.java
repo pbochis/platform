@@ -37,4 +37,9 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
             "LEFT JOIN FETCH task.languages " +
             "WHERE task.id = :id")
     Task findOneWithLanguages(@Param("id") UUID id);
+
+    @Query("SELECT task FROM Task task " +
+            "LEFT JOIN FETCH task.organization " +
+            "WHERE task.id = :id")
+    Task findOneWithOrganization(@Param("id") UUID id);
 }
