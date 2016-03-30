@@ -33,4 +33,13 @@ public interface ResultRepository extends JpaRepository<Result, UUID> {
             "JOIN result.challenge challenge " +
             "WHERE challenge.id = :id ")
     List<Result> findAllByChallenge(@Param("id") UUID id);
+
+    @Query(" SELECT result, " +
+            "   (select count(tr) FROM result.taskResults as tr where tr.green=true) as finishedTasksCount," +
+            "   (select max(tr.endTime) FROM result.taskResults tr where tr.green=true group by tr.key.result) as lastFinishedTaskTime " +
+            "FROM Result result  " +
+            "JOIN result.challenge challenge " +
+            "WHERE challenge.id =:challengeId " +
+            "ORDER BY finishedTasksCount desc, lastFinishedTaskTime")
+    List<Object[]> findLeaderboardForChallenge(@Param("challengeId") UUID challengeId);
 }

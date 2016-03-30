@@ -16,8 +16,7 @@ public class ChallengeDto {
     private ZonedDateTime endDate;
     private boolean inviteOnly;
 
-    //ToDo: add List<ResultShortShowDto> after TaskResult entity is created so we can display
-    // the last finished task like in the old catcoder view.
+    private List<LeaderboardEntryDto> leaderboard;
 
     private List<UserShowDto> invitedUsers;
 
@@ -79,5 +78,13 @@ public class ChallengeDto {
 
     public void setInvitedUsers(List<UserShowDto> invitedUsers) {
         this.invitedUsers = invitedUsers;
+    }
+
+    public List<LeaderboardEntryDto> getLeaderboard() {
+        return leaderboard;
+    }
+
+    public void setLeaderboard(List<LeaderboardEntryDto> leaderboard) {
+        this.leaderboard = leaderboard;
     }
 }
