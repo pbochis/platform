@@ -10,9 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
+import uno.cod.platform.server.core.dto.invitation.InvitationShowDto;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.InvitationRepository;
+import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 import uno.cod.platform.server.core.service.mail.MailService;
 
@@ -29,6 +31,7 @@ public class InvitationService {
 
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
+    private final ResultRepository resultRepository;
 
     private final ChallengeRepository challengeRepository;
     private final MailService mailService;
@@ -40,11 +43,12 @@ public class InvitationService {
     @Autowired
     public InvitationService(UserRepository userRepository,
                              InvitationRepository invitationRepository,
-                             ChallengeRepository challengeRepository,
+                             ResultRepository resultRepository, ChallengeRepository challengeRepository,
                              UserService userService,
                              MailService mailService) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
+        this.resultRepository = resultRepository;
         this.challengeRepository = challengeRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -71,9 +75,9 @@ public class InvitationService {
         Invitation invitation = new Invitation();
         invitation.setChallenge(challenge);
         invitation.setEmail(dto.getEmail());
-        if (challenge.getStartDate() != null){
+        if (challenge.getStartDate() != null) {
             invitation.setExpire(challenge.getStartDate().plus(challenge.getChallengeTemplate().getDuration()));
-        }else{
+        } else {
             invitation.setExpire(ZonedDateTime.now().plus(duration));
         }
         invitation.setToken(token);
@@ -123,6 +127,27 @@ public class InvitationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return challenge.getId();
+    }
+
+    public List<InvitationShowDto> getByChallengeId(UUID challengeId) {
+        List<Invitation> invitations = invitationRepository.findAllByChallenge(challengeId);
+        List<InvitationShowDto> dtos = new ArrayList<>();
+        for (Invitation invitation : invitations) {
+            InvitationShowDto dto = new InvitationShowDto();
+            dto.setEmail(invitation.getEmail());
+            dto.setToken(invitation.getToken());
+            dto.setExpire(invitation.getExpire());
+            User user = userRepository.findByUsernameOrEmail(invitation.getEmail(), invitation.getEmail());
+            if (user != null) {
+                dto.setUsername(user.getUsername());
+                Result result = resultRepository.findOneByUserAndChallenge(user.getId(), challengeId);
+                if (result != null) {
+                    dto.setStarted(result.getStarted());
+                }
+            }
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @Scheduled(fixedRate = 5000)

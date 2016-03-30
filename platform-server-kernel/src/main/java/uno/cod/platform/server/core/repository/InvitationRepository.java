@@ -9,6 +9,8 @@ import uno.cod.platform.server.core.domain.Invitation;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface InvitationRepository extends JpaRepository<Invitation, String> {
@@ -17,4 +19,9 @@ public interface InvitationRepository extends JpaRepository<Invitation, String> 
     @Transactional
     @Query("delete from Invitation i where i.expire > :now")
     void deleteExpiredTokens(@Param("now") ZonedDateTime now);
+
+    @Query("SELECT invitation FROM Invitation invitation " +
+            "LEFT JOIN FETCH invitation.challenge challenge " +
+            "WHERE challenge.id = :challenge")
+    List<Invitation> findAllByChallenge(@Param("challenge") UUID challenge);
 }
