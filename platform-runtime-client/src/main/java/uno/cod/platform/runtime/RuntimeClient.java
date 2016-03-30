@@ -43,6 +43,8 @@ public class RuntimeClient {
             obj = objectMapper.createObjectNode();
             ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
         } catch (RestClientException e) {
+            obj = objectMapper.createObjectNode();
+            ((ObjectNode) obj).put("error", e.getMessage());
             LOGGER.error("got generic rest client exception", e);
         }
         return obj;

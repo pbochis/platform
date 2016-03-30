@@ -148,6 +148,11 @@ public class SubmissionService {
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
         ((ObjectNode) obj).put("Test", test.getId().toString());
 
+        if(obj.get("error")!= null){
+            appClientConnection.send(userId, obj.toString());
+            return false;
+        }
+
         boolean failed = (obj.get("Stderr") != null && !obj.get("Stderr").asText().isEmpty()) || obj.get("Failed").booleanValue();
 
         TestResult testResult = new TestResult();
