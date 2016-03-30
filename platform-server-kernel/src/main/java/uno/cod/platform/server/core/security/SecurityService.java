@@ -121,7 +121,7 @@ public class SecurityService {
                 return true;
             }
             for(OrganizationMember membership: user.getOrganizations()){
-                if(membership.getKey().getOrganization().equals(task.getOrganization())){
+                if(membership.getKey().getOrganization().getId().equals(task.getOrganization().getId())){
                     return true;
                 }
             }
