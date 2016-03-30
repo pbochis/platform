@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.io.IOException;
 
@@ -38,13 +36,13 @@ public class RuntimeClient {
             LOGGER.trace("calling {} with parameters {}", endpoint, form);
             ResponseEntity<String> response = restTemplate.postForEntity(endpoint, form, String.class);
             obj = objectMapper.readValue(response.getBody(), JsonNode.class);
-        } catch (HttpStatusCodeException e) {
+        } catch (HttpServerErrorException e) {
             LOGGER.debug("got error response status {} from runtime, body: {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
             obj = objectMapper.createObjectNode();
             ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
-        } catch (RestClientException e) {
+        } catch (HttpClientErrorException e) {
             obj = objectMapper.createObjectNode();
-            ((ObjectNode) obj).put("error", e.getMessage());
+            ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
             LOGGER.error("got generic rest client exception", e);
         }
         return obj;
