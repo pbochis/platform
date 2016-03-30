@@ -16,8 +16,6 @@ public class ChallengeDto {
     private ZonedDateTime endDate;
     private boolean inviteOnly;
 
-    private List<LeaderboardEntryDto> leaderboard;
-
     private List<UserShowDto> invitedUsers;
 
     public ChallengeDto(Challenge challenge) {
@@ -78,13 +76,5 @@ public class ChallengeDto {
 
     public void setInvitedUsers(List<UserShowDto> invitedUsers) {
         this.invitedUsers = invitedUsers;
-    }
-
-    public List<LeaderboardEntryDto> getLeaderboard() {
-        return leaderboard;
-    }
-
-    public void setLeaderboard(List<LeaderboardEntryDto> leaderboard) {
-        this.leaderboard = leaderboard;
     }
 }

@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.core.dto.challenge.LeaderboardEntryDto;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.service.ResultService;
 import uno.cod.platform.server.rest.RestUrls;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,5 +43,11 @@ public class ResultController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResultShowDto> findMyResultForChallenge(@PathVariable UUID id, @AuthenticationPrincipal User principal) {
         return new ResponseEntity<>(service.findOneByUserAndChallenge(principal.getId(), id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.LEADERBOARD, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<LeaderboardEntryDto>> findLeaderboardForChallenge(@PathVariable UUID id) {
+        return new ResponseEntity<>(service.getLeaderboard(id), HttpStatus.OK);
     }
 }

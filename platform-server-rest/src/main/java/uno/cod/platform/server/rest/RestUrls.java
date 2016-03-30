@@ -28,6 +28,8 @@ public class RestUrls {
     public static final String RESULTS_CHALLENGE_ID_MY = "/results/challenge/{id}/my";
     public static final String RESULTS_ID_TASK_ID = "/results/{id}/task/{taskId}";
 
+    public static final String LEADERBOARD = "/challenge/{id}/leaderboard";
+
     public static final String TASKS = "/tasks";
     public static final String TASKS_ID = "/tasks/{id}";
 
