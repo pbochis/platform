@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.invitation.InvitationDto;
+import uno.cod.platform.server.core.dto.invitation.InvitationShowDto;
 import uno.cod.platform.server.core.service.InvitationService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +31,12 @@ public class InvitationController {
                                          Principal principal) throws MessagingException {
         service.invite(dto, principal.getName());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.CHALLENGES_ID_INVITATIONS, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<InvitationShowDto>> getByChallenge(@PathVariable UUID id) {
+        return new ResponseEntity<>(service.getByChallengeId(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.INVITE_AUTH_TOKEN, method = RequestMethod.GET)
