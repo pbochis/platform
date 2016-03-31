@@ -27,6 +27,7 @@ public class Task extends Assignment {
     private Map<CodingSkill, Double> skillMap;
 
     @OneToMany(mappedBy = "task")
+    @OrderColumn
     private List<Test> tests;
 
     @OneToMany(mappedBy = "task")
