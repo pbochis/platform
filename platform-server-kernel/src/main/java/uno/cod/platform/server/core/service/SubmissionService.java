@@ -146,7 +146,7 @@ public class SubmissionService {
             testResults.add(testResult);
             green = green && testResult.isGreen();
         }
-        if (testResults.size() == task.getTests().size() && green) {
+        if (testResults.size() == testRepository.findByTask(task.getId()).size() && green) {
             submission.setGreen(true);
             repository.save(submission);
             taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
