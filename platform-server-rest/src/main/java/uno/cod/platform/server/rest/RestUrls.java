@@ -35,6 +35,7 @@ public class RestUrls {
     public static final String TASKS = "/tasks";
     public static final String TASKS_ID = "/tasks/{id}";
 
+    public static final String TEMPLATES = "/templates";
     public static final String TEMPLATES_ID = "/templates/{id}";
 
     public static final String TASKS_ID_TESTS = "/tasks/{id}/tests";
@@ -47,6 +48,7 @@ public class RestUrls {
 
     public static final String ENDPOINTS = "/endpoints";
     public static final String RUNNERS = "/runners";
+    public static final String LANGUAGES = "/languages";
 
     public static final String TESTS = "/tests";
 
