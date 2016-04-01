@@ -34,6 +34,7 @@ public class TemplateController {
     }
 
     @RequestMapping(path = RestUrls.TEMPLATES_ID, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> getTemplateUrl(@PathVariable UUID id) throws GeneralSecurityException, UnsupportedEncodingException {
         return new ResponseEntity<>(service.getTemplateUrl(id), HttpStatus.OK);
     }
