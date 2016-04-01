@@ -40,6 +40,6 @@ public class Template extends IdentifiableEntity implements StoredObject {
 
     @Override
     public String filePath() {
-        return String.format("/%s/%s", language, fileName);
+        return fileName;
     }
 }
