@@ -18,14 +18,12 @@ import uno.cod.storage.PlatformStorage;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
 public class SubmissionService {
+    private static final Integer MAX_RESPONSE_SIZE = 2000000;
     private final SubmissionRepository repository;
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
@@ -169,22 +167,26 @@ public class SubmissionService {
             }
         }
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
-        boolean green = obj.get("Failed") != null && !obj.get("Failed").booleanValue();
+        boolean success = obj.get("failed") != null && !obj.get("failed").booleanValue();
 
         TestResult testResult = new TestResult();
         testResult.setTest(test);
         testResult.setSubmission(submission);
-        testResult.setGreen(green);
+        testResult.setGreen(success);
         testResultRepository.save(testResult);
 
-        OutputTestResultDto testResultDto = new OutputTestResultDto(test.getId(), green);
-        if (obj.get("Stdout").binaryValue().length < 2000000){
-            testResultDto.setStdout(obj.get("Stdout").binaryValue());
+        OutputTestResultDto testResultDto = new OutputTestResultDto(test.getId(), success);
+        byte[] stdout = obj.get("stdout").binaryValue();
+        if (stdout.length > MAX_RESPONSE_SIZE) {
+            stdout = Arrays.copyOfRange(stdout, 0, MAX_RESPONSE_SIZE);
         }
+        testResultDto.setStdout(stdout);
 
-        if (obj.get("Stderr").binaryValue().length < 2000000){
-            testResultDto.setStderr(obj.get("Stderr").binaryValue());
+        byte[] stderr = obj.get("stderr").binaryValue();
+        if (stderr.length > MAX_RESPONSE_SIZE) {
+            stderr = Arrays.copyOfRange(stderr, 0, MAX_RESPONSE_SIZE);
         }
+        testResultDto.setStderr(stderr);
 
         return testResultDto;
     }
@@ -207,7 +209,7 @@ public class SubmissionService {
             return false;
         }
 
-        boolean failed = (obj.get("Stderr") != null && !obj.get("Stderr").asText().isEmpty()) || obj.get("Failed").booleanValue();
+        boolean failed = (obj.get("stderr") != null && !obj.get("stderr").asText().isEmpty()) || obj.get("failed").booleanValue();
 
         TestResult testResult = new TestResult();
         testResult.setTest(test);
