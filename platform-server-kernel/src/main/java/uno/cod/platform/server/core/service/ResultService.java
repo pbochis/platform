@@ -7,6 +7,7 @@ import uno.cod.platform.server.core.domain.Challenge;
 import uno.cod.platform.server.core.domain.Result;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.challenge.LeaderboardEntryDto;
+import uno.cod.platform.server.core.dto.result.ResultInfoDto;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
 import uno.cod.platform.server.core.dto.user.UserShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
@@ -91,5 +92,13 @@ public class ResultService {
             leaderboard.add(entry);
         }
         return leaderboard;
+    }
+
+    public ResultInfoDto getResultInfoForUserAndChallenge(UUID userId, UUID challengeId) {
+        Result result = repository.findOneWithTaskResultsByUserAndChallenge(userId, challengeId);
+        if (result == null) {
+            return null;
+        }
+        return new ResultInfoDto(result);
     }
 }
