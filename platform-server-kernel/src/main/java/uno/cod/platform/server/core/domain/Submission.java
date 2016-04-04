@@ -1,6 +1,9 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -15,6 +18,9 @@ public class Submission extends IdentifiableEntity implements StoredObject {
 
     @OneToMany(mappedBy = "submission")
     private List<TestResult> testResults;
+
+    @ManyToOne()
+    private Language language;
 
     private String fileName;
 
@@ -65,5 +71,13 @@ public class Submission extends IdentifiableEntity implements StoredObject {
 
     public void setTestResults(List<TestResult> testResults) {
         this.testResults = testResults;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

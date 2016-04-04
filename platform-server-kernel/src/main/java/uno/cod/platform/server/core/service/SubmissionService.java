@@ -28,6 +28,7 @@ public class SubmissionService {
     private final TaskRepository taskRepository;
     private final TestRepository testRepository;
     private final RuntimeClient runtimeClient;
+    private final LanguageRepository languageRepository;
     private final IClientPushConnection appClientConnection;
     private final PlatformStorage platformStorage;
     private final TaskResultService taskResultService;
@@ -42,6 +43,7 @@ public class SubmissionService {
                              TaskRepository taskRepository,
                              TestRepository testRepository,
                              PlatformStorage platformStorage,
+                             LanguageRepository languageRepository,
                              RuntimeClient runtimeClient,
                              TaskResultService taskResultService,
                              TestResultRepository testResultRepository,
@@ -52,6 +54,7 @@ public class SubmissionService {
         this.testRepository = testRepository;
         this.platformStorage = platformStorage;
         this.taskResultService = taskResultService;
+        this.languageRepository = languageRepository;
         this.testResultRepository = testResultRepository;
         this.runtimeClient = runtimeClient;
         this.appClientConnection = appClientConnection;
@@ -77,6 +80,7 @@ public class SubmissionService {
 
         Submission submission = new Submission();
         submission.setTaskResult(taskResult);
+        submission.setLanguage(languageRepository.findByTag(language));
         submission.setFileName(file.getOriginalFilename());
         submission.setSubmissionTime(ZonedDateTime.now());
         submission = repository.save(submission);
