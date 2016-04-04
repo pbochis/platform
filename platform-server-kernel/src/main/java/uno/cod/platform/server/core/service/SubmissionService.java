@@ -11,18 +11,19 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.runtime.RuntimeClient;
 import uno.cod.platform.server.core.domain.*;
+import uno.cod.platform.server.core.dto.test.OutputTestResultDto;
 import uno.cod.platform.server.core.repository.*;
 import uno.cod.storage.PlatformStorage;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
 public class SubmissionService {
+    private static final Integer MAX_RESPONSE_SIZE = 2000000;
     private final SubmissionRepository repository;
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
@@ -67,7 +68,7 @@ public class SubmissionService {
         }
 
         Challenge challenge = result.getChallenge();
-        if (challenge.getEndDate() != null && challenge.getEndDate().isBefore(ZonedDateTime.now())){
+        if (challenge.getEndDate() != null && challenge.getEndDate().isBefore(ZonedDateTime.now())) {
             throw new AccessDeniedException("challenge.ended");
         }
 
@@ -97,7 +98,7 @@ public class SubmissionService {
 
         submission.setGreen(green);
         repository.save(submission);
-        if (green && !taskResult.isGreen()){
+        if (green && !taskResult.isGreen()) {
             taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), green);
         }
     }
@@ -110,7 +111,7 @@ public class SubmissionService {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("language", language);
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
-        if(task.getParams()!=null){
+        if (task.getParams() != null) {
             for (Map.Entry<String, String> param : task.getParams().entrySet()) {
                 form.add(param.getKey(), param.getValue());
             }
@@ -119,8 +120,41 @@ public class SubmissionService {
         appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getName(), form).toString());
     }
 
-    public boolean testOutput(UUID testId, MultipartFile file) throws IOException {
-        Test test = testRepository.findOneWithRunner(testId);
+    public List<OutputTestResultDto> testOutput(UUID resultId, UUID taskId, MultipartFile[] files) throws IOException {
+        Result result = resultRepository.findOne(resultId);
+        if (result == null) {
+            throw new IllegalArgumentException("result.invalid");
+        }
+
+        Task task = taskRepository.findOneWithTests(taskId);
+        if (task == null) {
+            throw new IllegalArgumentException("task.invalid");
+        }
+
+        TaskResult taskResult = taskResultService.findByTaskAndResult(taskId, resultId);
+        Submission submission = new Submission();
+        submission.setTaskResult(taskResult);
+        submission.setSubmissionTime(ZonedDateTime.now());
+        submission = repository.save(submission);
+
+        List<OutputTestResultDto> testResults = new ArrayList<>(files.length);
+        boolean green = true;
+        for (MultipartFile file : files) {
+            UUID testId = UUID.fromString(file.getOriginalFilename());
+            Test test = testRepository.findOneWithRunner(testId);
+            OutputTestResultDto testResult = runOutputTest(submission, test, file);
+            testResults.add(testResult);
+            green = green && testResult.isGreen();
+        }
+        if (testResults.size() == task.getTests().size() && green) {
+            submission.setGreen(true);
+            repository.save(submission);
+            taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
+        }
+        return testResults;
+    }
+
+    private OutputTestResultDto runOutputTest(Submission submission, Test test, MultipartFile file) throws IOException {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
         form.add("output_test", "true");
@@ -133,10 +167,28 @@ public class SubmissionService {
             }
         }
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
-        if(obj.get("Failed")==null){
-            return false;
+        boolean success = obj.get("failed") != null && !obj.get("failed").booleanValue();
+
+        TestResult testResult = new TestResult();
+        testResult.setTest(test);
+        testResult.setSubmission(submission);
+        testResult.setGreen(success);
+        testResultRepository.save(testResult);
+
+        OutputTestResultDto testResultDto = new OutputTestResultDto(test.getId(), success);
+        byte[] stdout = obj.get("stdout").binaryValue();
+        if (stdout.length > MAX_RESPONSE_SIZE) {
+            stdout = Arrays.copyOfRange(stdout, 0, MAX_RESPONSE_SIZE);
         }
-        return !obj.get("Failed").booleanValue();
+        testResultDto.setStdout(stdout);
+
+        byte[] stderr = obj.get("stderr").binaryValue();
+        if (stderr.length > MAX_RESPONSE_SIZE) {
+            stderr = Arrays.copyOfRange(stderr, 0, MAX_RESPONSE_SIZE);
+        }
+        testResultDto.setStderr(stderr);
+
+        return testResultDto;
     }
 
     private boolean runTest(UUID userId, Submission submission, String language, Test test) throws IOException {
@@ -152,12 +204,12 @@ public class SubmissionService {
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
         ((ObjectNode) obj).put("Test", test.getId().toString());
 
-        if(obj.get("error")!= null){
+        if (obj.get("error") != null) {
             appClientConnection.send(userId, obj.toString());
             return false;
         }
 
-        boolean failed = (obj.get("Stderr") != null && !obj.get("Stderr").asText().isEmpty()) || obj.get("Failed").booleanValue();
+        boolean failed = (obj.get("stderr") != null && !obj.get("stderr").asText().isEmpty()) || obj.get("failed").booleanValue();
 
         TestResult testResult = new TestResult();
         testResult.setTest(test);
