@@ -202,7 +202,7 @@ public class SubmissionService {
             }
         }
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
-        ((ObjectNode) obj).put("Test", test.getId().toString());
+        ((ObjectNode) obj).put("test", test.getId().toString());
 
         if (obj.get("error") != null) {
             appClientConnection.send(userId, obj.toString());
