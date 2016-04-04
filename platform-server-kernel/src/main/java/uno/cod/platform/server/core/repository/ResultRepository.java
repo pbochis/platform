@@ -24,6 +24,14 @@ public interface ResultRepository extends JpaRepository<Result, UUID> {
     Result findOneByUserAndChallenge(@Param("user") UUID userId, @Param("challenge") UUID challengeId);
 
     @Query("SELECT result FROM Result result " +
+            "LEFT JOIN FETCH result.challenge challenge " +
+            "LEFT JOIN FETCH result.user user " +
+            "LEFT JOIN FETCH result.taskResults taskResults " +
+            "LEFT JOIN FETCH taskResults.submissions " +
+            "WHERE user.id = :user AND challenge.id = :challenge")
+    Result findOneWithTaskResultsByUserAndChallenge(@Param("user") UUID userId, @Param("challenge") UUID challengeId);
+
+    @Query("SELECT result FROM Result result " +
             "JOIN result.challenge challenge " +
             "JOIN challenge.challengeTemplate template " +
             "WHERE template.id = :templateId ")
@@ -36,10 +44,11 @@ public interface ResultRepository extends JpaRepository<Result, UUID> {
 
     @Query(" SELECT result, " +
             "   (select count(tr) FROM result.taskResults as tr where tr.green=true) as finishedTasksCount," +
-            "   (select max(tr.endTime) FROM result.taskResults tr where tr.green=true group by tr.key.result) as lastFinishedTaskTime " +
+            "   (select max(tr.endTime) FROM result.taskResults tr where tr.green=true group by tr.key.result) as lastFinishedTaskTime, " +
+            "   (select max(tr.endTime) - result.started FROM result.taskResults tr where tr.green=true group by tr.key.result) as duration " +
             "FROM Result result  " +
             "JOIN result.challenge challenge " +
             "WHERE challenge.id =:challengeId " +
-            "ORDER BY finishedTasksCount desc, lastFinishedTaskTime")
+            "ORDER BY finishedTasksCount desc, duration")
     List<Object[]> findLeaderboardForChallenge(@Param("challengeId") UUID challengeId);
 }
