@@ -69,11 +69,11 @@ DROP TABLE IF EXISTS `challenge_template_task`;
 CREATE TABLE `challenge_template_task` (
   `challenge_template_id` binary(16) NOT NULL,
   `task_id` binary(16) NOT NULL,
-  `task_order` int(11) NOT NULL DEFAULT 0,
+  `task_order` int(11) NOT NULL,
   PRIMARY KEY (`challenge_template_id`,`task_order`),
   KEY `FKr1xioakulcpwam6vtrhdv3hx8` (`task_id`),
-  CONSTRAINT `FKpm5h2fhdqxbqcyoboajp8sm2l` FOREIGN KEY (`challenge_template_id`) REFERENCES `challenge_template` (`id`),
-  CONSTRAINT `FKr1xioakulcpwam6vtrhdv3hx8` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
+  CONSTRAINT `FKr1xioakulcpwam6vtrhdv3hx8` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
+  CONSTRAINT `FKpm5h2fhdqxbqcyoboajp8sm2l` FOREIGN KEY (`challenge_template_id`) REFERENCES `challenge_template` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -429,13 +429,31 @@ DROP TABLE IF EXISTS `test`;
 CREATE TABLE `test` (
   `id` binary(16) NOT NULL,
   `runner_id` binary(16) DEFAULT NULL,
-  `task_id` binary(16) DEFAULT NULL,
-  `test_order` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`, `test_order`),
+  `task_id` binary(16) NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `FKjvtfp7jnalo9d5em8rmpxbj68` (`runner_id`),
   KEY `FK2xx1yyitp3uqqmhgeg0qwuvps` (`task_id`),
   CONSTRAINT `FK2xx1yyitp3uqqmhgeg0qwuvps` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
   CONSTRAINT `FKjvtfp7jnalo9d5em8rmpxbj68` FOREIGN KEY (`runner_id`) REFERENCES `runner` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `task_test`
+--
+
+DROP TABLE IF EXISTS `task_test`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_test` (
+  `task_id` binary(16) NOT NULL,
+  `test_id` binary(16) NOT NULL,
+  `test_order` int(11) NOT NULL,
+  PRIMARY KEY (`task_id`,`test_order`),
+  UNIQUE KEY `UK_3dy4ukni25lki5q5nj4u7qa8i` (`test_id`),
+  CONSTRAINT `FKde2egmcpxvg6xw1h8yymk4u1r` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
+  CONSTRAINT `FKpsxerryf2urs8n7j9kir04igl` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
