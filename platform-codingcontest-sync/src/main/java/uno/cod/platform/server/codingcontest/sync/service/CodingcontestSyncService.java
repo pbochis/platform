@@ -59,6 +59,10 @@ public class CodingcontestSyncService {
             challenge.setCanonicalName("ccc-" + dto.getLocation() + "-" + Year.now().toString());
             challenge.setChallengeTemplate(template);
             challenge.setStartDate(ZonedDateTime.ofInstant(dto.getStartTime().toInstant(), ZoneId.of("UTC")));
+            challenge.setEndDate(
+                    challenge.getStartDate()
+                    .plusHours(dto.getDurationHours())
+                    .plusMinutes(dto.getDurationMinutes()));
             challenge = challengeRepository.save(challenge);
         }
 
