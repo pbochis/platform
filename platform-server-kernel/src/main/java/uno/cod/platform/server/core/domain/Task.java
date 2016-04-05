@@ -13,6 +13,9 @@ public class Task extends Assignment {
     @ManyToMany(mappedBy = "tasks")
     private List<ChallengeTemplate> challengeTemplates;
 
+    @Column(name = "canonical_name", nullable = false, unique = true)
+    private String canonicalName;
+
     @ManyToOne
     private Endpoint endpoint;
 
@@ -44,6 +47,14 @@ public class Task extends Assignment {
 
     @ManyToMany
     private Set<Language> languages;
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
+    }
 
     public List<ChallengeTemplate> getChallengeTemplates() {
         return Collections.unmodifiableList(challengeTemplates);
