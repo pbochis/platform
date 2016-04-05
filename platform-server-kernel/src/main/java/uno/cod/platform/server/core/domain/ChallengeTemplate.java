@@ -20,7 +20,7 @@ public class ChallengeTemplate extends Assignment {
     @ManyToOne
     private Organization organization;
 
-    @OrderColumn
+    @OrderColumn(name = "task_order")
     @ManyToMany(mappedBy = "challengeTemplates")
     private List<Task> tasks;
 

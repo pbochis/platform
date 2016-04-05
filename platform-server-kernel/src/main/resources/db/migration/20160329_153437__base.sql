@@ -69,8 +69,8 @@ DROP TABLE IF EXISTS `challenge_template_task`;
 CREATE TABLE `challenge_template_task` (
   `challenge_template_id` binary(16) NOT NULL,
   `task_id` binary(16) NOT NULL,
-  `tasks_ORDER` int(11) NOT NULL,
-  PRIMARY KEY (`task_id`,`tasks_ORDER`),
+  `task_order` int(11) NOT NULL,
+  PRIMARY KEY (`task_id`,`task_order`),
   KEY `FKr1xioakulcpwam6vtrhdv3hx8` (`task_id`),
   CONSTRAINT `FKpm5h2fhdqxbqcyoboajp8sm2l` FOREIGN KEY (`challenge_template_id`) REFERENCES `challenge_template` (`id`),
   CONSTRAINT `FKr1xioakulcpwam6vtrhdv3hx8` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
@@ -118,8 +118,8 @@ DROP TABLE IF EXISTS `coder_profile_skill_map`;
 CREATE TABLE `coder_profile_skill_map` (
   `coder_profile_user_id` binary(255) NOT NULL,
   `skill_map` double DEFAULT NULL,
-  `skill_map_KEY` int(11) NOT NULL,
-  PRIMARY KEY (`coder_profile_user_id`,`skill_map_KEY`),
+  `skill_map_key` int(11) NOT NULL,
+  PRIMARY KEY (`coder_profile_user_id`,`skill_map_key`),
   CONSTRAINT `FKqdt1d7fvegqwl6vfej9qs61kw` FOREIGN KEY (`coder_profile_user_id`) REFERENCES `coder_profile` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -324,8 +324,8 @@ DROP TABLE IF EXISTS `task_params`;
 CREATE TABLE `task_params` (
   `task_id` binary(16) NOT NULL,
   `params` longtext,
-  `params_KEY` varchar(255) NOT NULL,
-  PRIMARY KEY (`task_id`,`params_KEY`),
+  `params_key` varchar(255) NOT NULL,
+  PRIMARY KEY (`task_id`,`params_key`),
   CONSTRAINT `FKb8ei0q6q2udt6o5nc0rfyfggo` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -360,8 +360,8 @@ DROP TABLE IF EXISTS `task_skill_map`;
 CREATE TABLE `task_skill_map` (
   `task_id` binary(16) NOT NULL,
   `skill_map` double DEFAULT NULL,
-  `skill_map_KEY` int(11) NOT NULL,
-  PRIMARY KEY (`task_id`,`skill_map_KEY`),
+  `skill_map_key` int(11) NOT NULL,
+  PRIMARY KEY (`task_id`,`skill_map_key`),
   CONSTRAINT `FKkpyx9lkb064i8nhs8f3o6qv79` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -430,8 +430,8 @@ CREATE TABLE `test` (
   `id` binary(16) NOT NULL,
   `runner_id` binary(16) DEFAULT NULL,
   `task_id` binary(16) DEFAULT NULL,
-   `tests_ORDER` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`, `tests_ORDER`),
+  `test_order` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `test_order`),
   KEY `FKjvtfp7jnalo9d5em8rmpxbj68` (`runner_id`),
   KEY `FK2xx1yyitp3uqqmhgeg0qwuvps` (`task_id`),
   CONSTRAINT `FK2xx1yyitp3uqqmhgeg0qwuvps` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
@@ -449,8 +449,8 @@ DROP TABLE IF EXISTS `test_params`;
 CREATE TABLE `test_params` (
   `test_id` binary(16) NOT NULL,
   `params` longtext,
-  `params_KEY` varchar(255) NOT NULL,
-  PRIMARY KEY (`test_id`,`params_KEY`),
+  `params_key` varchar(255) NOT NULL,
+  PRIMARY KEY (`test_id`,`params_key`),
   CONSTRAINT `FKdfmjm368bkaw1knkqq7mxpiqh` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

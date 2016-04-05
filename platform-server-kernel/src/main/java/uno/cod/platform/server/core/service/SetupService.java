@@ -133,7 +133,7 @@ public class SetupService {
             Map<String, String> taskParams = new HashMap<>();
             taskParams.put("level", (i + 1) + "");
             taskParams.put("test", "1");
-            Task task = createTask("Level " + (i + 1),taskNames[i], "## Description", instructions[i],
+            Task task = createTask("Level " + (i + 1), taskNames[i], "## Description", instructions[i],
                     cccEndpoint, normalRunner, Duration.ofHours(4), catalysts, languages, taskParams);
             for (int j = 1; j <= 3; j++) {
                 Map<String, String> params = new HashMap<>();
