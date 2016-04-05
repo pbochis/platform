@@ -48,13 +48,7 @@ public class SetupService {
         this.languageRepository = languageRepository;
     }
 
-    public void init(String username, String password, String email) {
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(this.passwordEncoder.encode(password));
-        user.setEnabled(true);
-        this.userRepository.save(user);
+    public void init() {
         if (Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
             LOGGER.info("initializing development database");
             this.initDevelopmentDatabase();
@@ -62,164 +56,94 @@ public class SetupService {
     }
 
     private void initDevelopmentDatabase() {
-        this.initCoduno();
-        initCatalysts();
-        Language java = new Language();
-        java.setName("Java");
-        java.setTag("java");
-        java = languageRepository.save(java);
-        Language python = new Language();
-        python.setName("Python");
-        python.setTag("py");
-        python = languageRepository.save(python);
-        Language javascript = new Language();
-        javascript.setName("JavaScript");
-        javascript.setTag("js");
-        javascript = languageRepository.save(javascript);
+        Organization catalysts = initCatalystsWithUsers();
+        Set<Language> cccLanguages = initCCCLanguages();
 
-        Runner simpleRunner = createRunner("simple");
-        Runner diffRunner = createRunner("diff");
-        Runner ioRunner = createRunner("io");
-        Runner cccTestRunner = createRunner("cccdronetest");
-        Runner cccNormalRunner = createRunner("cccdronerun");
-
-        Endpoint outputMatchTaskEndpoint = createEndpoint("Output match", "output-match-task");
-        Endpoint javaUnitTestTaskEndpoint = createEndpoint("Java Unit Test", "javaut-task");
-        Endpoint robotGameTaskEndpoint = createEndpoint("Robot game", "canvas-game-task");
-        Endpoint coderJUnitTaskEndpoint = createEndpoint("User coded JUnit tests", "coder-javaut-task");
-
-        Endpoint sequentialChallengeEndpoint = createEndpoint("Sequential challenge", "sequential-challenge");
-
-        Endpoint cccTaskEndpoint = createEndpoint("CCC drone task", "ccc-drone-task");
+        Endpoint cccTaskEndpoint = createEndpoint("CCC task", "ccc-drone-task");
         Endpoint cccChallengeEndpoint = createEndpoint("CCC challenge", "ccc-challenge");
 
-        Set<Language> languages = new HashSet<>();
-        languages.add(python);
-        languages.add(java);
-        languages.add(javascript);
-        Task helloWorldTask = createTask(
-                "Hello, world!", "This is a welcome task to our platform. It is the easiest one so you can learn the ui and the workflow.",
-                "Create a program that outputs 'Hello, world!' in a language of your preference.",
-                outputMatchTaskEndpoint, simpleRunner, Duration.ofMinutes(30), languages);
+        String[] ccc = new String[]{".", ".", ".", ".", ".", ".", "."};
+        String[] cccTaskNames = new String[]{"drones-level-1", "drones-level-2",
+                "drones-level-3", "drones-level-4", "drones-level-5", "drones-level-6", "drones-level-7"};
 
-        Map<String, String> params = new HashMap<>();
-        params.put(Test.PATH, "helloworld/helloworld");
-        createTest(helloWorldTask, diffRunner, params);
+        String[] schoolCCC = new String[]{".", ".", ".", ".", "."};
+        String[] schoolCCCTaskNames = new String[]{"drones-2d-level-1", "drones-2d-level-2",
+                "drones-2d-level-3", "drones-2d-level-4", "drones-2d-level-5"};
 
-        createTemplate(helloWorldTask, python, "default/app.py");
-        createTemplate(helloWorldTask, java, "default/Application.java");
-
-        Task fizzBuzzTask = createTask(
-                "Fizz Buzz", "Fizz buzz is a group word game for children to teach them about division.\n" +
-                        "Players take turns to count incrementally, replacing any number divisible by three with the word 'fizz',\n" +
-                        "and any number divisible by five with the word 'buzz'.",
-                "Your job is to create the 'fizzbuzz(int n)' function.\n" +
-                        "The n parameter represents the max number to wich you need to generate the fizzbuzz data.\n" +
-                        "The output needs to be separated by '\\n'.",
-                outputMatchTaskEndpoint, null, Duration.ofMinutes(30), languages
-        );
-
-        params = new HashMap<>();
-        params.put(Test.PATH, "fizzbuzz-fizzbuzz10^2");
-        params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^2");
-        createTest(fizzBuzzTask, ioRunner, params);
-
-        params = new HashMap<>();
-        params.put(Test.PATH, "fizzbuzz-fizzbuzz10^3");
-        params.put(Test.STDIN, "fizzbuzz-fizzbuzzin10^3");
-        createTest(fizzBuzzTask, ioRunner, params);
-
-        createTemplate(fizzBuzzTask, python, "default/app.py");
-        createTemplate(fizzBuzzTask, java, "default/Application.java");
-
-        ChallengeTemplate challengeTemplate = new ChallengeTemplate();
-        challengeTemplate.setName("Coduno test");
-        challengeTemplate.setInstructions("Instructions for Coduno test");
-        challengeTemplate.setDescription("Description for Coduno test");
-        challengeTemplate.setOrganization(organizationRepository.findByNick("coduno"));
-        challengeTemplate.setEndpoint(sequentialChallengeEndpoint);
-        challengeTemplate.addTask(helloWorldTask);
-        challengeTemplate.addTask(fizzBuzzTask);
-        challengeTemplate.setDuration(Duration.ofMinutes(30));
-        challengeTemplateRepository.save(challengeTemplate);
-
-        initCCC(organizationRepository.findByNick("coduno"), languages, cccTestRunner, cccNormalRunner, cccChallengeEndpoint, cccTaskEndpoint);
+        Runner testRunner = createRunner("drones/test");
+        Runner normalRunner = createRunner("drones/run");
+        initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, ccc, cccTaskNames,
+                Duration.ofHours(4), "Drones", testRunner, normalRunner);
+        Runner schoolTestRunner = createRunner("drones-2d/test");
+        Runner schoolNormalRunner = createRunner("drones-2d/run");
+        initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, schoolCCC, schoolCCCTaskNames,
+                Duration.ofHours(2), "Drones 2D", schoolTestRunner, schoolNormalRunner);
     }
 
-    private void initCoduno() {
-        User victor = new User();
-        victor.setUsername("vbalan");
-        victor.setEmail("victor.balan@cod.uno");
-        victor.setPassword(this.passwordEncoder.encode("password"));
-        victor.setAdmin(true);
-        victor.setEnabled(true);
-        victor = userRepository.save(victor);
-
-        Organization coduno = new Organization();
-        coduno.setName("Coduno");
-        coduno.setNick("coduno");
-        coduno = organizationRepository.save(coduno);
-
-        OrganizationMembershipKey victorCodunoKey = new OrganizationMembershipKey();
-        victorCodunoKey.setUser(victor);
-        victorCodunoKey.setOrganization(coduno);
-
-        OrganizationMembership victorCoduno = new OrganizationMembership();
-        victorCoduno.setKey(victorCodunoKey);
-        victorCoduno.setAdmin(true);
-        victorCoduno = organizationMembershipRepository.save(victorCoduno);
-    }
-
-    private Organization initCatalysts() {
-        User victor = new User();
-        victor.setUsername("vbalan_catalysts");
-        victor.setEmail("victor.balan@catalysts.cc");
-        victor.setPassword(this.passwordEncoder.encode("password"));
-        victor.setAdmin(true);
-        victor.setEnabled(true);
-        victor = userRepository.save(victor);
-
+    private Organization initCatalystsWithUsers() {
         Organization catalysts = new Organization();
         catalysts.setName("Catalysts");
         catalysts.setNick("catalysts");
         catalysts = organizationRepository.save(catalysts);
 
-        OrganizationMembershipKey victorCatalystsKey = new OrganizationMembershipKey();
-        victorCatalystsKey.setUser(victor);
-        victorCatalystsKey.setOrganization(catalysts);
+        String password = this.passwordEncoder.encode("Whatismypassword?");
 
-        OrganizationMembership victorCatalysts = new OrganizationMembership();
-        victorCatalysts.setKey(victorCatalystsKey);
-        victorCatalysts.setAdmin(true);
-        victorCatalysts = organizationMembershipRepository.save(victorCatalysts);
+        List<User> users = new ArrayList<>();
+        users.add(createUser("vbalan", "victor.balan@cod.uno", password, true));
+        users.add(createUser("pbochis", "paul.bochis@cod.uno", password, true));
+        users.add(createUser("flowlo", "lorenz.leutgeb@cod.uno", password, true));
+        users.add(createUser("exordian", "jakob.englisch@cod.uno", password, true));
+        users.add(createUser("steindl", "cristoph.steindl@catalysts.cc", password, true));
+
+        for (User user : users) {
+            createMembership(user, catalysts);
+        }
         return catalysts;
     }
 
-    private void initCCC(Organization org, Set<Language> languages, Runner cccTestRunner, Runner cccNormalRunner, Endpoint cccChallengeEndpoint, Endpoint cccEndpoint) {
+    private Set<Language> initCCCLanguages() {
+        Set<Language> languages = new HashSet<>();
+        languages.add(createLanguage("Java", "java"));
+        languages.add(createLanguage("Python", "py"));
+        languages.add(createLanguage("C", "c"));
+        languages.add(createLanguage("C++", "cpp"));
+        languages.add(createLanguage("C#", "csharp"));
+        languages.add(createLanguage("Go", "go"));
+        languages.add(createLanguage("Scala", "scala"));
+        languages.add(createLanguage("Php", "php"));
+        languages.add(createLanguage("Groovy", "groovy"));
+        languages.add(createLanguage("Javascript", "js"));
+        return languages;
+    }
+
+    private void initCCC(Organization catalysts, Set<Language> languages,
+                         Endpoint cccChallengeEndpoint, Endpoint cccEndpoint,
+                         String[] instructions, String[] taskNames, Duration duration, String name,
+                         Runner testRunner, Runner normalRunner) {
 
         ChallengeTemplate ccc = new ChallengeTemplate();
-        ccc.setName("Catalysts Coding Contest");
+        ccc.setName(name);
         ccc.setDescription("## Description");
-        ccc.setInstructions("## Instructions for Catalysts Coding Contest");
-        ccc.setOrganization(org);
+        ccc.setInstructions("## Instructions");
+        ccc.setOrganization(catalysts);
         ccc.setEndpoint(cccChallengeEndpoint);
-        ccc.setDuration(Duration.ofHours(4));
+        ccc.setDuration(duration);
 
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 0; i < instructions.length; i++) {
             Map<String, String> taskParams = new HashMap<>();
-            taskParams.put("level", i + "");
-            taskParams.put("test",  "1");
-            Task task = createTask("Level " + i, "## Description", "## Instructions", cccEndpoint, cccNormalRunner, Duration.ofHours(4), org, languages, taskParams);
+            taskParams.put("level", (i + 1) + "");
+            taskParams.put("test", "1");
+            Task task = createTask("Level " + (i + 1),taskNames[i], "## Description", instructions[i],
+                    cccEndpoint, normalRunner, Duration.ofHours(4), catalysts, languages, taskParams);
             for (int j = 1; j <= 3; j++) {
                 Map<String, String> params = new HashMap<>();
-                params.put("level", i + "");
+                params.put("level", (i + 1) + "");
                 params.put("test", j + "");
-                createTest(task, cccTestRunner, params);
+                createTest(task, testRunner, params);
             }
             ccc.addTask(task);
         }
         challengeTemplateRepository.save(ccc);
-
     }
 
     private Runner createRunner(String name) {
@@ -235,14 +159,10 @@ public class SetupService {
         return endpointRepository.save(outputMatchEndpoint);
     }
 
-    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Set<Language> languages) {
-        return createTask(name, description, instructions, endpoint, runner, duration, null, languages, null);
-    }
-
-    private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages, Map<String, String> params) {
+    private Task createTask(String name, String canonicalName, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages, Map<String, String> params) {
         Task task = new Task();
         task.setName(name);
-        task.setCanonicalName(name + new Random().nextInt(1024));
+        task.setCanonicalName(canonicalName);
         task.setDescription(description);
         task.setInstructions(instructions);
         task.setEndpoint(endpoint);
@@ -252,7 +172,7 @@ public class SetupService {
         task.setOrganization(organization);
         task.setLanguages(languages);
         task.setParams(params);
-        if(organization == null){
+        if (organization == null) {
             task.setPublic(true);
         }
         return taskRepository.save(task);
@@ -264,6 +184,34 @@ public class SetupService {
         helloWorldTest.setRunner(runner);
         helloWorldTest.setParams(params);
         return testRepository.save(helloWorldTest);
+    }
+
+    private User createUser(String username, String email, String password, Boolean admin) {
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setAdmin(admin);
+        user.setEnabled(true);
+        return userRepository.save(user);
+    }
+
+    private void createMembership(User user, Organization organization) {
+        OrganizationMembershipKey key = new OrganizationMembershipKey();
+        key.setUser(user);
+        key.setOrganization(organization);
+
+        OrganizationMembership membership = new OrganizationMembership();
+        membership.setKey(key);
+        membership.setAdmin(true);
+        membership = organizationMembershipRepository.save(membership);
+    }
+
+    private Language createLanguage(String name, String tag) {
+        Language language = new Language();
+        language.setName(name);
+        language.setTag(tag);
+        return languageRepository.save(language);
     }
 
     private Template createTemplate(Task task, Language language, String fileName) {
