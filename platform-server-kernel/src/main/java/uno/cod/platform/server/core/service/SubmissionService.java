@@ -176,13 +176,13 @@ public class SubmissionService {
         testResultRepository.save(testResult);
 
         OutputTestResultDto testResultDto = new OutputTestResultDto(test.getId(), success);
-        byte[] stdout = obj.get("stdout").binaryValue();
+        byte[] stdout = obj.get("stdout").asText().getBytes();
         if (stdout.length > MAX_RESPONSE_SIZE) {
             stdout = Arrays.copyOfRange(stdout, 0, MAX_RESPONSE_SIZE);
         }
         testResultDto.setStdout(stdout);
 
-        byte[] stderr = obj.get("stderr").binaryValue();
+        byte[] stderr = obj.get("stderr").asText().getBytes();
         if (stderr.length > MAX_RESPONSE_SIZE) {
             stderr = Arrays.copyOfRange(stderr, 0, MAX_RESPONSE_SIZE);
         }
