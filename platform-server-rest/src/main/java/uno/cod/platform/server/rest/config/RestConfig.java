@@ -48,10 +48,10 @@ public class RestConfig {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(codunoUrl);
                 registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl);
                 registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl);
                 registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl);
+                registry.addMapping("/**").allowedOrigins(codunoUrl);
             }
         };
     }
