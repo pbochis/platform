@@ -10,10 +10,7 @@ import java.util.*;
 @Entity
 @Table(name = "task")
 public class Task extends Assignment {
-    @ManyToMany
-    @JoinTable(name = "challenge_template_task",
-            joinColumns = {@JoinColumn(name = "challenge_template_id")},
-            inverseJoinColumns = {@JoinColumn(name = "task_id")})
+    @ManyToMany(mappedBy = "tasks")
     private List<ChallengeTemplate> challengeTemplates;
 
     @Column(name = "canonical_name", nullable = false, unique = true)
@@ -47,9 +44,10 @@ public class Task extends Assignment {
     private Runner runner;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @Column(name = "task_id")
+    @Column(name = "params")
     @MapKeyColumn(name = "params_key")
-    @CollectionTable(name = "task_params")
+    @CollectionTable(name = "task_params",
+            joinColumns = {@JoinColumn(name = "task_id")})
     @Lob
     private Map<String, String> params;
 

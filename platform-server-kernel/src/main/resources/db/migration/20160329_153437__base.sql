@@ -69,8 +69,8 @@ DROP TABLE IF EXISTS `challenge_template_task`;
 CREATE TABLE `challenge_template_task` (
   `challenge_template_id` binary(16) NOT NULL,
   `task_id` binary(16) NOT NULL,
-  `task_order` int(11) NOT NULL,
-  PRIMARY KEY (`task_id`,`task_order`),
+  `task_order` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`challenge_template_id`,`task_order`),
   KEY `FKr1xioakulcpwam6vtrhdv3hx8` (`task_id`),
   CONSTRAINT `FKpm5h2fhdqxbqcyoboajp8sm2l` FOREIGN KEY (`challenge_template_id`) REFERENCES `challenge_template` (`id`),
   CONSTRAINT `FKr1xioakulcpwam6vtrhdv3hx8` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)

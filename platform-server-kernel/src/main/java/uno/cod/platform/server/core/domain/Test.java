@@ -16,9 +16,10 @@ public class Test extends IdentifiableEntity {
     private Task task;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "test_params")
+    @CollectionTable(name = "test_params",
+            joinColumns = {@JoinColumn(name = "test_id")})
     @MapKeyColumn(name = "params_key")
-    @Column(name = "test_id")
+    @Column(name = "params")
     @Lob
     private Map<String, String> params;
 
