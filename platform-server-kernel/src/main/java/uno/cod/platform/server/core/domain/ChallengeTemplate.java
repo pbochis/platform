@@ -21,7 +21,10 @@ public class ChallengeTemplate extends Assignment {
     private Organization organization;
 
     @OrderColumn(name = "task_order")
-    @ManyToMany(mappedBy = "challengeTemplates")
+    @ManyToMany
+    @JoinTable(name = "challenge_template_task",
+            joinColumns = {@JoinColumn(name = "challenge_template_id")},
+            inverseJoinColumns = {@JoinColumn(name = "task_id")})
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "challengeTemplate")
