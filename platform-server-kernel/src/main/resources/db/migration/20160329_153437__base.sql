@@ -255,11 +255,14 @@ CREATE TABLE `submission` (
   `fileName` varchar(255) DEFAULT NULL,
   `successful` bit(1) NOT NULL,
   `submissionTime` datetime DEFAULT NULL,
+  `language_id` BINARY(16),
   `taskResult_result_id` binary(16) NOT NULL,
   `taskResult_task_id` binary(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKmquolgstf98mxytbuvcgodh3c` (`taskResult_result_id`,`taskResult_task_id`),
-  CONSTRAINT `FKmquolgstf98mxytbuvcgodh3c` FOREIGN KEY (`taskResult_result_id`, `taskResult_task_id`) REFERENCES `task_result` (`result_id`, `task_id`)
+  KEY `fk_submission_language` (`language_id`),
+  CONSTRAINT `FKmquolgstf98mxytbuvcgodh3c` FOREIGN KEY (`taskResult_result_id`, `taskResult_task_id`) REFERENCES `task_result` (`result_id`, `task_id`),
+  CONSTRAINT  `fk_submission_language` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -424,7 +427,8 @@ CREATE TABLE `test` (
   `id` binary(16) NOT NULL,
   `runner_id` binary(16) DEFAULT NULL,
   `task_id` binary(16) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+   `tests_ORDER` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `tests_ORDER`),
   KEY `FKjvtfp7jnalo9d5em8rmpxbj68` (`runner_id`),
   KEY `FK2xx1yyitp3uqqmhgeg0qwuvps` (`task_id`),
   CONSTRAINT `FK2xx1yyitp3uqqmhgeg0qwuvps` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
