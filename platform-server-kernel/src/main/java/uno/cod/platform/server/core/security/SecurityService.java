@@ -58,7 +58,7 @@ public class SecurityService {
             return false;
         }
 
-        for (OrganizationMembership organizationMembership : user.getOrganizations()) {
+        for (OrganizationMembership organizationMembership : user.getOrganizationMemberships()) {
             if (organizationMembership.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;
             }
@@ -71,7 +71,7 @@ public class SecurityService {
             return false;
         }
 
-        for (OrganizationMembership organizationMembership : user.getOrganizations()) {
+        for (OrganizationMembership organizationMembership : user.getOrganizationMemberships()) {
             if (organizationMembership.isAdmin() && organizationMembership.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;
             }
@@ -98,7 +98,7 @@ public class SecurityService {
         }
 
         // TODO add organization check
-        if(user.getOrganizations() != null){
+        if(user.getOrganizationMemberships() != null){
             return true;
         }
         for(Challenge challenge: user.getInvitedChallenges()){
@@ -115,12 +115,12 @@ public class SecurityService {
         }
 
         // TODO extend for current organization the user is logged in
-        if(user.getOrganizations()!=null){
+        if(user.getOrganizationMemberships()!=null){
             Task task = taskRepository.findOneWithOrganization(taskId);
             if(task.isPublic()){
                 return true;
             }
-            for(OrganizationMembership membership: user.getOrganizations()){
+            for(OrganizationMembership membership: user.getOrganizationMemberships()){
                 if(membership.getKey().getOrganization().getId().equals(task.getOrganization().getId())){
                     return true;
                 }

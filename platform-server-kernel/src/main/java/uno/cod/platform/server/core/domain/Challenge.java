@@ -12,13 +12,11 @@ import java.util.Set;
 @Entity
 @Table(name = "challenge")
 public class Challenge extends IdentifiableEntity{
-
-    @Column(name = "challenge_name")
     private String name;
 
     @NotNull
     @NotEmpty
-    @Column(name = "canonical_name", unique = true)
+    @Column(unique = true, nullable = false)
     private String canonicalName;
 
     @ManyToOne

@@ -6,6 +6,6 @@ import uno.cod.platform.server.core.domain.OrganizationMembership;
 import uno.cod.platform.server.core.domain.OrganizationMembershipKey;
 
 @Repository
-public interface OrganizationMemberRepository extends JpaRepository<OrganizationMembership, OrganizationMembershipKey> {
+public interface OrganizationMembershipRepository extends JpaRepository<OrganizationMembership, OrganizationMembershipKey> {
 }
 

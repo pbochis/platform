@@ -25,7 +25,7 @@ public class SetupService {
     private final EndpointRepository endpointRepository;
     private final TaskRepository taskRepository;
     private final OrganizationRepository organizationRepository;
-    private final OrganizationMemberRepository organizationMemberRepository;
+    private final OrganizationMembershipRepository organizationMembershipRepository;
     private final ChallengeTemplateRepository challengeTemplateRepository;
     private final RunnerRepository runnerRepository;
     private final TestRepository testRepository;
@@ -33,14 +33,14 @@ public class SetupService {
     private final LanguageRepository languageRepository;
 
     @Autowired
-    public SetupService(Environment environment, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMemberRepository organizationMemberRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository, LanguageRepository languageRepository) {
+    public SetupService(Environment environment, PasswordEncoder passwordEncoder, UserRepository userRepository, EndpointRepository endpointRepository, TaskRepository taskRepository, OrganizationRepository organizationRepository, OrganizationMembershipRepository organizationMembershipRepository, ChallengeTemplateRepository challengeTemplateRepository, RunnerRepository runnerRepository, TestRepository testRepository, TemplateRepository templateRepository, LanguageRepository languageRepository) {
         this.environment = environment;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.endpointRepository = endpointRepository;
         this.taskRepository = taskRepository;
         this.organizationRepository = organizationRepository;
-        this.organizationMemberRepository = organizationMemberRepository;
+        this.organizationMembershipRepository = organizationMembershipRepository;
         this.challengeTemplateRepository = challengeTemplateRepository;
         this.runnerRepository = runnerRepository;
         this.testRepository = testRepository;
@@ -167,7 +167,7 @@ public class SetupService {
         OrganizationMembership victorCoduno = new OrganizationMembership();
         victorCoduno.setKey(victorCodunoKey);
         victorCoduno.setAdmin(true);
-        victorCoduno = organizationMemberRepository.save(victorCoduno);
+        victorCoduno = organizationMembershipRepository.save(victorCoduno);
     }
 
     private Organization initCatalysts() {
@@ -191,7 +191,7 @@ public class SetupService {
         OrganizationMembership victorCatalysts = new OrganizationMembership();
         victorCatalysts.setKey(victorCatalystsKey);
         victorCatalysts.setAdmin(true);
-        victorCatalysts = organizationMemberRepository.save(victorCatalysts);
+        victorCatalysts = organizationMembershipRepository.save(victorCatalysts);
         return catalysts;
     }
 

@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `challenge`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `challenge` (
   `id` binary(16) NOT NULL,
-  `canonical_name` varchar(255) DEFAULT NULL,
+  `canonicalName` varchar(255) NOT NULL,
   `endDate` datetime DEFAULT NULL,
   `inviteOnly` bit(1) NOT NULL,
-  `challenge_name` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `startDate` datetime DEFAULT NULL,
   `challengeTemplate_id` binary(16) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -239,7 +239,9 @@ DROP TABLE IF EXISTS `runner`;
 CREATE TABLE `runner` (
   `id` binary(16) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `canonicalName` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`canonicalName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -279,13 +281,13 @@ CREATE TABLE `task` (
   `duration` bigint(20) NOT NULL,
   `instructions` longtext NOT NULL,
   `name` varchar(255) NOT NULL,
-  `canonical_name` varchar(255) NOT NULL,
+  `canonicalName` varchar(255) NOT NULL,
   `isPublic` bit(1) DEFAULT NULL,
   `endpoint_id` binary(16) DEFAULT NULL,
   `organization_id` binary(16) DEFAULT NULL,
   `runner_id` binary(16) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`canonical_name`),
+  UNIQUE KEY (`canonicalName`),
   KEY `FKhmkv7bsyrl43gufb23c1g1win` (`endpoint_id`),
   KEY `FKlr7r6n58jgscnls4brj8c6fg2` (`organization_id`),
   KEY `FKiu5jr4nqt9yey18c721ixwyud` (`runner_id`),
@@ -485,8 +487,8 @@ CREATE TABLE `user` (
   `admin` bit(1) NOT NULL,
   `created` datetime NOT NULL,
   `email` varchar(255) NOT NULL,
-  `first_name` varchar(255),
-  `last_name` VARCHAR(255),
+  `firstName` varchar(255),
+  `lastName` VARCHAR(255),
   `enabled` bit(1) NOT NULL,
   `lastLogin` datetime DEFAULT NULL,
   `password` varchar(255) NOT NULL,

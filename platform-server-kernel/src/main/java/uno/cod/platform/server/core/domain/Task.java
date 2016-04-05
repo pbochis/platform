@@ -13,7 +13,7 @@ public class Task extends Assignment {
     @ManyToMany(mappedBy = "tasks")
     private List<ChallengeTemplate> challengeTemplates;
 
-    @Column(name = "canonical_name", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String canonicalName;
 
     @ManyToOne

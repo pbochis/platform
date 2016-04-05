@@ -11,13 +11,13 @@ import java.util.*;
 
 /**
  * A user, can be a coder, an organization employee, lecturer, or all of them
- * The role of the user is defined by the profile, teams and organizations he belongs
+ * The role of the user is defined by the profile, teams and organizationMemberships he belongs
  */
 @Entity
 @Table(name = "user")
 @NamedEntityGraph(name = "User.detail",
         attributeNodes = {
-                @NamedAttributeNode("organizations"),
+                @NamedAttributeNode("organizationMemberships"),
                 @NamedAttributeNode("teams"),
                 @NamedAttributeNode("invitedChallenges")
         })
@@ -30,10 +30,7 @@ public class User extends IdentifiableEntity implements UserDetails {
     @Email
     private String email;
 
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
 
     @Column(nullable = false)
@@ -51,10 +48,10 @@ public class User extends IdentifiableEntity implements UserDetails {
     private CoderProfile coderProfile;
 
     /**
-     * Organizations he belongs to, like github organizations
+     * Organizations he belongs to, like github organizationMemberships
      */
     @OneToMany(mappedBy = "key.user")
-    private Set<OrganizationMembership> organizations;
+    private Set<OrganizationMembership> organizationMemberships;
 
     /**
      * Teams he belongs to, can be used across multiple
@@ -118,15 +115,15 @@ public class User extends IdentifiableEntity implements UserDetails {
         this.lastName = lastName;
     }
 
-    public Set<OrganizationMembership> getOrganizations() {
-        if(this.organizations==null){
+    public Set<OrganizationMembership> getOrganizationMemberships() {
+        if(this.organizationMemberships ==null){
             return null;
         }
-        return Collections.unmodifiableSet(organizations);
+        return Collections.unmodifiableSet(organizationMemberships);
     }
 
-    protected void setOrganizations(Set<OrganizationMembership> organizations) {
-        this.organizations = organizations;
+    protected void setOrganizationMemberships(Set<OrganizationMembership> organizationMemberships) {
+        this.organizationMemberships = organizationMemberships;
     }
 
     public Set<TeamMember> getTeams() {
@@ -212,11 +209,11 @@ public class User extends IdentifiableEntity implements UserDetails {
         return new ArrayList<>();
     }
 
-    public void addOrganizationMember(OrganizationMembership member) {
-        if (organizations == null) {
-            organizations = new HashSet<>();
+    public void addOrganizationMembership(OrganizationMembership membership) {
+        if (organizationMemberships == null) {
+            organizationMemberships = new HashSet<>();
         }
-        organizations.add(member);
+        organizationMemberships.add(membership);
     }
 
     public void addResult(Result result) {
