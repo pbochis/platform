@@ -29,14 +29,14 @@ public class Task extends Assignment {
     private boolean isPublic;
 
     @ElementCollection
-    @MapKeyColumn(name = "skill_map_KEY")
+    @MapKeyColumn(name = "skill_map_key")
     @Column(name = "skill_map")
     @CollectionTable(name = "task_skill_map",
             joinColumns = {@JoinColumn(name = "task_id")})
     private Map<CodingSkill, Double> skillMap;
 
     @OneToMany(mappedBy = "task")
-    @OrderColumn
+    @OrderColumn(name = "test_order")
     private List<Test> tests;
 
     @OneToMany(mappedBy = "task")
@@ -48,6 +48,7 @@ public class Task extends Assignment {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "task_id")
+    @MapKeyColumn(name = "params_key")
     @CollectionTable(name = "task_params")
     @Lob
     private Map<String, String> params;
