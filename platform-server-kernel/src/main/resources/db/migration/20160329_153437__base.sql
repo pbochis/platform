@@ -407,7 +407,6 @@ DROP TABLE IF EXISTS `template`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template` (
   `id` binary(16) NOT NULL,
-  `fileName` varchar(255) DEFAULT NULL,
   `language_id` binary(16) DEFAULT NULL,
   `task_id` binary(16) DEFAULT NULL,
   PRIMARY KEY (`id`),

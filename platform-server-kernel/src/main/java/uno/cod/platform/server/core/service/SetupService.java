@@ -269,7 +269,6 @@ public class SetupService {
         Template helloWorldPyTemplate = new Template();
         helloWorldPyTemplate.setTask(task);
         helloWorldPyTemplate.setLanguage(language);
-        helloWorldPyTemplate.setFileName(fileName);
         return templateRepository.save(helloWorldPyTemplate);
     }
 }
