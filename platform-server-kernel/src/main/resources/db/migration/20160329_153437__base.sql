@@ -193,10 +193,10 @@ CREATE TABLE `organization` (
 -- Table structure for table `organization_member`
 --
 
-DROP TABLE IF EXISTS `organization_member`;
+DROP TABLE IF EXISTS `organization_membership`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organization_member` (
+CREATE TABLE `organization_membership` (
   `admin` bit(1) NOT NULL,
   `created` datetime NOT NULL,
   `user_id` binary(16) NOT NULL,

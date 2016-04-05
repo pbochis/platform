@@ -160,11 +160,11 @@ public class SetupService {
         coduno.setNick("coduno");
         coduno = organizationRepository.save(coduno);
 
-        OrganizationMemberKey victorCodunoKey = new OrganizationMemberKey();
+        OrganizationMembershipKey victorCodunoKey = new OrganizationMembershipKey();
         victorCodunoKey.setUser(victor);
         victorCodunoKey.setOrganization(coduno);
 
-        OrganizationMember victorCoduno = new OrganizationMember();
+        OrganizationMembership victorCoduno = new OrganizationMembership();
         victorCoduno.setKey(victorCodunoKey);
         victorCoduno.setAdmin(true);
         victorCoduno = organizationMemberRepository.save(victorCoduno);
@@ -184,11 +184,11 @@ public class SetupService {
         catalysts.setNick("catalysts");
         catalysts = organizationRepository.save(catalysts);
 
-        OrganizationMemberKey victorCatalystsKey = new OrganizationMemberKey();
+        OrganizationMembershipKey victorCatalystsKey = new OrganizationMembershipKey();
         victorCatalystsKey.setUser(victor);
         victorCatalystsKey.setOrganization(catalysts);
 
-        OrganizationMember victorCatalysts = new OrganizationMember();
+        OrganizationMembership victorCatalysts = new OrganizationMembership();
         victorCatalysts.setKey(victorCatalystsKey);
         victorCatalysts.setAdmin(true);
         victorCatalysts = organizationMemberRepository.save(victorCatalysts);

@@ -54,7 +54,7 @@ public class User extends IdentifiableEntity implements UserDetails {
      * Organizations he belongs to, like github organizations
      */
     @OneToMany(mappedBy = "key.user")
-    private Set<OrganizationMember> organizations;
+    private Set<OrganizationMembership> organizations;
 
     /**
      * Teams he belongs to, can be used across multiple
@@ -118,14 +118,14 @@ public class User extends IdentifiableEntity implements UserDetails {
         this.lastName = lastName;
     }
 
-    public Set<OrganizationMember> getOrganizations() {
+    public Set<OrganizationMembership> getOrganizations() {
         if(this.organizations==null){
             return null;
         }
         return Collections.unmodifiableSet(organizations);
     }
 
-    protected void setOrganizations(Set<OrganizationMember> organizations) {
+    protected void setOrganizations(Set<OrganizationMembership> organizations) {
         this.organizations = organizations;
     }
 
@@ -212,7 +212,7 @@ public class User extends IdentifiableEntity implements UserDetails {
         return new ArrayList<>();
     }
 
-    public void addOrganizationMember(OrganizationMember member) {
+    public void addOrganizationMember(OrganizationMembership member) {
         if (organizations == null) {
             organizations = new HashSet<>();
         }

@@ -28,7 +28,7 @@ public class Organization extends IdentifiableEntity {
      * all organization members
      */
     @OneToMany(mappedBy = "key.organization")
-    private Set<OrganizationMember> members;
+    private Set<OrganizationMembership> members;
 
     /**
      * challenges owned by the organization
@@ -55,11 +55,11 @@ public class Organization extends IdentifiableEntity {
         this.name = name;
     }
 
-    public Set<OrganizationMember> getMembers() {
+    public Set<OrganizationMembership> getMembers() {
         return Collections.unmodifiableSet(members);
     }
 
-    protected void setMembers(Set<OrganizationMember> members) {
+    protected void setMembers(Set<OrganizationMembership> members) {
         this.members = members;
     }
 
@@ -79,7 +79,7 @@ public class Organization extends IdentifiableEntity {
         this.tasks = tasks;
     }
 
-    public void addOrganizationMember(OrganizationMember member) {
+    public void addOrganizationMember(OrganizationMembership member) {
         if (member == null) {
             throw new IllegalArgumentException("organization.member.invalid");
         }

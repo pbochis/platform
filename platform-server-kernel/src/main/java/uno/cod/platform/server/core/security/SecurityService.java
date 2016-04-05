@@ -58,8 +58,8 @@ public class SecurityService {
             return false;
         }
 
-        for (OrganizationMember organizationMember : user.getOrganizations()) {
-            if (organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
+        for (OrganizationMembership organizationMembership : user.getOrganizations()) {
+            if (organizationMembership.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;
             }
         }
@@ -71,8 +71,8 @@ public class SecurityService {
             return false;
         }
 
-        for (OrganizationMember organizationMember : user.getOrganizations()) {
-            if (organizationMember.isAdmin() && organizationMember.getKey().getOrganization().getId().equals(organizationId)) {
+        for (OrganizationMembership organizationMembership : user.getOrganizations()) {
+            if (organizationMembership.isAdmin() && organizationMembership.getKey().getOrganization().getId().equals(organizationId)) {
                 return true;
             }
         }
@@ -120,7 +120,7 @@ public class SecurityService {
             if(task.isPublic()){
                 return true;
             }
-            for(OrganizationMember membership: user.getOrganizations()){
+            for(OrganizationMembership membership: user.getOrganizations()){
                 if(membership.getKey().getOrganization().getId().equals(task.getOrganization().getId())){
                     return true;
                 }

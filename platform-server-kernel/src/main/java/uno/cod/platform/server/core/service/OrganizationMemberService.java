@@ -3,8 +3,8 @@ package uno.cod.platform.server.core.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.Organization;
-import uno.cod.platform.server.core.domain.OrganizationMember;
-import uno.cod.platform.server.core.domain.OrganizationMemberKey;
+import uno.cod.platform.server.core.domain.OrganizationMembership;
+import uno.cod.platform.server.core.domain.OrganizationMembershipKey;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.organization.member.OrganizationMemberCreateDto;
 import uno.cod.platform.server.core.exception.ResourceConflictException;
@@ -38,13 +38,13 @@ public class OrganizationMemberService {
         if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
         }
-        OrganizationMemberKey key = new OrganizationMemberKey();
+        OrganizationMembershipKey key = new OrganizationMembershipKey();
         key.setUser(user);
         key.setOrganization(organization);
         if(repository.findOne(key)!=null){
             throw new ResourceConflictException("organization.member.exists");
         }
-        OrganizationMember member = new OrganizationMember();
+        OrganizationMembership member = new OrganizationMembership();
         member.setKey(key);
         member.setAdmin(dto.isAdmin());
         repository.save(member);
@@ -61,7 +61,7 @@ public class OrganizationMemberService {
         if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
         }
-        OrganizationMemberKey key = new OrganizationMemberKey();
+        OrganizationMembershipKey key = new OrganizationMembershipKey();
         key.setUser(user);
         key.setOrganization(organization);
         repository.delete(key);
