@@ -26,7 +26,7 @@ public class Submission extends IdentifiableEntity implements StoredObject {
 
     private ZonedDateTime submissionTime;
 
-    private boolean green;
+    private boolean successful;
 
     public TaskResult getTaskResult() {
         return taskResult;
@@ -52,12 +52,12 @@ public class Submission extends IdentifiableEntity implements StoredObject {
         this.fileName = fileName;
     }
 
-    public boolean isGreen() {
-        return green;
+    public boolean isSuccessful() {
+        return successful;
     }
 
-    public void setGreen(boolean green) {
-        this.green = green;
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
     }
 
     @Override

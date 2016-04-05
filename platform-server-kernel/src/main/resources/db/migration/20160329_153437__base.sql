@@ -253,7 +253,7 @@ DROP TABLE IF EXISTS `submission`;
 CREATE TABLE `submission` (
   `id` binary(16) NOT NULL,
   `fileName` varchar(255) DEFAULT NULL,
-  `green` bit(1) NOT NULL,
+  `successful` bit(1) NOT NULL,
   `submissionTime` datetime DEFAULT NULL,
   `taskResult_result_id` binary(16) NOT NULL,
   `taskResult_task_id` binary(16) NOT NULL,
@@ -332,7 +332,7 @@ DROP TABLE IF EXISTS `task_result`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `task_result` (
   `endTime` datetime DEFAULT NULL,
-  `green` bit(1) NOT NULL,
+  `successful` bit(1) NOT NULL,
   `startTime` datetime DEFAULT NULL,
   `task_id` binary(16) NOT NULL,
   `result_id` binary(16) NOT NULL,
@@ -457,7 +457,7 @@ DROP TABLE IF EXISTS `test_result`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_result` (
   `id` binary(16) NOT NULL,
-  `green` bit(1) NOT NULL,
+  `successful` bit(1) NOT NULL,
   `submission_id` binary(16) NOT NULL,
   `test_id` binary(16) NOT NULL,
   PRIMARY KEY (`id`),
