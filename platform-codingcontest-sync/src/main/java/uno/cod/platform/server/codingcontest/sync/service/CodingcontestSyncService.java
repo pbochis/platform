@@ -3,14 +3,8 @@ package uno.cod.platform.server.codingcontest.sync.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uno.cod.platform.server.codingcontest.sync.dto.CodingcontestDto;
-import uno.cod.platform.server.codingcontest.sync.dto.ContestInfoDto;
-import uno.cod.platform.server.codingcontest.sync.dto.ContestantDto;
-import uno.cod.platform.server.codingcontest.sync.dto.ParticipationDto;
-import uno.cod.platform.server.core.domain.Challenge;
-import uno.cod.platform.server.core.domain.ChallengeTemplate;
-import uno.cod.platform.server.core.domain.Result;
-import uno.cod.platform.server.core.domain.User;
+import uno.cod.platform.server.codingcontest.sync.dto.*;
+import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
@@ -78,6 +72,7 @@ public class CodingcontestSyncService {
                     user.addInvitedChallenge(challenge);
                 }
             }
+            user.setEnabled(true);
             userRepository.save(user);
         }
     }
@@ -95,17 +90,80 @@ public class CodingcontestSyncService {
         contestInfoDto.setUploadedCodePerLevelBonus(0);
         contestInfoDto.setGameName(challenge.getChallengeTemplate().getName());
         contestInfoDto.setName(challenge.getName());
-        // TODO replace with getLeaderboard
-        List<Result> results = resultRepository.findAllByChallenge(challenge.getId());
+        List<Object[]> results = resultRepository.findLeaderboardForChallenge(challenge.getId());
         List<ContestantDto> contestants = new ArrayList<>();
-        for (Result result : results) {
+        int rank = 0;
+        for (Object[] resultRow: results) {
+            Result result = (Result) resultRow[0];
+            int finishedTasks = ((Long) resultRow[1]).intValue();
+
             ContestantDto contestant = new ContestantDto();
             contestant.setEmail(result.getUser().getEmail());
             contestant.setUuid(result.getUser().getId());
-            // TODO fill with other data when TaskResults are added
+            contestant.setCodingLanguage(findLanguage(result));
+            contestant.setFinished(result.getFinished() != null);
+            contestant.setLevelsCompleted(finishedTasks);
+            contestant.setFailedTests(countFailedTests(result));
+            contestant.setRank(++rank);
+            contestant.setResults(getContestResults(result));
+            contestants.add(contestant);
         }
-
+        contestInfoDto.setParticipations(contestants);
         return contestInfoDto;
+    }
+
+    private List<ContestResultDto> getContestResults(Result result){
+        List<Task> tasks = result.getChallenge().getChallengeTemplate().getTasks();
+        List<ContestResultDto> contestResults = new ArrayList<>();
+
+        for (TaskResult taskResult: result.getTaskResults()){
+            int failedTests = countFailedTests(taskResult);
+            ContestResultDto contestResultDto = new ContestResultDto();
+            Long finishTime = taskResult.getEndTime() == null ? null : taskResult.getEndTime().toInstant().toEpochMilli();
+            contestResultDto.setFinishTime(finishTime);
+            contestResultDto.setFailedTests(failedTests);
+            contestResultDto.setCodeUploaded(taskResult.getSubmissions() != null && !taskResult.getSubmissions().isEmpty());
+            contestResultDto.setLevel(tasks.indexOf(taskResult.getKey().getTask()) + 1);
+            contestResults.add(contestResultDto);
+        }
+        return contestResults;
+    }
+
+    private int countFailedTests(TaskResult taskResult){
+        int failed = 0;
+        for (Submission submission: taskResult.getSubmissions()){
+            for (TestResult testResult: submission.getTestResults()){
+                if (!testResult.isGreen()){
+                    failed++;
+                }
+            }
+        }
+        return failed;
+    }
+
+    private int countFailedTests(Result result){
+        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()){
+            return 0;
+        }
+        int failed = 0;
+        for (TaskResult taskResult: result.getTaskResults()){
+            failed += countFailedTests(taskResult);
+        }
+        return failed;
+    }
+
+    private String findLanguage(Result result){
+        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()){
+            return null;
+        }
+        for (TaskResult taskResult: result.getTaskResults()){
+            for (Submission submission: taskResult.getSubmissions()){
+                if (submission.getLanguage() != null){
+                    return submission.getLanguage().getName();
+                }
+            }
+        }
+        return null;
     }
 
     private User createUserFromDto(ParticipationDto dto) {

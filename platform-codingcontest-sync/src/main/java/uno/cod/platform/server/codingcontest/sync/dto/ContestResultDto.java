@@ -3,7 +3,7 @@ package uno.cod.platform.server.codingcontest.sync.dto;
 public class ContestResultDto {
     private int level;
     private int failedTests;
-    private long finishTime;
+    private Long finishTime;
     private boolean codeUploaded;
 
     public int getLevel() {
@@ -22,11 +22,11 @@ public class ContestResultDto {
         this.failedTests = failedTests;
     }
 
-    public long getFinishTime() {
+    public Long getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(long finishTime) {
+    public void setFinishTime(Long finishTime) {
         this.finishTime = finishTime;
     }
 
