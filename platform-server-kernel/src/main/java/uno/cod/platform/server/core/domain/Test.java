@@ -13,6 +13,7 @@ public class Test extends IdentifiableEntity {
     private Runner runner;
 
     @ManyToOne
+    @JoinColumn(name = "task_id")
     private Task task;
 
     @ElementCollection(fetch = FetchType.EAGER)

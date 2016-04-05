@@ -32,8 +32,11 @@ public class Task extends Assignment {
             joinColumns = {@JoinColumn(name = "task_id")})
     private Map<CodingSkill, Double> skillMap;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany
     @OrderColumn(name = "test_order")
+    @JoinTable(name = "task_test",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "test_id")})
     private List<Test> tests;
 
     @OneToMany(mappedBy = "task")
