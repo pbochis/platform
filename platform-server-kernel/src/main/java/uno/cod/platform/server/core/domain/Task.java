@@ -10,10 +10,13 @@ import java.util.*;
 @Entity
 @Table(name = "task")
 public class Task extends Assignment {
-    @ManyToMany(mappedBy = "tasks")
+    @ManyToMany
+    @JoinTable(name = "challenge_template_task",
+            joinColumns = {@JoinColumn(name = "challenge_template_id")},
+            inverseJoinColumns = {@JoinColumn(name = "task_id")})
     private List<ChallengeTemplate> challengeTemplates;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "canonical_name", nullable = false, unique = true)
     private String canonicalName;
 
     @ManyToOne
@@ -26,7 +29,10 @@ public class Task extends Assignment {
     private boolean isPublic;
 
     @ElementCollection
-    @CollectionTable(name = "task_skillmap")
+    @MapKeyColumn(name = "skill_map_KEY")
+    @Column(name = "skill_map")
+    @CollectionTable(name = "task_skill_map",
+            joinColumns = {@JoinColumn(name = "task_id")})
     private Map<CodingSkill, Double> skillMap;
 
     @OneToMany(mappedBy = "task")
@@ -41,6 +47,7 @@ public class Task extends Assignment {
     private Runner runner;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @Column(name = "task_id")
     @CollectionTable(name = "task_params")
     @Lob
     private Map<String, String> params;

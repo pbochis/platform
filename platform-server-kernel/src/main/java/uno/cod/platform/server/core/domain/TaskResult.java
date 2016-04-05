@@ -16,7 +16,9 @@ public class TaskResult {
     @EmbeddedId
     private TaskResultKey key = new TaskResultKey();
 
+    @Column(name = "start_time")
     private ZonedDateTime startTime;
+    @Column(name = "end_time")
     private ZonedDateTime endTime;
 
     private boolean successful;
