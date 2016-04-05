@@ -30,7 +30,9 @@ public class User extends IdentifiableEntity implements UserDetails {
     @Email
     private String email;
 
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(nullable = false)
@@ -72,7 +74,7 @@ public class User extends IdentifiableEntity implements UserDetails {
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created = ZonedDateTime.now();
 
-    @Column
+    @Column(name = "last_login")
     private ZonedDateTime lastLogin;
 
     public String getUsername() {

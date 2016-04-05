@@ -242,6 +242,7 @@ public class SetupService {
     private Task createTask(String name, String description, String instructions, Endpoint endpoint, Runner runner, Duration duration, Organization organization, Set<Language> languages, Map<String, String> params) {
         Task task = new Task();
         task.setName(name);
+        task.setCanonicalName(name + new Random().nextInt(1024));
         task.setDescription(description);
         task.setInstructions(instructions);
         task.setEndpoint(endpoint);

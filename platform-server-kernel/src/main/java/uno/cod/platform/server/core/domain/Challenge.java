@@ -16,28 +16,37 @@ public class Challenge extends IdentifiableEntity{
 
     @NotNull
     @NotEmpty
-    @Column(unique = true, nullable = false)
+    @Column(name = "canonical_name", unique = true, nullable = false)
     private String canonicalName;
 
     @ManyToOne
+    @JoinColumn(name = "challenge_template_id")
     private ChallengeTemplate challengeTemplate;
 
     @ManyToMany
+    @JoinTable(
+            name = "challenge_user",
+            joinColumns = {@JoinColumn(name = "invited_challenge_id")},
+            inverseJoinColumns = {@JoinColumn(name = "invited_user_id")}
+    )
     private Set<User> invitedUsers;
 
     @OneToMany(mappedBy = "challenge")
     private Set<Result> results;
 
+    @Column(name = "invite_only")
     private boolean inviteOnly = true;
 
     /**
      * Start of the challenge, users can already be invited before
      */
+    @Column(name = "start_date")
     private ZonedDateTime startDate;
 
     /**
      * End of the challenge, the challenge is read only afterwards
      */
+    @Column(name = "end_date")
     private ZonedDateTime endDate;
 
     public Set<User> getInvitedUsers() {

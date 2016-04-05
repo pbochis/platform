@@ -13,7 +13,7 @@ public class Runner extends IdentifiableEntity {
     @Column
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "canonical_name", unique = true, nullable = false)
     private String canonicalName;
 
     @OneToMany(mappedBy = "runner")
