@@ -484,6 +484,8 @@ CREATE TABLE `user` (
   `admin` bit(1) NOT NULL,
   `created` datetime NOT NULL,
   `email` varchar(255) NOT NULL,
+  `first_name` varchar(255),
+  `last_name` VARCHAR(255),
   `enabled` bit(1) NOT NULL,
   `lastLogin` datetime DEFAULT NULL,
   `password` varchar(255) NOT NULL,
