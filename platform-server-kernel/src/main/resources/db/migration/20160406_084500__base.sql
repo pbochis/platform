@@ -238,10 +238,9 @@ DROP TABLE IF EXISTS `runner`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `runner` (
   `id` binary(16) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `canonical_name` varchar(255) DEFAULT NULL,
+  `path` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`canonical_name`)
+  UNIQUE KEY (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -430,8 +429,8 @@ CREATE TABLE `test` (
   `id` binary(16) NOT NULL,
   `runner_id` binary(16) DEFAULT NULL,
   `task_id` binary(16) DEFAULT NULL,
-  `test_order` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`, `test_order`),
+  `custom_index` int(11) NOT NULL,
+  PRIMARY KEY (`id`, `custom_index`),
   KEY `FKjvtfp7jnalo9d5em8rmpxbj68` (`runner_id`),
   KEY `FK2xx1yyitp3uqqmhgeg0qwuvps` (`task_id`),
   CONSTRAINT `FK2xx1yyitp3uqqmhgeg0qwuvps` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),

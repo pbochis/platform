@@ -17,13 +17,13 @@ import uno.cod.storage.PlatformStorage;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 @Transactional
 public class SubmissionService {
-    private static final Integer MAX_RESPONSE_SIZE = 2000000;
     private final SubmissionRepository repository;
     private final ResultRepository resultRepository;
     private final TaskRepository taskRepository;
@@ -97,7 +97,8 @@ public class SubmissionService {
         boolean green = true;
         switch (type) {
             case NORMAL:
-                for (Test test : task.getTests()) {
+                List<Test> tests = testRepository.findByTaskIdOrderByIndex(taskId);
+                for (Test test : tests) {
                     MultiValueMap<String, Object> form = createForm(test);
                     form.add("language", language);
                     form.add("files_gcs", submission.filePath());
@@ -115,7 +116,7 @@ public class SubmissionService {
 
                     green = green && runAndSendResults(form, result.getUser().getId(), submission, test);
                 }
-                green = green && files.length == testRepository.findByTask(task.getId()).size();
+                green = green && files.length == testRepository.findByTaskIdOrderByIndex(task.getId()).size();
                 break;
         }
 
@@ -141,7 +142,7 @@ public class SubmissionService {
     }
 
     private boolean runAndSendResults(MultiValueMap<String, Object> form, UUID userId, Submission submission, Test test) throws IOException {
-        JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getName(), form);
+        JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getPath(), form);
         ((ObjectNode) obj).put("test", test.getId().toString());
 
         if (obj.get("error") != null) {
@@ -175,6 +176,6 @@ public class SubmissionService {
             }
         }
 
-        appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getName(), form).toString());
+        appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getPath(), form).toString());
     }
 }

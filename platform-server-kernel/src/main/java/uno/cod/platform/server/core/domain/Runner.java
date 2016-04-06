@@ -10,25 +10,14 @@ import java.util.List;
 @Entity
 @Table(name = "runner")
 public class Runner extends IdentifiableEntity {
-    @Column
-    private String name;
-
-    @Column(name = "canonical_name", unique = true, nullable = false)
-    private String canonicalName;
+    @Column(unique = true, nullable = false)
+    private String path;
 
     @OneToMany(mappedBy = "runner")
     private List<Test> tests;
 
     @OneToMany(mappedBy = "runner")
     private List<Task> tasks;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public List<Test> getTests() {
         return Collections.unmodifiableList(tests);
@@ -46,11 +35,11 @@ public class Runner extends IdentifiableEntity {
         this.tasks = tasks;
     }
 
-    public String getCanonicalName() {
-        return canonicalName;
+    public String getPath() {
+        return path;
     }
 
-    public void setCanonicalName(String canonicalName) {
-        this.canonicalName = canonicalName;
+    public void setPath(String path) {
+        this.path = path;
     }
 }

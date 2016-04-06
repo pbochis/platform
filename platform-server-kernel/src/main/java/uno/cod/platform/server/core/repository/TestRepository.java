@@ -12,8 +12,9 @@ public interface TestRepository extends JpaRepository<Test, UUID> {
 
     @Query("SELECT test FROM Test test " +
             "LEFT JOIN FETCH test.task task " +
-            "WHERE task.id = :taskId")
-    List<Test> findByTask(@Param("taskId") UUID taskId);
+            "WHERE task.id = :taskId " +
+            "ORDER BY test.index ASC")
+    List<Test> findByTaskIdOrderByIndex(@Param("taskId") UUID taskId);
 
     @Query("SELECT test FROM Test test " +
             "LEFT JOIN FETCH test.runner " +

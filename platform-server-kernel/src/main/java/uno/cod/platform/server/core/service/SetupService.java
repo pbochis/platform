@@ -70,12 +70,12 @@ public class SetupService {
         String[] schoolCCCTaskNames = new String[]{"drones-2d-level-1", "drones-2d-level-2",
                 "drones-2d-level-3", "drones-2d-level-4", "drones-2d-level-5"};
 
-        Runner testRunner = createRunner("drones/test");
-        Runner normalRunner = createRunner("drones/run");
+        Runner testRunner = createRunner("/drones/test");
+        Runner normalRunner = createRunner("/drones/run");
         initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, ccc, cccTaskNames,
                 Duration.ofHours(4), "Drones", testRunner, normalRunner);
-        Runner schoolTestRunner = createRunner("drones-2d/test");
-        Runner schoolNormalRunner = createRunner("drones-2d/run");
+        Runner schoolTestRunner = createRunner("/drones-2d/test");
+        Runner schoolNormalRunner = createRunner("/drones-2d/run");
         initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, schoolCCC, schoolCCCTaskNames,
                 Duration.ofHours(2), "Drones 2D", schoolTestRunner, schoolNormalRunner);
     }
@@ -139,16 +139,16 @@ public class SetupService {
                 Map<String, String> params = new HashMap<>();
                 params.put("level", (i + 1) + "");
                 params.put("test", j + "");
-                createTest(task, testRunner, params);
+                createTest(task, testRunner, (j - 1), params);
             }
             ccc.addTask(task);
         }
         challengeTemplateRepository.save(ccc);
     }
 
-    private Runner createRunner(String name) {
+    private Runner createRunner(String path) {
         Runner runner = new Runner();
-        runner.setName(name);
+        runner.setPath(path);
         return runnerRepository.save(runner);
     }
 
@@ -178,11 +178,12 @@ public class SetupService {
         return taskRepository.save(task);
     }
 
-    private Test createTest(Task task, Runner runner, Map<String, String> params) {
+    private Test createTest(Task task, Runner runner, int index, Map<String, String> params) {
         Test helloWorldTest = new Test();
         helloWorldTest.setTask(task);
         helloWorldTest.setRunner(runner);
         helloWorldTest.setParams(params);
+        helloWorldTest.setIndex(index);
         return testRepository.save(helloWorldTest);
     }
 

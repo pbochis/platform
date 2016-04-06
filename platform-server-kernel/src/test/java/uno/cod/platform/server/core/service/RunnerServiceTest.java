@@ -36,6 +36,6 @@ public class RunnerServiceTest {
         Runner runner = runners.get(0);
 
         assertEquals(runner.getId(), dto.getId());
-        assertEquals(runner.getName(), dto.getName());
+        assertEquals(runner.getPath(), dto.getPath());
     }
 }

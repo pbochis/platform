@@ -32,7 +32,7 @@ public class TestController {
 
     @RequestMapping(value = RestUrls.TASKS_ID_TESTS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<TestShowDto>> findByTaskId(@PathVariable UUID id) {
-        return new ResponseEntity<>(testService.findByTaskId(id), HttpStatus.OK);
+    public ResponseEntity<List<TestShowDto>> findByTaskIdOrderByIndex(@PathVariable UUID id) {
+        return new ResponseEntity<>(testService.findByTaskIdOrderByIndex(id), HttpStatus.OK);
     }
 }

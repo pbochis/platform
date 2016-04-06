@@ -46,7 +46,7 @@ public class TestService {
         testRepository.save(test);
     }
 
-    public List<TestShowDto> findByTaskId(UUID taskId){
-        return testRepository.findByTask(taskId).stream().map(TestShowDto::new).collect(Collectors.toList());
+    public List<TestShowDto> findByTaskIdOrderByIndex(UUID taskId) {
+        return testRepository.findByTaskIdOrderByIndex(taskId).stream().map(TestShowDto::new).collect(Collectors.toList());
     }
 }

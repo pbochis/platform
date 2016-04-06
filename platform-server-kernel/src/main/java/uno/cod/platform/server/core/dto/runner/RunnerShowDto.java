@@ -6,13 +6,11 @@ import java.util.UUID;
 
 public class RunnerShowDto {
     private UUID id;
-    private String name;
-    private String canonicalName;
+    private String path;
 
-    public RunnerShowDto(Runner runner){
+    public RunnerShowDto(Runner runner) {
         this.id = runner.getId();
-        this.canonicalName = runner.getCanonicalName();
-        this.name = runner.getName();
+        this.path = runner.getPath();
     }
 
     public UUID getId() {
@@ -23,19 +21,11 @@ public class RunnerShowDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getPath() {
+        return path;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCanonicalName() {
-        return canonicalName;
-    }
-
-    public void setCanonicalName(String canonicalName) {
-        this.canonicalName = canonicalName;
+    public void setPath(String path) {
+        this.path = path;
     }
 }

@@ -33,7 +33,6 @@ public class Task extends Assignment {
     private Map<CodingSkill, Double> skillMap;
 
     @OneToMany(mappedBy = "task")
-    @OrderColumn(name = "test_order")
     private List<Test> tests;
 
     @OneToMany(mappedBy = "task")

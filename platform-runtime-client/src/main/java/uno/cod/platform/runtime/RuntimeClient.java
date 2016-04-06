@@ -29,8 +29,8 @@ public class RuntimeClient {
         this.objectMapper = new ObjectMapper();
     }
 
-    public JsonNode postToRuntime(String runnerName, MultiValueMap<String, Object> form) throws IOException {
-        String endpoint = runtimeProperties.getUrl() + "/" + runnerName;
+    public JsonNode postToRuntime(String runnerPath, MultiValueMap<String, Object> form) throws IOException {
+        String endpoint = runtimeProperties.getUrl() + runnerPath;
         JsonNode obj = null;
         try {
             LOGGER.trace("calling {} with parameters {}", endpoint, form);
