@@ -88,12 +88,14 @@ public class SubmissionService {
         submission.setTaskResult(taskResult);
         if (SubmissionType.NORMAL.equals(type)) {
             submission.setLanguage(languageRepository.findByTag(language));
-            platformStorage.upload(bucket, submission.filePath(), files[0].getInputStream(), files[0].getContentType());
             submission.setFileName(files[0].getOriginalFilename());
         }
         submission.setSubmissionTime(ZonedDateTime.now());
         submission = repository.save(submission);
-        repository.save(submission);
+
+        if (SubmissionType.NORMAL.equals(type)) {
+            platformStorage.upload(bucket, submission.filePath(), files[0].getInputStream(), files[0].getContentType());
+        }
         boolean green = true;
         switch (type) {
             case NORMAL:
@@ -150,7 +152,7 @@ public class SubmissionService {
             return false;
         }
 
-        boolean successful = obj.get("successful") != null && !obj.get("successful").booleanValue();
+        boolean successful = obj.get("successful") != null && obj.get("successful").booleanValue();
 
         TestResult testResult = new TestResult();
         testResult.setTest(test);

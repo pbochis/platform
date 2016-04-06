@@ -139,7 +139,7 @@ public class SetupService {
                 Map<String, String> params = new HashMap<>();
                 params.put("level", (i + 1) + "");
                 params.put("test", j + "");
-                createTest(task, testRunner, (j - 1), params);
+                createTest(task, testRunner, j - 1, params);
             }
             ccc.addTask(task);
         }
