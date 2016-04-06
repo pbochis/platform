@@ -9,8 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.core.service.TemplateService;
 import uno.cod.platform.server.rest.RestUrls;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +35,7 @@ public class TemplateController {
 
     @RequestMapping(path = RestUrls.TEMPLATES_ID, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> getTemplateUrl(@PathVariable UUID id) throws GeneralSecurityException, UnsupportedEncodingException {
+    public ResponseEntity<List<String>> getTemplateUrl(@PathVariable UUID id) throws GeneralSecurityException, IOException {
         return new ResponseEntity<>(service.getTemplateUrl(id), HttpStatus.OK);
     }
 }
