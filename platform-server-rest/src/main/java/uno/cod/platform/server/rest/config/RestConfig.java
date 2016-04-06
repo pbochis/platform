@@ -23,6 +23,9 @@ public class RestConfig {
     @Value("${coduno.codingcontest_url}")
     private String codingContestUrl;
 
+    @Value("${coduno.codingcontest_lab_url}")
+    private String codingContestLabUrl;
+
     @Bean(name = "exceptionMessageSource")
     public ResourceBundleMessageSource exceptionMessageSource() {
         ResourceBundleMessageSource bean = new ResourceBundleMessageSource();
@@ -48,9 +51,9 @@ public class RestConfig {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl);
-                registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl);
-                registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl);
+                registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl, codingContestLabUrl);
+                registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl, codingContestLabUrl);
+                registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl, codingContestLabUrl);
                 registry.addMapping("/**").allowedOrigins(codunoUrl);
             }
         };
