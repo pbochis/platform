@@ -96,7 +96,7 @@ public class SubmissionService {
         if (SubmissionType.NORMAL.equals(type)) {
             platformStorage.upload(bucket, submission.filePath(), files[0].getInputStream(), files[0].getContentType());
         }
-        boolean green = true;
+        boolean successful = true;
         switch (type) {
             case NORMAL:
                 List<Test> tests = testRepository.findByTaskIdOrderByIndex(taskId);
@@ -104,7 +104,7 @@ public class SubmissionService {
                     MultiValueMap<String, Object> form = createForm(test);
                     form.add("language", language);
                     form.add("files_gcs", submission.filePath());
-                    green = green && runAndSendResults(form, result.getUser().getId(), submission, test);
+                    successful = runAndSendResults(form, result.getUser().getId(), submission, test) && successful;
                 }
                 break;
             case OUTPUT:
@@ -116,13 +116,13 @@ public class SubmissionService {
                     form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
                     form.add("validate", "true");
 
-                    green = green && runAndSendResults(form, result.getUser().getId(), submission, test);
+                    successful = runAndSendResults(form, result.getUser().getId(), submission, test) && successful;
                 }
-                green = green && files.length == testRepository.findByTaskIdOrderByIndex(task.getId()).size();
+                successful = files.length == testRepository.findByTaskIdOrderByIndex(task.getId()).size() && successful;
                 break;
         }
 
-        if (green) {
+        if (successful) {
             submission.setSuccessful(true);
             repository.save(submission);
             taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
