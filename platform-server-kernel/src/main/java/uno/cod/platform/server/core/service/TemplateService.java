@@ -45,9 +45,9 @@ public class TemplateService {
         if (language == null) {
             throw new IllegalArgumentException("language.invalid");
         }
-        String path =  task.getCanonicalName() + "/" + language.getTag();
+        String path = task.getCanonicalName() + "/" + language.getTag() + "/" + file.getOriginalFilename();
         try {
-            storage.upload(bucket, path , file.getInputStream(), "text/plain");
+            storage.upload(bucket, path, file.getInputStream(), "text/plain");
         } catch (IOException e) {
             throw new IllegalArgumentException("file.invalid");
         }
