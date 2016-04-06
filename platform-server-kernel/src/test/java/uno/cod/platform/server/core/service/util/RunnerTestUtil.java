@@ -12,7 +12,7 @@ public class RunnerTestUtil {
     public static Runner getRunner(UUID id) {
         Runner runner = new Runner();
         runner.setId(id);
-        runner.setName("default runner");
+        runner.setPath("default runner");
         return runner;
     }
 }
