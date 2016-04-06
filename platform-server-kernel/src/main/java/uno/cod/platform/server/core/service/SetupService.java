@@ -70,12 +70,12 @@ public class SetupService {
         String[] schoolCCCTaskNames = new String[]{"drones-2d-level-1", "drones-2d-level-2",
                 "drones-2d-level-3", "drones-2d-level-4", "drones-2d-level-5"};
 
-        Runner testRunner = createRunner("Drones test","drones/test");
-        Runner normalRunner = createRunner("Drones run", "drones/run");
+        Runner testRunner = createRunner("drones/test");
+        Runner normalRunner = createRunner("drones/run");
         initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, ccc, cccTaskNames,
                 Duration.ofHours(4), "Drones", testRunner, normalRunner);
-        Runner schoolTestRunner = createRunner("Drones 2d test", "drones-2d/test");
-        Runner schoolNormalRunner = createRunner("Drones 2d run", "drones-2d/run");
+        Runner schoolTestRunner = createRunner("drones-2d/test");
+        Runner schoolNormalRunner = createRunner("drones-2d/run");
         initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, schoolCCC, schoolCCCTaskNames,
                 Duration.ofHours(2), "Drones 2D", schoolTestRunner, schoolNormalRunner);
     }
@@ -139,19 +139,16 @@ public class SetupService {
                 Map<String, String> params = new HashMap<>();
                 params.put("level", (i + 1) + "");
                 params.put("test", j + "");
-                Test test = createTest(task, testRunner, params);
-                // FIXME: if task is not saved the test_order is not persisted
-                task.addTest(test);
+                createTest(task, testRunner, params);
             }
             ccc.addTask(task);
         }
         challengeTemplateRepository.save(ccc);
     }
 
-    private Runner createRunner(String name, String canonicalName) {
+    private Runner createRunner(String name) {
         Runner runner = new Runner();
         runner.setName(name);
-        runner.setCanonicalName(canonicalName);
         return runnerRepository.save(runner);
     }
 
