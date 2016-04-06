@@ -17,5 +17,7 @@ public interface PlatformStorage {
     void downloadToOutputStream(String bucketName, String objectName, OutputStream data) throws IOException;
 
     String exposeFile(String bucket, String fileName, Long expiration) throws GeneralSecurityException, UnsupportedEncodingException;
+
+    List<String> exposeFilesInFolder(String bucket, String folderName, Long expiration) throws GeneralSecurityException, IOException;
 }
 

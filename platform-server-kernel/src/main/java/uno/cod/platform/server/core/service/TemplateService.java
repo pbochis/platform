@@ -13,8 +13,8 @@ import uno.cod.platform.server.core.repository.TemplateRepository;
 import uno.cod.storage.PlatformStorage;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,10 +58,10 @@ public class TemplateService {
     }
 
 
-    public String getTemplateUrl(UUID templateId) throws GeneralSecurityException, UnsupportedEncodingException {
+    public List<String> getTemplateUrl(UUID templateId) throws GeneralSecurityException, IOException {
         Template template = repository.findOne(templateId);
         //set expiration time to 2 hours
         Long expiration = (System.currentTimeMillis() / 1000) + 7200;
-        return storage.exposeFile(bucket, template.filePath(), expiration);
+        return storage.exposeFilesInFolder(bucket, template.filePath(), expiration);
     }
 }

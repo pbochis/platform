@@ -18,6 +18,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class GcsStorageDriver implements PlatformStorage {
         for (StorageObject obj: response.getItems()) {
             allItems.add(obj.getName());
         }
+
         while (response.getNextPageToken() != null) {
             String pageToken = response.getNextPageToken();
             response = storage.objects().list(bucket).
@@ -86,6 +88,20 @@ public class GcsStorageDriver implements PlatformStorage {
         Storage.Objects.Get getObject = storage.objects().get(bucketName, objectName);
         getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
         getObject.executeMediaAndDownloadTo(data);
+    }
+
+    @Override
+    public List<String> exposeFilesInFolder(String bucket, String folderName, Long expiration) throws GeneralSecurityException, IOException {
+        if (!folderName.endsWith("/")){
+            folderName = folderName.concat("/");
+        }
+        List<String> files = listFiles(bucket, folderName);
+        files.remove(folderName);
+        List<String> exposedFiles = new ArrayList<>();
+        for (String file: files){
+            exposedFiles.add(exposeFile(bucket, file, expiration));
+        }
+        return exposedFiles;
     }
 
     @Override

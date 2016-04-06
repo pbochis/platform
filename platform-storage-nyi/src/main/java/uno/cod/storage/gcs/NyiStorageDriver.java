@@ -3,7 +3,10 @@ package uno.cod.storage.gcs;
 
 import uno.cod.storage.PlatformStorage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -34,4 +37,8 @@ public class NyiStorageDriver implements PlatformStorage {
         throw new UnsupportedOperationException("NYI");
     }
 
+    @Override
+    public List<String> exposeFilesInFolder(String bucket, String folderName, Long expiration) throws GeneralSecurityException, IOException {
+        throw new UnsupportedOperationException("NYI");
+    }
 }
