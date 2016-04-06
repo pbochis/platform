@@ -8,12 +8,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.core.domain.User;
-import uno.cod.platform.server.core.dto.test.OutputTestResultDto;
 import uno.cod.platform.server.core.service.SubmissionService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
