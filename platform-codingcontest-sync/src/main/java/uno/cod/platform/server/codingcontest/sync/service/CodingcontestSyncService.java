@@ -64,18 +64,20 @@ public class CodingcontestSyncService {
         }
 
         for (ParticipationDto participation : dto.getParticipations()) {
-            User user = userRepository.findOne(UUID.fromString(dto.getUuid()));
-            if (user == null) {
-                user = createUserFromDto(participation);
-                user.addInvitedChallenge(challenge);
-            } else {
-                user.setPassword(participation.getPassword());
-                if(!user.getInvitedChallenges().contains(challenge)) {
+            if (!participation.isDisabled()){
+                User user = userRepository.findOne(UUID.fromString(dto.getUuid()));
+                if (user == null) {
+                    user = createUserFromDto(participation);
                     user.addInvitedChallenge(challenge);
+                } else {
+                    user.setPassword(participation.getPassword());
+                    if(!user.getInvitedChallenges().contains(challenge)) {
+                        user.addInvitedChallenge(challenge);
+                    }
                 }
+                user.setEnabled(true);
+                userRepository.save(user);
             }
-            user.setEnabled(true);
-            userRepository.save(user);
         }
     }
 
