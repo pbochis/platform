@@ -45,10 +45,23 @@ public class CodingcontestSyncService {
         return userRepository.save(user);
     }
 
+    private static final String DRONES_UUID = "bc14f054-3ef5-4816-8255-0b30c2a22856";
+    private static final String DRONES_2D_UUID = "3890c253-e754-4185-a9bb-6c963abd6d76";
+
     public void createOrUpdateContest(CodingcontestDto dto) {
         UUID id = UUID.fromString(dto.getUuid());
         Challenge challenge = challengeRepository.findOne(id);
         ChallengeTemplate template = challengeTemplateRepository.findOneByName(dto.getGameName());
+        if (template == null) {
+            switch (dto.getGameName()) {
+                case DRONES_UUID:
+                    template = challengeTemplateRepository.findOneByName("Drones");
+                    break;
+                case DRONES_2D_UUID:
+                    template = challengeTemplateRepository.findOneByName("Drones 2D");
+                    break;
+            }
+        }
         if (template == null) {
             throw new IllegalArgumentException("sync.game.invalid");
         }
@@ -64,14 +77,14 @@ public class CodingcontestSyncService {
         }
 
         for (ParticipationDto participation : dto.getParticipations()) {
-            if (!participation.isDisabled()){
+            if (!participation.isDisabled()) {
                 User user = userRepository.findOne(UUID.fromString(dto.getUuid()));
                 if (user == null) {
                     user = createUserFromDto(participation);
                     user.addInvitedChallenge(challenge);
                 } else {
                     user.setPassword(participation.getPassword());
-                    if(!user.getInvitedChallenges().contains(challenge)) {
+                    if (!user.getInvitedChallenges().contains(challenge)) {
                         user.addInvitedChallenge(challenge);
                     }
                 }
@@ -97,7 +110,7 @@ public class CodingcontestSyncService {
         List<Object[]> results = resultRepository.findLeaderboardForChallenge(challenge.getId());
         List<ContestantDto> contestants = new ArrayList<>();
         int rank = 0;
-        for (Object[] resultRow: results) {
+        for (Object[] resultRow : results) {
             Result result = (Result) resultRow[0];
             int finishedTasks = ((Long) resultRow[1]).intValue();
 
@@ -116,17 +129,17 @@ public class CodingcontestSyncService {
         return contestInfoDto;
     }
 
-    private List<ContestResultDto> getContestResults(Result result){
+    private List<ContestResultDto> getContestResults(Result result) {
         List<Task> tasks = result.getChallenge().getChallengeTemplate().getTasks();
         List<ContestResultDto> contestResults = new ArrayList<>();
 
-        for (TaskResult taskResult: result.getTaskResults()){
+        for (TaskResult taskResult : result.getTaskResults()) {
             int failedTests = countFailedTests(taskResult);
             ContestResultDto contestResultDto = new ContestResultDto();
             contestResultDto.setFailedTests(failedTests);
             contestResultDto.setCodeUploaded(taskResult.getSubmissions() != null && !taskResult.getSubmissions().isEmpty());
             Long finishTime = null;
-            if (taskResult.getEndTime() != null){
+            if (taskResult.getEndTime() != null) {
                 finishTime = ChronoUnit.MILLIS.between(taskResult.getStartTime(), taskResult.getEndTime());
             }
             contestResultDto.setFinishTime(finishTime);
@@ -136,11 +149,11 @@ public class CodingcontestSyncService {
         return contestResults;
     }
 
-    private int countFailedTests(TaskResult taskResult){
+    private int countFailedTests(TaskResult taskResult) {
         int failed = 0;
-        for (Submission submission: taskResult.getSubmissions()){
-            for (TestResult testResult: submission.getTestResults()){
-                if (!testResult.isSuccessful()){
+        for (Submission submission : taskResult.getSubmissions()) {
+            for (TestResult testResult : submission.getTestResults()) {
+                if (!testResult.isSuccessful()) {
                     failed++;
                 }
             }
@@ -148,24 +161,24 @@ public class CodingcontestSyncService {
         return failed;
     }
 
-    private int countFailedTests(Result result){
-        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()){
+    private int countFailedTests(Result result) {
+        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()) {
             return 0;
         }
         int failed = 0;
-        for (TaskResult taskResult: result.getTaskResults()){
+        for (TaskResult taskResult : result.getTaskResults()) {
             failed += countFailedTests(taskResult);
         }
         return failed;
     }
 
-    private String findLanguage(Result result){
-        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()){
+    private String findLanguage(Result result) {
+        if (result.getTaskResults() == null || result.getTaskResults().isEmpty()) {
             return null;
         }
-        for (TaskResult taskResult: result.getTaskResults()){
-            for (Submission submission: taskResult.getSubmissions()){
-                if (submission.getLanguage() != null){
+        for (TaskResult taskResult : result.getTaskResults()) {
+            for (Submission submission : taskResult.getSubmissions()) {
+                if (submission.getLanguage() != null) {
                     return submission.getLanguage().getName();
                 }
             }
@@ -178,7 +191,7 @@ public class CodingcontestSyncService {
         user.setId(UUID.fromString(dto.getUuid()));
         user.setUsername(dto.getName());
         user.setPassword(dto.getPassword());
-        if(dto.getEmail() != null) {
+        if (dto.getEmail() != null) {
             user.setEmail(dto.getEmail());
         } else {
             user.setEmail(dto.getUuid() + "@team.cod.uno");
