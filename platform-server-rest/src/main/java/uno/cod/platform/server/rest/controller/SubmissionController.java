@@ -29,7 +29,7 @@ public class SubmissionController {
                                          @PathVariable UUID taskId,
                                          @RequestParam("language") String language,
                                          @RequestParam("file") MultipartFile file) throws IOException {
-        service.submitToRuntime(SubmissionService.SubmissionType.NORMAL, resultId, taskId, new MultipartFile[]{file}, language);
+        service.submitToRuntime(SubmissionService.SubmissionType.COMPILE_AND_RUN, resultId, taskId, new MultipartFile[]{file}, language);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -39,13 +39,13 @@ public class SubmissionController {
     public ResponseEntity<String> testOutput(@PathVariable UUID resultId,
                                                                 @PathVariable UUID taskId,
                                                                 @RequestParam("files") MultipartFile[] files) throws IOException {
-        service.submitToRuntime(SubmissionService.SubmissionType.OUTPUT, resultId, taskId, files, "");
+        service.submitToRuntime(SubmissionService.SubmissionType.VALIDATE_SOLUTION_FILE, resultId, taskId, files, "");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.TASKS_ID_RUN, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> runtask(@PathVariable UUID taskId,
+    public ResponseEntity<String> runTask(@PathVariable UUID taskId,
                                           @RequestParam("language") String language,
                                           @RequestParam("file") MultipartFile file,
                                           @AuthenticationPrincipal User principal) throws IOException {

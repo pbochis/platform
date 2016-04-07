@@ -62,8 +62,8 @@ public class SubmissionService {
     }
 
     public enum SubmissionType {
-        NORMAL,
-        OUTPUT;
+        COMPILE_AND_RUN,
+        VALIDATE_SOLUTION_FILE
     }
 
     public void submitToRuntime(SubmissionType type, UUID resultId, UUID taskId, MultipartFile[] files, String language) throws IOException {
@@ -86,33 +86,31 @@ public class SubmissionService {
 
         Submission submission = new Submission();
         submission.setTaskResult(taskResult);
-        if (SubmissionType.NORMAL.equals(type)) {
+        submission.setSubmissionTime(ZonedDateTime.now());
+        if (SubmissionType.COMPILE_AND_RUN.equals(type)) {
             submission.setLanguage(languageRepository.findByTag(language));
             submission.setFileName(files[0].getOriginalFilename());
-        }
-        submission.setSubmissionTime(ZonedDateTime.now());
-        submission = repository.save(submission);
-
-        if (SubmissionType.NORMAL.equals(type)) {
             platformStorage.upload(bucket, submission.filePath(), files[0].getInputStream(), files[0].getContentType());
         }
+        submission = repository.save(submission);
+
         boolean successful = true;
         switch (type) {
-            case NORMAL:
+            case COMPILE_AND_RUN:
                 List<Test> tests = testRepository.findByTaskIdOrderByIndex(taskId);
                 for (Test test : tests) {
-                    MultiValueMap<String, Object> form = createForm(test);
+                    MultiValueMap<String, Object> form = createForm(task, test);
                     form.add("language", language);
                     form.add("files_gcs", submission.filePath());
                     successful = runAndSendResults(form, result.getUser().getId(), submission, test) && successful;
                 }
                 break;
-            case OUTPUT:
+            case VALIDATE_SOLUTION_FILE:
                 for (MultipartFile file : files) {
                     UUID testId = UUID.fromString(file.getOriginalFilename());
                     Test test = testRepository.findOneWithRunner(testId);
 
-                    MultiValueMap<String, Object> form = createForm(test);
+                    MultiValueMap<String, Object> form = createForm(task, test);
                     form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
                     form.add("validate", "true");
 
@@ -122,25 +120,37 @@ public class SubmissionService {
                 break;
         }
 
-        if (successful) {
-            submission.setSuccessful(true);
-            repository.save(submission);
-            taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
+        if (!successful) {
+            return;
         }
+
+        submission.setSuccessful(true);
+        repository.save(submission);
+        taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
     }
 
-    private MultiValueMap<String, Object> createForm(Test test) {
+    private MultiValueMap<String, Object> createForm(Task task, Test test) {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
 
-        Map<String, String> params = test.getParams();
-        if (params != null) {
-            for (Map.Entry<String, String> param : params.entrySet()) {
-                form.add(param.getKey(), param.getValue());
-            }
+        if (task != null) {
+            addParams(form, task.getParams());
+        }
+
+        if (test != null) {
+            addParams(form, test.getParams());
         }
 
         return form;
+    }
 
+    private void addParams(MultiValueMap<String, Object> form, Map<String, String> params) {
+        if (params == null || params.isEmpty()) {
+            return;
+        }
+
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            form.add(param.getKey(), param.getValue());
+        }
     }
 
     private boolean runAndSendResults(MultiValueMap<String, Object> form, UUID userId, Submission submission, Test test) throws IOException {
@@ -159,7 +169,8 @@ public class SubmissionService {
         testResult.setSubmission(submission);
         testResult.setSuccessful(successful);
         testResultRepository.save(testResult);
-        //TODO: think wether we should save the test results in the database or as a json file in gcs
+        // TODO: Think whether we should save the test
+        // results in the database or as a JSON file in GCS.
         appClientConnection.send(userId, obj.toString());
         return successful;
     }
@@ -169,14 +180,10 @@ public class SubmissionService {
         if (task == null) {
             throw new IllegalArgumentException("task.invalid");
         }
-        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+
+        MultiValueMap<String, Object> form = createForm(task, null);
         form.add("language", language);
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
-        if (task.getParams() != null) {
-            for (Map.Entry<String, String> param : task.getParams().entrySet()) {
-                form.add(param.getKey(), param.getValue());
-            }
-        }
 
         appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getPath(), form).toString());
     }
