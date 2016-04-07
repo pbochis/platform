@@ -99,7 +99,7 @@ public class SubmissionService {
             case COMPILE_AND_RUN:
                 List<Test> tests = testRepository.findByTaskIdOrderByIndex(taskId);
                 for (Test test : tests) {
-                    MultiValueMap<String, Object> form = createForm(task, test);
+                    MultiValueMap<String, Object> form = createForm(test.getParams());
                     form.add("language", language);
                     form.add("files_gcs", submission.filePath());
                     successful = runAndSendResults(form, result.getUser().getId(), submission, test) && successful;
@@ -110,7 +110,7 @@ public class SubmissionService {
                     UUID testId = UUID.fromString(file.getOriginalFilename());
                     Test test = testRepository.findOneWithRunner(testId);
 
-                    MultiValueMap<String, Object> form = createForm(task, test);
+                    MultiValueMap<String, Object> form = createForm(test.getParams());
                     form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
                     form.add("validate", "true");
 
@@ -129,16 +129,9 @@ public class SubmissionService {
         taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
     }
 
-    private MultiValueMap<String, Object> createForm(Task task, Test test) {
+    private MultiValueMap<String, Object> createForm(Map<String, String> params) {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
-
-        if (task != null) {
-            addParams(form, task.getParams());
-        }
-
-        if (test != null) {
-            addParams(form, test.getParams());
-        }
+        addParams(form, params);
 
         return form;
     }
@@ -181,7 +174,7 @@ public class SubmissionService {
             throw new IllegalArgumentException("task.invalid");
         }
 
-        MultiValueMap<String, Object> form = createForm(task, null);
+        MultiValueMap<String, Object> form = createForm(task.getParams());
         form.add("language", language);
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
 

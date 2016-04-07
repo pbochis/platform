@@ -32,7 +32,6 @@ public interface ResultRepository extends JpaRepository<Result, UUID> {
             "LEFT JOIN FETCH result.challenge challenge " +
             "LEFT JOIN FETCH result.user user " +
             "LEFT JOIN FETCH result.taskResults taskResults " +
-            "LEFT JOIN FETCH taskResults.submissions " +
             "WHERE user.id = :user AND challenge.id = :challenge")
     Result findOneWithTaskResultsByUserAndChallenge(@Param("user") UUID userId, @Param("challenge") UUID challengeId);
 
