@@ -87,12 +87,12 @@ public class SubmissionService {
         Submission submission = new Submission();
         submission.setTaskResult(taskResult);
         submission.setSubmissionTime(ZonedDateTime.now());
+        submission = repository.save(submission);
         if (SubmissionType.COMPILE_AND_RUN.equals(type)) {
             submission.setLanguage(languageRepository.findByTag(language));
             submission.setFileName(files[0].getOriginalFilename());
             platformStorage.upload(bucket, submission.filePath(), files[0].getInputStream(), files[0].getContentType());
         }
-        submission = repository.save(submission);
 
         boolean successful = true;
         switch (type) {
