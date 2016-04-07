@@ -39,10 +39,10 @@ public class RuntimeClient {
         } catch (HttpServerErrorException e) {
             LOGGER.debug("got error response status {} from runtime, body: {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
             obj = objectMapper.createObjectNode();
-            ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
+            ((ObjectNode) obj).put("failure", e.getResponseBodyAsString());
         } catch (HttpClientErrorException e) {
             obj = objectMapper.createObjectNode();
-            ((ObjectNode) obj).put("error", e.getResponseBodyAsString());
+            ((ObjectNode) obj).put("failure", e.getResponseBodyAsString());
             LOGGER.error("got generic rest client exception", e);
         }
         return obj;
