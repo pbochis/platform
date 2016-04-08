@@ -1,5 +1,8 @@
 package uno.cod.platform.server.websocket.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
@@ -21,6 +24,8 @@ public class WebSocketService implements IClientPushConnection {
 
     private final BiMap<UUID, WebSocketSession> sessions;
     private final UserRepository userRepository;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public WebSocketService(UserRepository userRepository) {
@@ -63,5 +68,21 @@ public class WebSocketService implements IClientPushConnection {
         } catch (IOException e) {
             LOGGER.warn("sending \"{}\" to user {} failed", message, userId, e);
         }
+    }
+
+    @Override
+    public void sendLevelCompleted(UUID userId, UUID taskId) {
+        JsonNode obj = objectMapper.createObjectNode();
+        ((ObjectNode)obj).put("levelState", "completed");
+        ((ObjectNode)obj).put("task", taskId.toString());
+        this.send(userId, obj.toString());
+    }
+
+    @Override
+    public void sendChallengeTimeout(UUID userId, UUID challengeId) {
+        JsonNode obj = objectMapper.createObjectNode();
+        ((ObjectNode)obj).put("challengeState", "timeout");
+        ((ObjectNode)obj).put("challenge", challengeId.toString());
+        this.send(userId, obj.toString());
     }
 }
