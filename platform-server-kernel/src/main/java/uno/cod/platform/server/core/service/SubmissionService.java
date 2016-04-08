@@ -127,6 +127,7 @@ public class SubmissionService {
         submission.setSuccessful(true);
         repository.save(submission);
         taskResultService.finishTaskResult(taskResult, submission.getSubmissionTime(), true);
+        this.appClientConnection.sendLevelCompleted(result.getUser().getId(), task.getId());
     }
 
     private MultiValueMap<String, Object> createForm(Map<String, String> params) {
@@ -150,7 +151,7 @@ public class SubmissionService {
         JsonNode obj = runtimeClient.postToRuntime(test.getRunner().getPath(), form);
         ((ObjectNode) obj).put("test", test.getId().toString());
 
-        if (obj.get("error") != null) {
+        if (obj.get("failure") != null) {
             appClientConnection.send(userId, obj.toString());
             return false;
         }
