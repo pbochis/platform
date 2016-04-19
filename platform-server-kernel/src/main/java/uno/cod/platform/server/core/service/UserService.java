@@ -5,7 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
+import uno.cod.platform.server.core.dto.user.UserShortShowDto;
 import uno.cod.platform.server.core.dto.user.UserShowDto;
+import uno.cod.platform.server.core.dto.user.UserUpdateDto;
 import uno.cod.platform.server.core.exception.ResourceConflictException;
 import uno.cod.platform.server.core.repository.UserRepository;
 
@@ -38,20 +40,34 @@ public class UserService{
         repository.save(user);
     }
 
-    public UserShowDto findByUsername(String username){
-        return new UserShowDto(repository.findByUsernameOrEmail(username, username));
+    public UserShowDto update(UserUpdateDto dto, User user) {
+        if(!dto.getUsername().equals(user.getUsername()) && repository.findByUsername(dto.getUsername())!=null){
+            throw new IllegalArgumentException("username.existing");
+        }
+        if(!dto.getEmail().equals(user.getEmail()) && repository.findByEmail(dto.getEmail())!=null){
+            throw new IllegalArgumentException("email.existing");
+        }
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        return new UserShowDto(repository.save(user));
     }
 
-    public List<UserShowDto> listUsers() {
-        return repository.findAll().stream().map(UserShowDto::new).collect(Collectors.toList());
+    public UserShortShowDto findByUsername(String username){
+        return new UserShortShowDto(repository.findByUsernameOrEmail(username, username));
     }
 
-    public UserShowDto findByEmail(String email){
+    public List<UserShortShowDto> listUsers() {
+        return repository.findAll().stream().map(UserShortShowDto::new).collect(Collectors.toList());
+    }
+
+    public UserShortShowDto findByEmail(String email){
         User user = repository.findByEmail(email);
         if (user == null){
             return null;
         }
-        return new UserShowDto(user);
+        return new UserShortShowDto(user);
     }
 }
 

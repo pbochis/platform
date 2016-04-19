@@ -9,7 +9,7 @@ import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.challenge.LeaderboardEntryDto;
 import uno.cod.platform.server.core.dto.result.ResultInfoDto;
 import uno.cod.platform.server.core.dto.result.ResultShowDto;
-import uno.cod.platform.server.core.dto.user.UserShowDto;
+import uno.cod.platform.server.core.dto.user.UserShortShowDto;
 import uno.cod.platform.server.core.mapper.ResultMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
@@ -86,7 +86,7 @@ public class ResultService {
         for (Object[] resultEntry : results) {
             LeaderboardEntryDto entry = new LeaderboardEntryDto();
             Result result = (Result) resultEntry[0];
-            entry.setUser(new UserShowDto(result.getUser()));
+            entry.setUser(new UserShortShowDto(result.getUser()));
             entry.setTasksCompleted((Long) resultEntry[1]);
             entry.setLastLevelFinishDate((ZonedDateTime) resultEntry[2]);
             leaderboard.add(entry);

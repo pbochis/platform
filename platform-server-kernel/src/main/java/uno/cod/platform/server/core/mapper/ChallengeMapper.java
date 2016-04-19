@@ -2,7 +2,7 @@ package uno.cod.platform.server.core.mapper;
 
 import uno.cod.platform.server.core.domain.Challenge;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
-import uno.cod.platform.server.core.dto.user.UserShowDto;
+import uno.cod.platform.server.core.dto.user.UserShortShowDto;
 
 import java.util.stream.Collectors;
 
@@ -14,7 +14,7 @@ public class ChallengeMapper {
         }
         ChallengeDto dto = new ChallengeDto(challenge);
         if (challenge.getInvitedUsers() != null){
-            dto.setInvitedUsers(challenge.getInvitedUsers().stream().map(UserShowDto::new).collect(Collectors.toList()));
+            dto.setInvitedUsers(challenge.getInvitedUsers().stream().map(UserShortShowDto::new).collect(Collectors.toList()));
         }
         return dto;
     }

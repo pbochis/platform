@@ -1,21 +1,23 @@
 package uno.cod.platform.server.core.dto.user;
 
-import org.springframework.beans.BeanUtils;
-import uno.cod.platform.server.core.domain.User;
+import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
-public class UserShowDto {
+public class UserUpdateDto {
     private UUID id;
+    @NotNull
+    @Size(min = 5, max = 40)
+    @Pattern(regexp = "^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$")
     private String username;
+    @NotNull
+    @Email
     private String email;
     private String firstName;
     private String lastName;
-    private boolean admin;
-
-    public UserShowDto(User user) {
-        BeanUtils.copyProperties(user, this);
-    }
 
     public UUID getId() {
         return id;
@@ -55,13 +57,5 @@ public class UserShowDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
     }
 }

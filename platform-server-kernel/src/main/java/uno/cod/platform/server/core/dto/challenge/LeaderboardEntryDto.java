@@ -1,19 +1,19 @@
 package uno.cod.platform.server.core.dto.challenge;
 
-import uno.cod.platform.server.core.dto.user.UserShowDto;
+import uno.cod.platform.server.core.dto.user.UserShortShowDto;
 
 import java.time.ZonedDateTime;
 
 public class LeaderboardEntryDto {
-    private UserShowDto user;
+    private UserShortShowDto user;
     private long tasksCompleted;
     private ZonedDateTime lastLevelFinishDate;
 
-    public UserShowDto getUser() {
+    public UserShortShowDto getUser() {
         return user;
     }
 
-    public void setUser(UserShowDto user) {
+    public void setUser(UserShortShowDto user) {
         this.user = user;
     }
 

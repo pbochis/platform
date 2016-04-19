@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.user.UserCreateDto;
+import uno.cod.platform.server.core.dto.user.UserShortShowDto;
 import uno.cod.platform.server.core.dto.user.UserShowDto;
+import uno.cod.platform.server.core.dto.user.UserUpdateDto;
 import uno.cod.platform.server.core.service.UserService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @RequestMapping(value = RestUrls.USERS, method = RequestMethod.GET)
-    public List<UserShowDto> list() {
+    public List<UserShortShowDto> list() {
         return userService.listUsers();
     }
 
@@ -42,5 +44,11 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserShowDto> get(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(new UserShowDto(user), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.USER, method = RequestMethod.PUT)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserShowDto> updateMyUser(@Valid @RequestBody UserUpdateDto dto, @AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(userService.update(dto, user), HttpStatus.OK);
     }
 }
