@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.User;
-import uno.cod.platform.server.core.dto.user.UserCreateDto;
-import uno.cod.platform.server.core.dto.user.UserShortShowDto;
-import uno.cod.platform.server.core.dto.user.UserShowDto;
-import uno.cod.platform.server.core.dto.user.UserUpdateDto;
+import uno.cod.platform.server.core.dto.user.*;
 import uno.cod.platform.server.core.exception.ResourceConflictException;
 import uno.cod.platform.server.core.repository.UserRepository;
 
@@ -52,6 +49,20 @@ public class UserService{
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         return new UserShowDto(repository.save(user));
+    }
+
+    public void updatePassword(UserPasswordChangeDto dto, User user) {
+        if(dto.getOldPassword().equals(dto.getNewPassword())){
+            throw new IllegalArgumentException("new.password.matches.old");
+        }
+        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())){
+            throw new IllegalArgumentException("old.password.invalid");
+        }
+        if(!dto.getNewPassword().equals(dto.getRetypedPassword())){
+            throw new IllegalArgumentException("passwords.not.equal");
+        }
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        repository.save(user);
     }
 
     public UserShortShowDto findByUsername(String username){
