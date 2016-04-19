@@ -36,25 +36,25 @@ public class RestConfig {
 
     @Bean
     @Profile(Profiles.DEVELOPMENT)
-    public WebMvcConfigurer devCorsConfigurer(){
+    public WebMvcConfigurer devCorsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
+                registry.addMapping("/**").allowedOrigins("*").allowedMethods("OPTIONS", "GET", "POST", "DELETE", "PUT");
             }
         };
     }
 
     @Bean
     @Profile(Profiles.PRODUCTION)
-    public WebMvcConfigurer corsConfigurer(){
+    public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/contestuploadraw").allowedOrigins(codingContestUrl, codingContestLabUrl);
                 registry.addMapping("/uploaduserraw").allowedOrigins(codingContestUrl, codingContestLabUrl);
                 registry.addMapping("/api/contests/*/report/json").allowedOrigins(codingContestUrl, codingContestLabUrl);
-                registry.addMapping("/**").allowedOrigins(codunoUrl);
+                registry.addMapping("/**").allowedOrigins(codunoUrl).allowedMethods("OPTIONS", "GET", "POST", "DELETE", "PUT");
             }
         };
     }
@@ -66,4 +66,5 @@ public class RestConfig {
         factory.setMaxRequestSize("16mb");
         return factory.createMultipartConfig();
     }
+
 }
