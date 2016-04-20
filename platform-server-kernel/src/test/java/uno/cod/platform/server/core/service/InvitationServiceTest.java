@@ -29,6 +29,7 @@ public class InvitationServiceTest {
     private ChallengeRepository challengeRepository;
     private UserService userService;
     private MailService mailService;
+    private GithubService githubService;
 
     @Before
     public void setUp() {
@@ -38,8 +39,9 @@ public class InvitationServiceTest {
         this.challengeRepository = Mockito.mock(ChallengeRepository.class);
         this.userService = Mockito.mock(UserService.class);
         this.mailService = Mockito.mock(MailService.class);
+        this.githubService = Mockito.mock(GithubService.class);
 
-        this.invitationService = new InvitationService(userRepository, invitationRepository, resultRepository, challengeRepository, userService, mailService);
+        this.invitationService = new InvitationService(userRepository, invitationRepository, resultRepository, challengeRepository, userService, mailService, githubService);
     }
 
     @Test
