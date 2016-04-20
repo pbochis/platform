@@ -1,3 +1,13 @@
+/*
+ * The list of names in this file was copied from the Docker project.
+ * The list of adjectives in this file was copied from the Docker
+ * project as well, but altered to sound more positive.
+ *
+ * The Docker project and it's name generator are licensed under
+ * the Apache License 2.0.
+ *
+ * See https://github.com/docker/docker/blob/master/pkg/namesgenerator/names-generator.go
+ */
 package uno.cod.platform.server.core.util;
 
 import java.util.Random;
