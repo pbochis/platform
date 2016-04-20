@@ -25,5 +25,5 @@ public class RunnerController {
     public ResponseEntity<List<RunnerShowDto>> findAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
-    
+
 }

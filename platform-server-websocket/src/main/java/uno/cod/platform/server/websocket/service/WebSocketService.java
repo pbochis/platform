@@ -34,7 +34,7 @@ public class WebSocketService implements IClientPushConnection {
     }
 
     public void addSession(UUID userId, WebSocketSession session) {
-        if(userRepository.findOne(userId) == null){
+        if (userRepository.findOne(userId) == null) {
             LOGGER.info("user {} with session id {} wanted to start a session, but we do not know him", userId, session.getId());
             try {
                 session.close();
@@ -58,7 +58,7 @@ public class WebSocketService implements IClientPushConnection {
     }
 
     public void send(UUID userId, String message) {
-        if(sessions.get(userId) == null){
+        if (sessions.get(userId) == null) {
             LOGGER.info("we wanted to talk to user {}, but we do not know this session, discarding message", userId);
             return;
         }
@@ -73,16 +73,16 @@ public class WebSocketService implements IClientPushConnection {
     @Override
     public void sendLevelCompleted(UUID userId, UUID taskId) {
         JsonNode obj = objectMapper.createObjectNode();
-        ((ObjectNode)obj).put("levelState", "completed");
-        ((ObjectNode)obj).put("task", taskId.toString());
+        ((ObjectNode) obj).put("levelState", "completed");
+        ((ObjectNode) obj).put("task", taskId.toString());
         this.send(userId, obj.toString());
     }
 
     @Override
     public void sendChallengeTimeout(UUID userId, UUID challengeId) {
         JsonNode obj = objectMapper.createObjectNode();
-        ((ObjectNode)obj).put("challengeState", "timeout");
-        ((ObjectNode)obj).put("challenge", challengeId.toString());
+        ((ObjectNode) obj).put("challengeState", "timeout");
+        ((ObjectNode) obj).put("challenge", challengeId.toString());
         this.send(userId, obj.toString());
     }
 }

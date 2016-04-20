@@ -1,8 +1,12 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Result holds the performance of an user for a challenge.
@@ -57,7 +61,7 @@ public class Result extends IdentifiableEntity {
     }
 
     public List<TaskResult> getTaskResults() {
-        if(taskResults == null){
+        if (taskResults == null) {
             return null;
         }
         return Collections.unmodifiableList(taskResults);

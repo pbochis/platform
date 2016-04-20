@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class OrganizationMembershipKey implements Serializable{
+public class OrganizationMembershipKey implements Serializable {
     @ManyToOne
     private Organization organization;
     @ManyToOne

@@ -10,7 +10,7 @@ public class OrganizationShowDto {
     private String name;
     private String nick;
 
-    public OrganizationShowDto(Organization organization){
+    public OrganizationShowDto(Organization organization) {
         BeanUtils.copyProperties(organization, this);
     }
 

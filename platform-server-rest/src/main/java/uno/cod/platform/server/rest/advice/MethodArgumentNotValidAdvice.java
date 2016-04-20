@@ -13,6 +13,7 @@ public class MethodArgumentNotValidAdvice {
 
     /**
      * Thrown on spring validation errors
+     *
      * @param ex validation error exception
      * @return list of errors
      */

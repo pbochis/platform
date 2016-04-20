@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 // TODO add languages and templates
-public class TaskCreateDto extends AssignmentCreateDto{
+public class TaskCreateDto extends AssignmentCreateDto {
     private boolean isPublic;
 
     @NotNull

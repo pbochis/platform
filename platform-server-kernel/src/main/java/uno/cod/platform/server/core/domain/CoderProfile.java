@@ -20,7 +20,7 @@ public class CoderProfile {
     @MapKeyColumn(name = "skill_map_key")
     @Column(name = "skill_map")
     @CollectionTable(name = "coder_profile_skill_map",
-        joinColumns = {@JoinColumn(name = "coder_profile_user_id")})
+            joinColumns = {@JoinColumn(name = "coder_profile_user_id")})
     private Map<CodingSkill, Double> skillMap;
 
     @Column(name = "last_updated")

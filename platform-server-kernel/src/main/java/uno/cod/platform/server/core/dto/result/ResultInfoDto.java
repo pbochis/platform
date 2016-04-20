@@ -14,11 +14,11 @@ public class ResultInfoDto {
     private ZonedDateTime started;
     private ZonedDateTime finished;
 
-    public ResultInfoDto(Result result){
+    public ResultInfoDto(Result result) {
         this.id = result.getId();
         this.started = result.getStarted();
         this.finished = result.getFinished();
-        if(result.getTaskResults()==null){
+        if (result.getTaskResults() == null) {
             return;
         }
         this.taskResults = result.getTaskResults().stream().map(TaskResultShowDto::new).collect(Collectors.toList());

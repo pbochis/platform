@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 
 public class InvitationTestUtil {
 
-    public static Invitation getInvitation(){
+    public static Invitation getInvitation() {
         Invitation invitation = new Invitation();
 
         invitation.setToken("token");

@@ -25,7 +25,7 @@ public class UserControllerTest extends AbstractControllerTest {
         mockMvc.perform(post(RestUrls.USERS)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(userCreateDto))
-                ).andExpect(status().isCreated());
+        ).andExpect(status().isCreated());
 
         assertNotNull(userRepository.findByUsername("testnick"));
     }

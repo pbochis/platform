@@ -37,8 +37,8 @@ public class SubmissionController {
     @RequestMapping(value = RestUrls.RESULTS_TESTS_OUTPUT, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> testOutput(@PathVariable UUID resultId,
-                                                                @PathVariable UUID taskId,
-                                                                @RequestParam("files") MultipartFile[] files) throws IOException {
+                                             @PathVariable UUID taskId,
+                                             @RequestParam("files") MultipartFile[] files) throws IOException {
         service.submitToRuntime(SubmissionService.SubmissionType.VALIDATE_SOLUTION_FILE, resultId, taskId, files, "");
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -19,11 +19,10 @@ import uno.cod.platform.server.Server;
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 @SpringApplicationConfiguration(classes = Server.class)
 public abstract class AbstractControllerTest {
+    protected MockMvc mockMvc;
+    ObjectMapper mapper;
     @Autowired
     private WebApplicationContext ctx;
-
-    ObjectMapper mapper;
-    protected MockMvc mockMvc;
 
     @Before
     public void setup() {

@@ -27,13 +27,13 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .httpBasic()
+                .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint())
-            .and()
+                .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
-            .and()
+                .and()
                 .logout()
-            .and()
+                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/setup",
@@ -42,9 +42,9 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/ip",
                         "/invite/auth/*").permitAll()
                 .anyRequest().authenticated()
-            .and()
+                .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
         http.csrf().disable();
     }

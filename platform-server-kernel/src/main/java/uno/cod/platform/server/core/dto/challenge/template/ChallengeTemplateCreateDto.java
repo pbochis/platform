@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-public class ChallengeTemplateCreateDto extends AssignmentCreateDto{
+public class ChallengeTemplateCreateDto extends AssignmentCreateDto {
     @NotNull
     private List<UUID> tasks;
 

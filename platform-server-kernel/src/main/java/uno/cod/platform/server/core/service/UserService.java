@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserService{
+public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
@@ -26,7 +26,7 @@ public class UserService{
 
     public void createFromDto(UserCreateDto dto) {
         User found = repository.findByUsernameOrEmail(dto.getNick(), dto.getEmail());
-        if(found != null) {
+        if (found != null) {
             throw new ResourceConflictException("user.name.exists");
         }
         User user = new User();
@@ -38,10 +38,10 @@ public class UserService{
     }
 
     public UserShowDto update(UserUpdateDto dto, User user) {
-        if(!dto.getUsername().equals(user.getUsername()) && repository.findByUsername(dto.getUsername())!=null){
+        if (!dto.getUsername().equals(user.getUsername()) && repository.findByUsername(dto.getUsername()) != null) {
             throw new IllegalArgumentException("username.existing");
         }
-        if(!dto.getEmail().equals(user.getEmail()) && repository.findByEmail(dto.getEmail())!=null){
+        if (!dto.getEmail().equals(user.getEmail()) && repository.findByEmail(dto.getEmail()) != null) {
             throw new IllegalArgumentException("email.existing");
         }
         user.setUsername(dto.getUsername());
@@ -52,20 +52,20 @@ public class UserService{
     }
 
     public void updatePassword(UserPasswordChangeDto dto, User user) {
-        if(dto.getOldPassword().equals(dto.getNewPassword())){
+        if (dto.getOldPassword().equals(dto.getNewPassword())) {
             throw new IllegalArgumentException("new.password.matches.old");
         }
-        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("old.password.invalid");
         }
-        if(!dto.getNewPassword().equals(dto.getRetypedPassword())){
+        if (!dto.getNewPassword().equals(dto.getRetypedPassword())) {
             throw new IllegalArgumentException("passwords.not.equal");
         }
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         repository.save(user);
     }
 
-    public UserShortShowDto findByUsername(String username){
+    public UserShortShowDto findByUsername(String username) {
         return new UserShortShowDto(repository.findByUsernameOrEmail(username, username));
     }
 
@@ -73,9 +73,9 @@ public class UserService{
         return repository.findAll().stream().map(UserShortShowDto::new).collect(Collectors.toList());
     }
 
-    public UserShortShowDto findByEmail(String email){
+    public UserShortShowDto findByEmail(String email) {
         User user = repository.findByEmail(email);
-        if (user == null){
+        if (user == null) {
             return null;
         }
         return new UserShortShowDto(user);

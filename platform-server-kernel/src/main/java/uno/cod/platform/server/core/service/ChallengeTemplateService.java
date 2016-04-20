@@ -38,7 +38,7 @@ public class ChallengeTemplateService {
 
     public UUID save(ChallengeTemplateCreateDto dto) {
         Organization organization = organizationRepository.findOne(dto.getOrganizationId());
-        if(organization==null){
+        if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
         }
         Endpoint endpoint = endpointRepository.findOne(dto.getEndpointId());
@@ -67,7 +67,7 @@ public class ChallengeTemplateService {
         return ChallengeTemplateMapper.map(repository.findAllWithTasks(organizationId));
     }
 
-    public ChallengeTemplateShowDto findByChallengeId(UUID challengeId){
+    public ChallengeTemplateShowDto findByChallengeId(UUID challengeId) {
         return ChallengeTemplateMapper.map(challengeRepository.findOneWithTemplate(challengeId).getChallengeTemplate());
     }
 }

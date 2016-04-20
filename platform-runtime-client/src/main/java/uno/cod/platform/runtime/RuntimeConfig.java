@@ -29,12 +29,12 @@ public class RuntimeConfig {
     public RestTemplate runtimeRestTemplate() {
         ClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 
-        if(runtimeProperties.getUsername() != null &&
+        if (runtimeProperties.getUsername() != null &&
                 !runtimeProperties.getUsername().isEmpty()) {
             LOGGER.info("enabled basic authentication for runtime client");
             List<ClientHttpRequestInterceptor> interceptors = Collections
                     .singletonList(new BasicAuthorizationInterceptor(runtimeProperties.getUsername(),
-                                    runtimeProperties.getPassword()));
+                            runtimeProperties.getPassword()));
             clientHttpRequestFactory = new InterceptingClientHttpRequestFactory(clientHttpRequestFactory,
                     interceptors);
         }

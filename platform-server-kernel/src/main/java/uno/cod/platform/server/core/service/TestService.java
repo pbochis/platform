@@ -30,13 +30,13 @@ public class TestService {
         this.runnerRepository = runnerRepository;
     }
 
-    public void save(TestCreateDto dto){
+    public void save(TestCreateDto dto) {
         Task task = taskRepository.findOne(dto.getTaskId());
-        if(task == null){
+        if (task == null) {
             throw new IllegalArgumentException("task.invalid");
         }
         Runner runner = runnerRepository.findOne(dto.getRunnerId());
-        if(runner == null){
+        if (runner == null) {
             throw new IllegalArgumentException("runner.invalid");
         }
         Test test = new Test();

@@ -8,7 +8,7 @@ public class OutputTestResultDto {
     private byte[] stdout;
     private byte[] stderr;
 
-    public OutputTestResultDto(UUID testId, boolean successful){
+    public OutputTestResultDto(UUID testId, boolean successful) {
         this.testId = testId;
         this.successful = successful;
     }

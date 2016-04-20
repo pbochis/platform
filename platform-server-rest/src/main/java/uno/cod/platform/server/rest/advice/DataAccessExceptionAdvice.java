@@ -14,6 +14,7 @@ public class DataAccessExceptionAdvice {
      * thrown on errors on the data layer (e.g. constraint key exception)
      */
     @ExceptionHandler(value = DataAccessException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason="Data integrity violation")
-    public void handleDataAccessException() {}
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation")
+    public void handleDataAccessException() {
+    }
 }

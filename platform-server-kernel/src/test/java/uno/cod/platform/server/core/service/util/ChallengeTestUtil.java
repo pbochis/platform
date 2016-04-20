@@ -19,7 +19,7 @@ public class ChallengeTestUtil {
         return challenge;
     }
 
-    public static Challenge getChallenge(ChallengeCreateDto dto){
+    public static Challenge getChallenge(ChallengeCreateDto dto) {
         Challenge challenge = new Challenge();
         challenge.setName(dto.getName());
         challenge.setCanonicalName(dto.getCanonicalName());

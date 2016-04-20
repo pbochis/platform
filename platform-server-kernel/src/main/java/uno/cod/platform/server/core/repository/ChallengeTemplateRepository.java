@@ -29,7 +29,7 @@ public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemp
 
     @Query("SELECT distinct challenge FROM ChallengeTemplate challenge " +
             "JOIN FETCH challenge.organization organization " +
-            "JOIN FETCH challenge.tasks tasks "+
+            "JOIN FETCH challenge.tasks tasks " +
             "WHERE organization.id = :organizationId AND challenge.tasks IS NOT EMPTY")
     List<ChallengeTemplate> findAllWithTasks(@Param("organizationId") UUID organizationId);
 }

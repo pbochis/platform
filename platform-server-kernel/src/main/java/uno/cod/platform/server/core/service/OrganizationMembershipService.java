@@ -41,7 +41,7 @@ public class OrganizationMembershipService {
         OrganizationMembershipKey key = new OrganizationMembershipKey();
         key.setUser(user);
         key.setOrganization(organization);
-        if(repository.findOne(key)!=null){
+        if (repository.findOne(key) != null) {
             throw new ResourceConflictException("organization.member.exists");
         }
         OrganizationMembership membership = new OrganizationMembership();

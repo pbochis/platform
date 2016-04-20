@@ -19,7 +19,7 @@ public class TaskResultController {
     private final TaskResultService taskResultService;
 
     @Autowired
-    public TaskResultController(TaskResultService taskResultService){
+    public TaskResultController(TaskResultService taskResultService) {
         this.taskResultService = taskResultService;
     }
 

@@ -39,19 +39,19 @@ public class TaskService {
         if (endpoint == null) {
             throw new IllegalArgumentException("endpoint.invalid");
         }
-        Organization organization= organizationRepository.findOne(dto.getOrganizationId());
+        Organization organization = organizationRepository.findOne(dto.getOrganizationId());
         if (organization == null) {
             throw new IllegalArgumentException("organization.invalid");
         }
         Runner runner = null;
-        if(dto.getRunnerId()!=null){
+        if (dto.getRunnerId() != null) {
             runner = runnerRepository.findOne(dto.getRunnerId());
         }
         double skillSum = 0;
-        for (Double skill: dto.getSkillMap().values()){
+        for (Double skill : dto.getSkillMap().values()) {
             skillSum += skill;
         }
-        if (skillSum != 1){
+        if (skillSum != 1) {
             throw new IllegalArgumentException("skills.invalid");
         }
         Task task = new Task();

@@ -9,4 +9,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan({"uno.cod.platform.server.core.domain", "uno.cod.platform.server.core.repository"})
 @EnableJpaRepositories(basePackages = {"uno.cod.platform.server.core.repository"})
 @EnableTransactionManagement
-public class JpaConfig {}
+public class JpaConfig {
+}

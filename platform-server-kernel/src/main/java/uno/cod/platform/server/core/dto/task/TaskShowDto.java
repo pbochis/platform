@@ -12,6 +12,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TaskShowDto extends AssignmentShowDto {
+    private String canonicalName;
+    private List<TemplateShowDto> templates;
+    private Map<CodingSkill, Double> skillMap;
+    private boolean normalRunAvailable;
+    private List<LanguageShowDto> languages;
+
     public TaskShowDto(Task task) {
         this.setId(task.getId());
         this.setName(task.getName());
@@ -25,11 +31,6 @@ public class TaskShowDto extends AssignmentShowDto {
             this.languages = task.getLanguages().stream().map(LanguageShowDto::new).collect(Collectors.toList());
         }
     }
-    private String canonicalName;
-    private List<TemplateShowDto> templates;
-    private Map<CodingSkill, Double> skillMap;
-    private boolean normalRunAvailable;
-    private List<LanguageShowDto> languages;
 
     public Map<CodingSkill, Double> getSkillMap() {
         return skillMap;

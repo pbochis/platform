@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class ResultTestUtil {
-    public static Result getResult(){
+    public static Result getResult() {
         Result result = new Result();
 
         result.setId(UUID.randomUUID());

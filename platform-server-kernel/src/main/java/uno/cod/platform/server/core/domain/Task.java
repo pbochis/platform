@@ -156,7 +156,7 @@ public class Task extends Assignment {
     }
 
     public List<Template> getTemplates() {
-        if(templates==null){
+        if (templates == null) {
             return null;
         }
         return Collections.unmodifiableList(templates);
@@ -166,15 +166,15 @@ public class Task extends Assignment {
         this.templates = templates;
     }
 
-    public void addTemplate(Template template){
-        if (templates == null){
+    public void addTemplate(Template template) {
+        if (templates == null) {
             templates = new ArrayList<>();
         }
         templates.add(template);
     }
 
-    public void addLanguage(Language language){
-        if(languages == null){
+    public void addLanguage(Language language) {
+        if (languages == null) {
             languages = new HashSet<>();
         }
         languages.add(language);

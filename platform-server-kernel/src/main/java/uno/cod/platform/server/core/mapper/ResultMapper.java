@@ -9,13 +9,13 @@ import java.util.List;
 
 public class ResultMapper {
     public static ResultShowDto map(Result result) {
-        if(result == null){
+        if (result == null) {
             return null;
         }
         List<Long> startTimes = new ArrayList<>();
         if (result.getTaskResults() != null) {
-            for (TaskResult taskResult: result.getTaskResults()) {
-                if(taskResult.getStartTime() != null) {
+            for (TaskResult taskResult : result.getTaskResults()) {
+                if (taskResult.getStartTime() != null) {
                     startTimes.add(taskResult.getStartTime().toInstant().toEpochMilli());
                 }
             }

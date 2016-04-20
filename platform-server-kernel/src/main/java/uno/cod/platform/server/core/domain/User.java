@@ -118,7 +118,7 @@ public class User extends IdentifiableEntity implements UserDetails {
     }
 
     public Set<OrganizationMembership> getOrganizationMemberships() {
-        if(this.organizationMemberships ==null){
+        if (this.organizationMemberships == null) {
             return null;
         }
         return Collections.unmodifiableSet(organizationMemberships);

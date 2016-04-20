@@ -16,7 +16,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
             "LEFT JOIN FETCH challengeTemplate.organization organization " +
             "WHERE challengeTemplate.id=:templateId AND challenge.startDate=:startDate AND organization.id=:organizationId")
     Challenge findOneByTemplateAndStartDateAndOrganization(@Param("templateId") UUID challengeTemplate,
-                                                           @Param("startDate")ZonedDateTime startDate,
+                                                           @Param("startDate") ZonedDateTime startDate,
                                                            @Param("organizationId") UUID organizationId);
 
     @Query("SELECT challenge FROM Challenge challenge " +

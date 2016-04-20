@@ -53,20 +53,20 @@ public class ChallengeService {
         return ChallengeMapper.map(repository.findOne(challengeId));
     }
 
-    public List<UserChallengeShowDto> getUserChallenges(User user){
+    public List<UserChallengeShowDto> getUserChallenges(User user) {
         List<UserChallengeShowDto> dtos = new ArrayList<>();
         List<Challenge> challenges = repository.findAllByInvitedUser(user.getId());
-        for(Challenge challenge: challenges){
+        for (Challenge challenge : challenges) {
             UserChallengeShowDto dto = new UserChallengeShowDto();
             dto.setChallenge(new ChallengeDto(challenge));
             dtos.add(dto);
         }
-        for(UserChallengeShowDto dto: dtos){
+        for (UserChallengeShowDto dto : dtos) {
             Result result = resultRepository.findOneByUserAndChallenge(user.getId(), dto.getChallenge().getId());
-            if(result!=null && result.getStarted()!=null){
-                if(result.getFinished()!=null){
+            if (result != null && result.getStarted() != null) {
+                if (result.getFinished() != null) {
                     dto.setStatus(UserChallengeShowDto.ChallengeStatus.COMPLETED);
-                }else{
+                } else {
                     dto.setStatus(UserChallengeShowDto.ChallengeStatus.IN_PROGRESS);
                 }
             }

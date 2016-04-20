@@ -16,5 +16,6 @@ public class NoSuchElementAdvice {
      */
     @ExceptionHandler(value = NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The requested element does not exist")
-    public void handleNoSuchElement() {}
+    public void handleNoSuchElement() {
+    }
 }

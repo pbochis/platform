@@ -61,11 +61,6 @@ public class SubmissionService {
         this.appClientConnection = appClientConnection;
     }
 
-    public enum SubmissionType {
-        COMPILE_AND_RUN,
-        VALIDATE_SOLUTION_FILE
-    }
-
     public void submitToRuntime(SubmissionType type, UUID resultId, UUID taskId, MultipartFile[] files, String language) throws IOException {
         Result result = resultRepository.findOne(resultId);
         if (result == null) {
@@ -180,5 +175,10 @@ public class SubmissionService {
         form.add("files", new FileMessageResource(file.getBytes(), file.getOriginalFilename()));
 
         appClientConnection.send(user.getId(), runtimeClient.postToRuntime(task.getRunner().getPath(), form).toString());
+    }
+
+    public enum SubmissionType {
+        COMPILE_AND_RUN,
+        VALIDATE_SOLUTION_FILE
     }
 }

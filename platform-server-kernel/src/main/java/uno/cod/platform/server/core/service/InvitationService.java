@@ -27,20 +27,19 @@ import java.util.*;
 
 @Service
 public class InvitationService {
-    @Value("#{T(java.time.Duration).parse('${coduno.invite.expire}')}")
-    private Duration duration;
-
     private final UserRepository userRepository;
     private final InvitationRepository invitationRepository;
     private final ResultRepository resultRepository;
-
     private final ChallengeRepository challengeRepository;
     private final MailService mailService;
     private final UserService userService;
     private final GithubService githubService;
+    private final Random random = new Random();
+
+    @Value("#{T(java.time.Duration).parse('${coduno.invite.expire}')}")
+    private Duration duration;
 
     private Logger log = Logger.getLogger(InvitationService.class.getName());
-    private final Random random = new Random();
 
     @Autowired
     public InvitationService(UserRepository userRepository,

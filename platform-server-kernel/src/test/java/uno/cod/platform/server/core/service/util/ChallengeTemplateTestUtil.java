@@ -6,11 +6,11 @@ import java.time.Duration;
 import java.util.UUID;
 
 public class ChallengeTemplateTestUtil {
-    public static ChallengeTemplate getChallengeTemplate(){
+    public static ChallengeTemplate getChallengeTemplate() {
         return getChallengeTemplate(UUID.randomUUID());
     }
 
-    public static ChallengeTemplate getChallengeTemplate(UUID id){
+    public static ChallengeTemplate getChallengeTemplate(UUID id) {
         ChallengeTemplate template = new ChallengeTemplate();
         template.setId(id);
         template.setDuration(Duration.ofMinutes(50));

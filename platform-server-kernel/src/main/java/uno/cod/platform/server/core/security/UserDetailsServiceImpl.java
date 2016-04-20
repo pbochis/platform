@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user = userRepository.findByUsername(username);
         }
 
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("user not registered yet");
         }
 

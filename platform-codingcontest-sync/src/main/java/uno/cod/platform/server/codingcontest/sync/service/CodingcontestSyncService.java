@@ -22,6 +22,9 @@ import java.util.UUID;
 @Service
 @Transactional
 public class CodingcontestSyncService {
+    private static final String DRONES_UUID = "bc14f054-3ef5-4816-8255-0b30c2a22856";
+    private static final String DRONES_2D_UUID = "3890c253-e754-4185-a9bb-6c963abd6d76";
+
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
     private final ChallengeTemplateRepository challengeTemplateRepository;
@@ -44,9 +47,6 @@ public class CodingcontestSyncService {
         }
         return userRepository.save(user);
     }
-
-    private static final String DRONES_UUID = "bc14f054-3ef5-4816-8255-0b30c2a22856";
-    private static final String DRONES_2D_UUID = "3890c253-e754-4185-a9bb-6c963abd6d76";
 
     public void createOrUpdateContest(CodingcontestDto dto) {
         UUID id = UUID.fromString(dto.getUuid());

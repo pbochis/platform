@@ -49,7 +49,7 @@ public class GcsStorageDriver implements PlatformStorage {
         List<String> allItems = new LinkedList<>();
         Objects response = storage.objects().list(bucket).
                 setPrefix(path).execute();
-        for (StorageObject obj: response.getItems()) {
+        for (StorageObject obj : response.getItems()) {
             allItems.add(obj.getName());
         }
 
@@ -57,7 +57,7 @@ public class GcsStorageDriver implements PlatformStorage {
             String pageToken = response.getNextPageToken();
             response = storage.objects().list(bucket).
                     setPrefix(path).setPageToken(pageToken).execute();
-            for (StorageObject obj: response.getItems()) {
+            for (StorageObject obj : response.getItems()) {
                 allItems.add(obj.getName());
             }
         }
@@ -92,13 +92,13 @@ public class GcsStorageDriver implements PlatformStorage {
 
     @Override
     public List<String> exposeFilesInFolder(String bucket, String folderName, Long expiration) throws GeneralSecurityException, IOException {
-        if (!folderName.endsWith("/")){
+        if (!folderName.endsWith("/")) {
             folderName = folderName.concat("/");
         }
         List<String> files = listFiles(bucket, folderName);
         files.remove(folderName);
         List<String> exposedFiles = new ArrayList<>();
-        for (String file: files){
+        for (String file : files) {
             exposedFiles.add(exposeFile(bucket, file, expiration));
         }
         return exposedFiles;

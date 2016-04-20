@@ -29,12 +29,11 @@ public class GithubService {
      * Attempts to use the GitHub API to translate an email address
      * into a username by searching GitHub.
      *
-     * @see <a href="https://developer.github.com/v3/search/#search-users">"Search users" in the GitHub API docs</a>
-     *
      * @param email The email address to look up.
      * @return A list of usernames as returned by the GitHub API ordered by
-     *         best match, or an empty list if there were no matches or
-     *         something went wrong.
+     * best match, or an empty list if there were no matches or
+     * something went wrong.
+     * @see <a href="https://developer.github.com/v3/search/#search-users">"Search users" in the GitHub API docs</a>
      */
     public List<String> guessUsername(String email) {
         JsonNode body;

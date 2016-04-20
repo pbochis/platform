@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "challenge")
-public class Challenge extends IdentifiableEntity{
+public class Challenge extends IdentifiableEntity {
     private String name;
 
     @NotNull

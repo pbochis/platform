@@ -16,14 +16,12 @@ import java.util.Map;
 
 @Service
 public class MailService {
-    @Value("${coduno.url}")
-    private String url;
-
-    @Value("${coduno.mail.from}")
-    private String fromMail;
-
     private final SpringTemplateEngine templateEngine;
     private final JavaMailSender mailSender;
+    @Value("${coduno.url}")
+    private String url;
+    @Value("${coduno.mail.from}")
+    private String fromMail;
 
     @Autowired
     public MailService(SpringTemplateEngine templateEngine, JavaMailSender mailSender) {
@@ -44,7 +42,7 @@ public class MailService {
         final Context ctx = new Context(locale);
         ctx.setVariable("name", recipientName);
         ctx.setVariable("url", url);
-        for(String key : attributes.keySet()) {
+        for (String key : attributes.keySet()) {
             ctx.setVariable(key, attributes.get(key));
         }
 

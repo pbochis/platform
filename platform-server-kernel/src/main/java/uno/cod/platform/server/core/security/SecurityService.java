@@ -79,13 +79,13 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canAccessScheduledChallengeChallenge(User user, UUID scheduledChallengeId){
+    public boolean canAccessScheduledChallengeChallenge(User user, UUID scheduledChallengeId) {
         if (user == null || scheduledChallengeId == null) {
             return false;
         }
 
-        for(Challenge challenge: user.getInvitedChallenges()){
-            if(challenge.getId().equals(scheduledChallengeId)){
+        for (Challenge challenge : user.getInvitedChallenges()) {
+            if (challenge.getId().equals(scheduledChallengeId)) {
                 return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
             }
         }
@@ -98,11 +98,11 @@ public class SecurityService {
         }
 
         // TODO add organization check
-        if(user.getOrganizationMemberships() != null){
+        if (user.getOrganizationMemberships() != null) {
             return true;
         }
-        for(Challenge challenge: user.getInvitedChallenges()){
-            if(challenge.getId().equals(challengeId)){
+        for (Challenge challenge : user.getInvitedChallenges()) {
+            if (challenge.getId().equals(challengeId)) {
                 return true;
             }
         }
@@ -115,23 +115,23 @@ public class SecurityService {
         }
 
         // TODO extend for current organization the user is logged in
-        if(user.getOrganizationMemberships()!=null){
+        if (user.getOrganizationMemberships() != null) {
             Task task = taskRepository.findOneWithOrganization(taskId);
-            if(task.isPublic()){
+            if (task.isPublic()) {
                 return true;
             }
-            for(OrganizationMembership membership: user.getOrganizationMemberships()){
-                if(membership.getKey().getOrganization().getId().equals(task.getOrganization().getId())){
+            for (OrganizationMembership membership : user.getOrganizationMemberships()) {
+                if (membership.getKey().getOrganization().getId().equals(task.getOrganization().getId())) {
                     return true;
                 }
             }
         }
 
         user = userRepository.findOneWithResults(user.getId());
-        for(Result result: user.getResults()){
-            if(result.getFinished()==null){
-                for(TaskResult taskResult: result.getTaskResults()){
-                    if(taskResult.getKey().getTask().getId().equals(taskId) && taskResult.getStartTime() != null){
+        for (Result result : user.getResults()) {
+            if (result.getFinished() == null) {
+                for (TaskResult taskResult : result.getTaskResults()) {
+                    if (taskResult.getKey().getTask().getId().equals(taskId) && taskResult.getStartTime() != null) {
                         return true;
                     }
                 }

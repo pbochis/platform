@@ -13,12 +13,12 @@ public class TaskMapper {
         if (task.getEndpoint() != null) {
             dto.setEndpoint(EndpointMapper.map(task.getEndpoint()));
         }
-        if (task.getTemplates() != null){
+        if (task.getTemplates() != null) {
             dto.setTemplates(task
                     .getTemplates()
                     .stream()
-            .map(TemplateShowDto::new)
-            .collect(Collectors.toList()));
+                    .map(TemplateShowDto::new)
+                    .collect(Collectors.toList()));
         }
         return dto;
     }

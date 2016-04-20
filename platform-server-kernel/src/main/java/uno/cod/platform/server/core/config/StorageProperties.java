@@ -6,6 +6,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = StorageProperties.PREFIX)
 public class StorageProperties {
     public final static String PREFIX = "coduno.storage";
+    private Gcs gcs;
+
+    public Gcs getGcs() {
+        return gcs;
+    }
+
+    public void setGcs(Gcs gcs) {
+        this.gcs = gcs;
+    }
 
     public static class Gcs {
         @NotBlank
@@ -28,15 +37,5 @@ public class StorageProperties {
         public void setPkcs12(String pkcs12) {
             this.pkcs12 = pkcs12;
         }
-    }
-
-    private Gcs gcs;
-
-    public Gcs getGcs() {
-        return gcs;
-    }
-
-    public void setGcs(Gcs gcs) {
-        this.gcs = gcs;
     }
 }

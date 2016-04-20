@@ -7,7 +7,7 @@ import java.util.UUID;
 public class TestShowDto {
     private UUID id;
 
-    public TestShowDto(Test test){
+    public TestShowDto(Test test) {
         this.id = test.getId();
     }
 

@@ -12,7 +12,7 @@ public class ChallengeShortShowDto {
     private String canonicalName;
     private ZonedDateTime startDate;
 
-    public ChallengeShortShowDto(Challenge challenge){
+    public ChallengeShortShowDto(Challenge challenge) {
         BeanUtils.copyProperties(challenge, this);
     }
 
