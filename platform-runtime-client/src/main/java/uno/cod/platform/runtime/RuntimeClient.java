@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.*;
@@ -31,19 +30,14 @@ public class RuntimeClient {
 
     public JsonNode postToRuntime(String runnerPath, MultiValueMap<String, Object> form) throws IOException {
         String endpoint = runtimeProperties.getUrl() + runnerPath;
-        JsonNode obj = null;
+        JsonNode obj;
         try {
             LOGGER.trace("calling {} with parameters {}", endpoint, form);
-            ResponseEntity<String> response = restTemplate.postForEntity(endpoint, form, String.class);
-            obj = objectMapper.readValue(response.getBody(), JsonNode.class);
-        } catch (HttpServerErrorException e) {
-            LOGGER.debug("got error response status {} from runtime, body: {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
+            obj = restTemplate.postForObject(endpoint, form, JsonNode.class);
+        } catch (HttpServerErrorException|HttpClientErrorException e) {
+            LOGGER.debug("Got HTTP {} and body {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
             obj = objectMapper.createObjectNode();
             ((ObjectNode) obj).put("failure", e.getResponseBodyAsString());
-        } catch (HttpClientErrorException e) {
-            obj = objectMapper.createObjectNode();
-            ((ObjectNode) obj).put("failure", e.getResponseBodyAsString());
-            LOGGER.error("got generic rest client exception", e);
         }
         return obj;
     }
