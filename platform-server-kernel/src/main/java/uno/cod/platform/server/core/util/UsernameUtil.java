@@ -25,7 +25,7 @@ public class UsernameUtil {
             "big",
             "boring",
             "clever",
-            "commited",
+            "committed",
             "compassionate",
             "condescending",
             "cranky",
