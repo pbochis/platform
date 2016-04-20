@@ -13,9 +13,9 @@ package uno.cod.platform.server.core.util;
 import java.util.Random;
 
 public class UsernameUtil {
-    private static Random random = new Random();
+    private static final Random RANDOM = new Random();
 
-    private static final String[] left = new String[] {
+    private static final String[] LEFT = new String[] {
             "admiring",
             "adoring",
             "amazing",
@@ -81,7 +81,7 @@ public class UsernameUtil {
             "trusting",
     };
 
-    private static final String[] right = new String[] {
+    private static final String[] RIGHT = new String[] {
             // https://en.wikipedia.org/wiki/Mu%E1%B8%A5ammad_ibn_J%C4%81bir_al-%E1%B8%A4arr%C4%81n%C4%AB_al-Batt%C4%81n%C4%AB
             "albattani",
             // https://en.wikipedia.org/wiki/Frances_E._Allen
@@ -369,6 +369,6 @@ public class UsernameUtil {
     };
 
     public static String randomUsername() {
-        return left[random.nextInt(left.length)] + "-" + right[random.nextInt(right.length)];
+        return LEFT[RANDOM.nextInt(LEFT.length)] + "-" + RIGHT[RANDOM.nextInt(RIGHT.length)];
     }
 }
