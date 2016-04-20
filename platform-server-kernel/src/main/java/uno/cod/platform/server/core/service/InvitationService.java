@@ -37,6 +37,7 @@ public class InvitationService {
     private final ChallengeRepository challengeRepository;
     private final MailService mailService;
     private final UserService userService;
+    private final GithubService githubService;
 
     private Logger log = Logger.getLogger(InvitationService.class.getName());
     private final Random random = new Random();
@@ -46,13 +47,15 @@ public class InvitationService {
                              InvitationRepository invitationRepository,
                              ResultRepository resultRepository, ChallengeRepository challengeRepository,
                              UserService userService,
-                             MailService mailService) {
+                             MailService mailService,
+                             GithubService githubService) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
         this.resultRepository = resultRepository;
         this.challengeRepository = challengeRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.githubService = githubService;
     }
 
     public void invite(InvitationDto dto, String from) throws MessagingException {
@@ -108,7 +111,8 @@ public class InvitationService {
         if (user == null) {
             UserCreateDto dto = new UserCreateDto();
             dto.setEmail(invite.getEmail());
-            dto.setNick(UsernameUtil.randomUsername());
+            List<String> guessedUsernames = githubService.guessUsername(invite.getEmail());
+            dto.setNick(guessedUsernames.isEmpty() ? UsernameUtil.randomUsername() : guessedUsernames.get(0));
             dto.setPassword(new BigInteger(130, random).toString(32));
             userService.createFromDto(dto);
 
