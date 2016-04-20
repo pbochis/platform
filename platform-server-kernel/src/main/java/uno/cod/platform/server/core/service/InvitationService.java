@@ -17,6 +17,7 @@ import uno.cod.platform.server.core.repository.InvitationRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 import uno.cod.platform.server.core.service.mail.MailService;
+import uno.cod.platform.server.core.util.UsernameUtil;
 
 import javax.mail.MessagingException;
 import java.math.BigInteger;
@@ -107,7 +108,7 @@ public class InvitationService {
         if (user == null) {
             UserCreateDto dto = new UserCreateDto();
             dto.setEmail(invite.getEmail());
-            dto.setNick(new BigInteger(130, random).toString(32));
+            dto.setNick(UsernameUtil.randomUsername());
             dto.setPassword(new BigInteger(130, random).toString(32));
             userService.createFromDto(dto);
 
