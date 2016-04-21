@@ -1,10 +1,8 @@
 package uno.cod.platform.server.core.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,6 +22,14 @@ public class Team extends IdentifiableEntity implements CanonicalEntity {
 
     @OneToMany(mappedBy = "key.team")
     private Set<TeamMember> members;
+
+    @ManyToMany
+    @JoinTable(
+            name = "team_user",
+            joinColumns = {@JoinColumn(name = "invited_team_id")},
+            inverseJoinColumns = {@JoinColumn(name = "invited_user_id")}
+    )
+    private Set<User> invitedUsers;
 
     public String getName() {
         return name;
@@ -48,6 +54,28 @@ public class Team extends IdentifiableEntity implements CanonicalEntity {
 
     protected void setMembers(Set<TeamMember> members) {
         this.members = members;
+    }
+
+    public Set<User> getInvitedUsers() {
+        return invitedUsers;
+    }
+
+    public void setInvitedUsers(Set<User> invitedUsers) {
+        this.invitedUsers = invitedUsers;
+    }
+
+    protected void addInvitedUser(User user) {
+        if (invitedUsers == null) {
+            invitedUsers = new HashSet<>();
+        }
+        invitedUsers.add(user);
+    }
+
+    public void addTeamMember(TeamMember member) {
+        if (members == null) {
+            members = new HashSet<>();
+        }
+        members.add(member);
     }
 }
 

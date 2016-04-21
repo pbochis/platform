@@ -68,6 +68,9 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
     @ManyToMany(mappedBy = "invitedUsers")
     private Set<Challenge> invitedChallenges;
 
+    @ManyToMany(mappedBy = "invitedUsers")
+    private Set<Team> invitedTeams;
+
     @OneToMany(mappedBy = "user")
     private Set<Result> results;
 
@@ -210,6 +213,14 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
         return true;
     }
 
+    public Set<Team> getInvitedTeams() {
+        return invitedTeams;
+    }
+
+    public void setInvitedTeams(Set<Team> invitedTeams) {
+        this.invitedTeams = invitedTeams;
+    }
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
     }
@@ -235,6 +246,14 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
         }
         challenge.addInvitedUser(this);
         invitedChallenges.add(challenge);
+    }
+
+    public void addInvitedTeam(Team team) {
+        if (invitedTeams == null) {
+            invitedTeams = new HashSet<>();
+        }
+        team.addInvitedUser(this);
+        invitedTeams.add(team);
     }
 
     @Override

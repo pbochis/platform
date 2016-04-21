@@ -14,7 +14,8 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
     Team findOneByCanonicalName(String canonicalName);
 
     @Query("SELECT DISTINCT team from Team team " +
-            "LEFT JOIN FETCH team.members members " +
+            "JOIN FETCH team.members members " +
+            "JOIN FETCH team.members " +
             "WHERE members.key.user.id = :userId")
     List<Team> findAllByUserId(@Param("userId") UUID userId);
 }
