@@ -15,9 +15,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "team")
-public class Team extends IdentifiableEntity {
+public class Team extends IdentifiableEntity implements CanonicalEntity {
     @Column(unique = true, nullable = false)
     private String name;
+
+    @Column(name = "canonical_name", nullable = false, unique = true)
+    private String canonicalName;
 
     @OneToMany(mappedBy = "key.team")
     private Set<TeamMember> members;
@@ -28,6 +31,15 @@ public class Team extends IdentifiableEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 
     public Set<TeamMember> getMembers() {

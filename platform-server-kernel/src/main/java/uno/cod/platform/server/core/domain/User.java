@@ -21,7 +21,7 @@ import java.util.*;
                 @NamedAttributeNode("teams"),
                 @NamedAttributeNode("invitedChallenges")
         })
-public class User extends IdentifiableEntity implements UserDetails {
+public class User extends IdentifiableEntity implements UserDetails, CanonicalEntity {
     @Column(unique = true, nullable = false)
     @NotNull
     private String username;
@@ -235,6 +235,11 @@ public class User extends IdentifiableEntity implements UserDetails {
         }
         challenge.addInvitedUser(this);
         invitedChallenges.add(challenge);
+    }
+
+    @Override
+    public String getCanonicalName() {
+        return username;
     }
 
     @Override
