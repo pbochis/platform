@@ -39,9 +39,15 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = RestUrls.USERS_USERNAME_TEAMS, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<TeamShowDto>> findByUsername(@PathVariable("username") String username) {
+        return new ResponseEntity<>(service.findAllTeamsForUser(username), HttpStatus.OK);
+    }
+
     @RequestMapping(value = RestUrls.USER_TEAMS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TeamShowDto>> findMyTeams(@AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(service.findAllTeamsForUser(user.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAllTeamsForUser(user.getUsername()), HttpStatus.OK);
     }
 }

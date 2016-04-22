@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.user.*;
 import uno.cod.platform.server.core.service.UserService;
@@ -30,6 +27,11 @@ public class UserController {
     public ResponseEntity<String> create(@Valid @RequestBody UserCreateDto dto) {
         userService.createFromDto(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = RestUrls.USERS_USERNAME, method = RequestMethod.GET)
+    public ResponseEntity<UserShowDto> querySingleUser(@PathVariable("username") String username) {
+        return new ResponseEntity<>(userService.findByUsername(username), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.USERS, method = RequestMethod.GET)
