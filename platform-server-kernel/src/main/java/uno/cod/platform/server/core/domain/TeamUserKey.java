@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class TeamMemberKey implements Serializable {
+public class TeamUserKey implements Serializable {
     @ManyToOne
     private Team team;
 
@@ -37,7 +37,7 @@ public class TeamMemberKey implements Serializable {
             return false;
         }
 
-        TeamMemberKey that = (TeamMemberKey) o;
+        TeamUserKey that = (TeamUserKey) o;
 
         if (team != null ? !team.equals(that.team) : that.team != null) {
             return false;

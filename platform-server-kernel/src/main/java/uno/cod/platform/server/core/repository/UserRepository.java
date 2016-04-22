@@ -24,5 +24,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "LEFT JOIN FETCH results.taskResults " +
             "WHERE user.id = :id")
     User findOneWithResults(@Param("id") UUID id);
+
+    @Query("SELECT user FROM User user " +
+            "LEFT JOIN FETCH user.teams " +
+            "WHERE user.id = :id")
+    User findOneWithTeams(@Param("id") UUID id);
 }
 

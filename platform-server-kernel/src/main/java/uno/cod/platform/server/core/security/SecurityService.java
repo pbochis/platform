@@ -40,6 +40,20 @@ public class SecurityService {
         return false;
     }
 
+    public boolean canJoinTeam(User user, UUID teamId) {
+        if (user == null || teamId == null) {
+            return false;
+        }
+
+        user = userRepository.findOneWithTeams(user.getId());
+        for (Team team : user.getInvitedTeams()) {
+            if (team.getId().equals(teamId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isTeamAdmin(User user, UUID teamId) {
         if (user == null || teamId == null) {
             return false;
