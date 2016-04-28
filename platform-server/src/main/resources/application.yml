@@ -41,6 +41,10 @@ flyway:
   sql-migration-prefix: ""
   out-of-order: true
 
+multipart:
+  maxFileSize: 16MB
+  maxRequestSize: 16MB
+
 server:
   session:
     cookie:
