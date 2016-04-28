@@ -92,8 +92,8 @@ public class SetupService {
         users.add(createUser("vbalan", "victor.balan@cod.uno", password, true));
         users.add(createUser("pbochis", "paul.bochis@cod.uno", password, true));
         users.add(createUser("flowlo", "lorenz.leutgeb@cod.uno", password, true));
-        users.add(createUser("exordian", "jakob.englisch@cod.uno", password, true));
-        users.add(createUser("steindl", "cristoph.steindl@catalysts.cc", password, true));
+        users.add(createUser("jenglisch", "jakob.englisch@cod.uno", password, true));
+        users.add(createUser("steindl", "christoph.steindl@catalysts.cc", password, true));
 
         for (User user : users) {
             createMembership(user, catalysts);
