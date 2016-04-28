@@ -1,7 +1,6 @@
 package uno.cod.platform.server.rest.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +10,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import uno.cod.platform.server.core.Profiles;
-
-import javax.servlet.MultipartConfigElement;
 
 @Configuration
 @ComponentScan({"uno.cod.platform.server.rest"})
@@ -58,13 +55,4 @@ public class RestConfig {
             }
         };
     }
-
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxFileSize("16mb");
-        factory.setMaxRequestSize("16mb");
-        return factory.createMultipartConfig();
-    }
-
 }
