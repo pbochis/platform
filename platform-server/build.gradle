@@ -1,5 +1,3 @@
-//apply plugin: 'com.google.gcloud-preview'
-//apply plugin: 'appengine'
 
 dependencies {
     compile project(':platform-server-kernel')
@@ -31,6 +29,9 @@ test {
 }
 
 /*
+apply plugin: 'com.google.gcloud-preview'
+apply plugin: 'appengine'
+
 gcloud {
     configurations {
         prod {
