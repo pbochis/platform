@@ -64,7 +64,7 @@ public class TeamService {
         //TODO maybe delete invitation after join/decline?
     }
 
-    public List<TeamShowDto> findAllTeamsForUser(UUID userId) {
-        return repository.findAllByUserId(userId).stream().map(TeamShowDto::new).collect(Collectors.toList());
+    public List<TeamShowDto> findAllTeamsForUser(String username) {
+        return repository.findAllByUsername(username).stream().map(TeamShowDto::new).collect(Collectors.toList());
     }
 }

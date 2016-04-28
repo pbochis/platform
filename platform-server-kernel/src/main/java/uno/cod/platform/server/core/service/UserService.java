@@ -10,6 +10,7 @@ import uno.cod.platform.server.core.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,8 +66,12 @@ public class UserService {
         repository.save(user);
     }
 
-    public UserShortShowDto findByUsername(String username) {
-        return new UserShortShowDto(repository.findByUsernameOrEmail(username, username));
+    public UserShowDto findByUsername(String username) {
+        return new UserShowDto(repository.findByUsername(username));
+    }
+
+    public UserShowDto findOne(UUID id) {
+        return new UserShowDto(repository.findOne(id));
     }
 
     public List<UserShortShowDto> listUsers() {
