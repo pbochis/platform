@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-public class UserUpdateDto {
+public class UserUpdateProfileDetailsDto {
     private UUID id;
     @NotNull
     @Size(min = 5, max = 40)

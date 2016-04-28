@@ -47,7 +47,7 @@ public class UserController {
 
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.PUT)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserShowDto> updateMyUser(@Valid @RequestBody UserUpdateDto dto, @AuthenticationPrincipal User user) {
+    public ResponseEntity<UserShowDto> updateProfileDetails(@Valid @RequestBody UserUpdateProfileDetailsDto dto, @AuthenticationPrincipal User user) {
         return new ResponseEntity<>(userService.update(dto, user), HttpStatus.OK);
     }
 

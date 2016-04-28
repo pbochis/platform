@@ -10,9 +10,6 @@ public class UserPasswordChangeDto {
     @NotNull
     @Size(min = 6, max = 40)
     private String newPassword;
-    @NotNull
-    @Size(min = 6, max = 40)
-    private String retypedPassword;
 
     public String getOldPassword() {
         return oldPassword;
@@ -30,11 +27,4 @@ public class UserPasswordChangeDto {
         this.newPassword = newPassword;
     }
 
-    public String getRetypedPassword() {
-        return retypedPassword;
-    }
-
-    public void setRetypedPassword(String retypedPassword) {
-        this.retypedPassword = retypedPassword;
-    }
 }
