@@ -40,7 +40,7 @@ public class TeamInvitationService {
         if (user == null) {
             throw new IllegalArgumentException("user.invalid");
         }
-        Team team = teamRepository.findOneByCanonicalName(canonicalName);
+        Team team = teamRepository.findByCanonicalNameAndEnabledTrue(canonicalName);
         if (team == null) {
             throw new IllegalArgumentException("team.invalid");
         }
@@ -64,7 +64,7 @@ public class TeamInvitationService {
     }
 
     public void join(User user, String canonicalName) {
-        Team team = teamRepository.findOneByCanonicalName(canonicalName);
+        Team team = teamRepository.findByCanonicalNameAndEnabledTrue(canonicalName);
         if (team == null) {
             throw new IllegalArgumentException("team.invalid");
         }

@@ -33,7 +33,7 @@ public class TeamService {
     }
 
     public void create(TeamCreateDto dto) {
-        if (repository.findOneByCanonicalName(dto.getCanonicalName()) != null) {
+        if (repository.findByCanonicalNameAndEnabledTrue(dto.getCanonicalName()) != null) {
             throw new IllegalArgumentException("team.canonicalName.existing");
         }
         Team team = new Team();
@@ -62,7 +62,7 @@ public class TeamService {
     }
 
     public void delete(String canonicalName) {
-        Team team = repository.findOneByCanonicalName(canonicalName);
+        Team team = repository.findByCanonicalNameAndEnabledTrue(canonicalName);
         team.setEnabled(false);
         repository.save(team);
 
@@ -70,7 +70,7 @@ public class TeamService {
     }
 
     public TeamShowDto findOne(String canonicalName) {
-        return new TeamShowDto(repository.findOneByCanonicalName(canonicalName));
+        return new TeamShowDto(repository.findByCanonicalNameAndEnabledTrue(canonicalName));
     }
 
     public List<TeamShowDto> findAllTeamsForUser(String username) {
