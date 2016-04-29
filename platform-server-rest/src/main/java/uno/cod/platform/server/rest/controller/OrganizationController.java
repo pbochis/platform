@@ -61,7 +61,7 @@ public class OrganizationController {
     }
 
     @RequestMapping(value = RestUrls.USER_ORGANIZATIONS_ACTIVE, method = RequestMethod.PUT)
-    @PreAuthorize("isAuthenticated() and @securityService.canSwitchOrganization(principal, #organization.id)")
+    @PreAuthorize("isAuthenticated() and (#organization.id == null or @securityService.isOrganizationMember(principal, #organization.id))")
     public ResponseEntity<CurrentUserDto> setLoggedInOrganization(@RequestBody ActiveOrganizationDto organization) {
         sessionService.setActiveOrganization(organization.getId());
         return new ResponseEntity<>(new CurrentUserDto(sessionService.getLoggedInUser()), HttpStatus.OK);

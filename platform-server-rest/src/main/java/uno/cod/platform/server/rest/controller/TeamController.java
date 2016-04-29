@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.team.TeamCreateDto;
 import uno.cod.platform.server.core.dto.team.TeamShowDto;
+import uno.cod.platform.server.core.service.TeamInvitationService;
 import uno.cod.platform.server.core.service.TeamService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -18,10 +19,12 @@ import java.util.List;
 @RestController
 public class TeamController {
     private final TeamService service;
+    private final TeamInvitationService teamInvitationService;
 
     @Autowired
-    public TeamController(TeamService service) {
+    public TeamController(TeamService service, TeamInvitationService teamInvitationService) {
         this.service = service;
+        this.teamInvitationService = teamInvitationService;
     }
 
     @RequestMapping(value = RestUrls.TEAMS, method = RequestMethod.POST)
@@ -45,10 +48,10 @@ public class TeamController {
     }
 
     @RequestMapping(value = RestUrls.TEAMS_CANONICAL_NAME_JOIN, method = RequestMethod.PUT)
-    @PreAuthorize("isAuthenticated() and @securityService.canJoinTeam(principal, #teamId)")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> joinTeam(@PathVariable("canonicalName") String canonicalName,
                                            @AuthenticationPrincipal User user) {
-        service.join(user, canonicalName);
+        teamInvitationService.join(user, canonicalName);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

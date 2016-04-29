@@ -8,6 +8,7 @@ import uno.cod.platform.server.core.domain.TeamUserKey;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.team.TeamCreateDto;
 import uno.cod.platform.server.core.dto.team.TeamShowDto;
+import uno.cod.platform.server.core.repository.TeamInvitationRepository;
 import uno.cod.platform.server.core.repository.TeamMemberRepository;
 import uno.cod.platform.server.core.repository.TeamRepository;
 
@@ -20,12 +21,14 @@ import java.util.stream.Collectors;
 public class TeamService {
     private final TeamRepository repository;
     private final TeamMemberRepository teamMemberRepository;
+    private final TeamInvitationRepository teamInvitationRepository;
     private final SessionService sessionService;
 
     @Autowired
-    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, SessionService sessionService) {
+    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, TeamInvitationRepository teamInvitationRepository, SessionService sessionService) {
         this.repository = repository;
         this.teamMemberRepository = teamMemberRepository;
+        this.teamInvitationRepository = teamInvitationRepository;
         this.sessionService = sessionService;
     }
 
@@ -49,24 +52,21 @@ public class TeamService {
         teamMemberRepository.save(member);
     }
 
-    public void join(User user, String canonicalName) {
-        Team team = repository.findOneByCanonicalName(canonicalName);
-        if (team == null) {
-            throw new IllegalArgumentException("team.invalid");
-        }
+    void join(User user, Team team) {
         TeamUserKey key = new TeamUserKey();
         key.setTeam(team);
         key.setUser(user);
         TeamMember member = new TeamMember();
         member.setKey(key);
         teamMemberRepository.save(member);
-        //TODO maybe delete invitation after join/decline?
     }
 
     public void delete(String canonicalName) {
         Team team = repository.findOneByCanonicalName(canonicalName);
         team.setEnabled(false);
         repository.save(team);
+
+        teamInvitationRepository.deleteAllForTeam(team);
     }
 
     public TeamShowDto findOne(String canonicalName) {
