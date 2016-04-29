@@ -38,7 +38,7 @@ public class UserService {
         repository.save(user);
     }
 
-    public UserShowDto update(UserUpdateDto dto, User user) {
+    public UserShowDto update(UserUpdateProfileDetailsDto dto, User user) {
         if (!dto.getUsername().equals(user.getUsername()) && repository.findByUsername(dto.getUsername()) != null) {
             throw new IllegalArgumentException("username.existing");
         }
@@ -58,9 +58,6 @@ public class UserService {
         }
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("old.password.invalid");
-        }
-        if (!dto.getNewPassword().equals(dto.getRetypedPassword())) {
-            throw new IllegalArgumentException("passwords.not.equal");
         }
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         repository.save(user);
