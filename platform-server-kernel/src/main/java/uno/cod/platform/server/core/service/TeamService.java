@@ -8,12 +8,12 @@ import uno.cod.platform.server.core.domain.TeamUserKey;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.team.TeamCreateDto;
 import uno.cod.platform.server.core.dto.team.TeamShowDto;
+import uno.cod.platform.server.core.repository.TeamInvitationRepository;
 import uno.cod.platform.server.core.repository.TeamMemberRepository;
 import uno.cod.platform.server.core.repository.TeamRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,17 +21,19 @@ import java.util.stream.Collectors;
 public class TeamService {
     private final TeamRepository repository;
     private final TeamMemberRepository teamMemberRepository;
+    private final TeamInvitationRepository teamInvitationRepository;
     private final SessionService sessionService;
 
     @Autowired
-    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, SessionService sessionService) {
+    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, TeamInvitationRepository teamInvitationRepository, SessionService sessionService) {
         this.repository = repository;
         this.teamMemberRepository = teamMemberRepository;
+        this.teamInvitationRepository = teamInvitationRepository;
         this.sessionService = sessionService;
     }
 
     public void create(TeamCreateDto dto) {
-        if (repository.findOneByCanonicalName(dto.getCanonicalName()) != null) {
+        if (repository.findByCanonicalNameAndEnabledTrue(dto.getCanonicalName()) != null) {
             throw new IllegalArgumentException("team.canonicalName.existing");
         }
         Team team = new Team();
@@ -50,18 +52,25 @@ public class TeamService {
         teamMemberRepository.save(member);
     }
 
-    public void join(User user, UUID teamId) {
-        Team team = repository.findOne(teamId);
-        if (team == null) {
-            throw new IllegalArgumentException("team.invalid");
-        }
+    void join(User user, Team team) {
         TeamUserKey key = new TeamUserKey();
         key.setTeam(team);
         key.setUser(user);
         TeamMember member = new TeamMember();
         member.setKey(key);
         teamMemberRepository.save(member);
-        //TODO maybe delete invitation after join/decline?
+    }
+
+    public void delete(String canonicalName) {
+        Team team = repository.findByCanonicalNameAndEnabledTrue(canonicalName);
+        team.setEnabled(false);
+        repository.save(team);
+
+        teamInvitationRepository.deleteAllForTeam(team);
+    }
+
+    public TeamShowDto findOne(String canonicalName) {
+        return new TeamShowDto(repository.findByCanonicalNameAndEnabledTrue(canonicalName));
     }
 
     public List<TeamShowDto> findAllTeamsForUser(String username) {

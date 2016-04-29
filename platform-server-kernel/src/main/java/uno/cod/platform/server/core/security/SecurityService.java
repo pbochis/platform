@@ -40,41 +40,17 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canJoinTeam(User user, UUID teamId) {
-        if (user == null || teamId == null) {
-            return false;
-        }
-
-        user = userRepository.findOneWithTeams(user.getId());
-        for (Team team : user.getInvitedTeams()) {
-            if (team.getId().equals(teamId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isTeamAdmin(User user, UUID teamId) {
-        if (user == null || teamId == null) {
+    public boolean isTeamAdmin(User user, String canonicalName) {
+        if (user == null || canonicalName == null) {
             return false;
         }
 
         for (TeamMember teamMember : user.getTeams()) {
-            if (teamMember.isAdmin() && teamMember.getKey().getTeam().getId().equals(teamId)) {
+            if (teamMember.isAdmin() && teamMember.getKey().getTeam().getCanonicalName().equals(canonicalName)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public boolean canSwitchOrganization(User user, UUID organizationId) {
-        if (user == null) {
-            return false;
-        }
-        if (organizationId == null) {
-            return true;
-        }
-        return isOrganizationMember(user, organizationId);
     }
 
     public boolean isOrganizationMember(User user, UUID organizationId) {

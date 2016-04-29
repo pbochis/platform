@@ -9,20 +9,22 @@ import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.team.TeamCreateDto;
 import uno.cod.platform.server.core.dto.team.TeamShowDto;
+import uno.cod.platform.server.core.service.TeamInvitationService;
 import uno.cod.platform.server.core.service.TeamService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class TeamController {
     private final TeamService service;
+    private final TeamInvitationService teamInvitationService;
 
     @Autowired
-    public TeamController(TeamService service) {
+    public TeamController(TeamService service, TeamInvitationService teamInvitationService) {
         this.service = service;
+        this.teamInvitationService = teamInvitationService;
     }
 
     @RequestMapping(value = RestUrls.TEAMS, method = RequestMethod.POST)
@@ -32,10 +34,24 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = RestUrls.TEAMS_ID_JOIN, method = RequestMethod.PUT)
-    @PreAuthorize("isAuthenticated() and @securityService.canJoinTeam(principal, #teamId)")
-    public ResponseEntity<String> joinTeam(@PathVariable("id") UUID teamId, @AuthenticationPrincipal User user) {
-        service.join(user, teamId);
+    @RequestMapping(value = RestUrls.TEAMS_CANONICAL_NAME, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<TeamShowDto> getOne(@PathVariable("canonicalName") String canonicalName) {
+        return new ResponseEntity<>(service.findOne(canonicalName), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.TEAMS_CANONICAL_NAME, method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated() and @securityService.isTeamAdmin(principal, #canonicalName)")
+    public ResponseEntity<String> delete(@PathVariable("canonicalName") String canonicalName) {
+        service.delete(canonicalName);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = RestUrls.TEAMS_CANONICAL_NAME_JOIN, method = RequestMethod.PUT)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> joinTeam(@PathVariable("canonicalName") String canonicalName,
+                                           @AuthenticationPrincipal User user) {
+        teamInvitationService.join(user, canonicalName);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
