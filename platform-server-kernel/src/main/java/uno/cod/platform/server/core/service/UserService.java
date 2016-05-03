@@ -41,7 +41,7 @@ public class UserService {
 
     public UserShowDto update(UserUpdateProfileDetailsDto dto, User user) {
         if (!dto.getUsername().equals(user.getUsername()) && repository.findByUsername(dto.getUsername()) != null) {
-            throw new ResourceConflictException("username.existing");
+            throw new ResourceConflictException("user.name.exists");
         }
         if (!dto.getEmail().equals(user.getEmail()) && repository.findByEmail(dto.getEmail()) != null) {
             throw new ResourceConflictException("email.existing");
@@ -82,6 +82,17 @@ public class UserService {
 
     public List<UserShortShowDto> listUsers() {
         return repository.findAll().stream().map(UserShortShowDto::new).collect(Collectors.toList());
+    }
+
+    public List<UserShortShowDto> listUsersByUsernameContaining(String searchValue) {
+        if(searchValue.length() <= 3) {
+            throw new IllegalArgumentException("user.search.length.invalid");
+        }
+
+        return repository.findByUsernameContaining(searchValue)
+                .stream()
+                .map(UserShortShowDto::new)
+                .collect(Collectors.toList());
     }
 
     public UserShortShowDto findByEmail(String email) {
