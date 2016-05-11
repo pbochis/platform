@@ -19,25 +19,27 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TeamService {
-    private final TeamRepository repository;
+    private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamInvitationRepository teamInvitationRepository;
 
     @Autowired
-    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, TeamInvitationRepository teamInvitationRepository) {
-        this.repository = repository;
+    public TeamService(TeamRepository teamRepository,
+                       TeamMemberRepository teamMemberRepository,
+                       TeamInvitationRepository teamInvitationRepository) {
+        this.teamRepository = teamRepository;
         this.teamMemberRepository = teamMemberRepository;
         this.teamInvitationRepository = teamInvitationRepository;
     }
 
     public void create(TeamCreateDto dto, User user) {
-        if (repository.findByCanonicalNameAndEnabledTrue(dto.getCanonicalName()) != null) {
+        if (teamRepository.findByCanonicalNameAndEnabledTrue(dto.getCanonicalName()) != null) {
             throw new IllegalArgumentException("team.canonicalName.existing");
         }
         Team team = new Team();
         team.setName(dto.getName());
         team.setCanonicalName(dto.getCanonicalName());
-        team = repository.save(team);
+        team = teamRepository.save(team);
 
         TeamUserKey key = new TeamUserKey();
         key.setTeam(team);
@@ -58,18 +60,18 @@ public class TeamService {
     }
 
     public void delete(String canonicalName) {
-        Team team = repository.findByCanonicalNameAndEnabledTrue(canonicalName);
+        Team team = teamRepository.findByCanonicalNameAndEnabledTrue(canonicalName);
         team.setEnabled(false);
-        repository.save(team);
+        teamRepository.save(team);
 
         teamInvitationRepository.deleteAllForTeam(team);
     }
 
     public TeamShowDto findOne(String canonicalName) {
-        return new TeamShowDto(repository.findByCanonicalNameAndEnabledTrue(canonicalName));
+        return new TeamShowDto(teamRepository.findByCanonicalNameAndEnabledTrue(canonicalName));
     }
 
     public List<TeamShowDto> findAllTeamsForUser(String username) {
-        return repository.findAllByUsername(username).stream().map(TeamShowDto::new).collect(Collectors.toList());
+        return teamRepository.findAllByUsername(username).stream().map(TeamShowDto::new).collect(Collectors.toList());
     }
 }

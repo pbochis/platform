@@ -12,12 +12,14 @@ import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.TemplateRepository;
 import uno.cod.storage.PlatformStorage;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class TemplateService {
     private final TemplateRepository repository;
     private final TaskRepository taskRepository;

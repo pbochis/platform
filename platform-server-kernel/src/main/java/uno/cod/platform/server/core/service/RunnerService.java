@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.dto.runner.RunnerShowDto;
 import uno.cod.platform.server.core.repository.RunnerRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RunnerService {
     private final RunnerRepository repository;
 

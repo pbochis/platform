@@ -2,6 +2,7 @@ package uno.cod.platform.server.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uno.cod.platform.server.core.dto.endpoint.EndpointShowDto;
 import uno.cod.platform.server.core.mapper.EndpointMapper;
 import uno.cod.platform.server.core.repository.EndpointRepository;
@@ -9,6 +10,7 @@ import uno.cod.platform.server.core.repository.EndpointRepository;
 import java.util.List;
 
 @Service
+@Transactional
 public class EndpointService {
     private final EndpointRepository repository;
 
