@@ -1,6 +1,9 @@
 package uno.cod.platform.server.core.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,12 +16,17 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "challenge_template")
-public class ChallengeTemplate extends Assignment {
+public class ChallengeTemplate extends Assignment implements CanonicalEntity{
     @ManyToOne
     private Endpoint endpoint;
 
     @ManyToOne
     private Organization organization;
+
+    @NotNull
+    @NotEmpty
+    @Column(name = "canonical_name", unique = true, nullable = false)
+    private String canonicalName;
 
     @OrderColumn(name = "task_order")
     @ManyToMany
@@ -71,5 +79,14 @@ public class ChallengeTemplate extends Assignment {
 
     public void setChallenges(Set<Challenge> challenges) {
         this.challenges = challenges;
+    }
+
+    @Override
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 }

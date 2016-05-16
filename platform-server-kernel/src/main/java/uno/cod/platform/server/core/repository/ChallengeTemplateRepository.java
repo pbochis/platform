@@ -14,6 +14,8 @@ public interface ChallengeTemplateRepository extends JpaRepository<ChallengeTemp
 
     ChallengeTemplate findOneByName(String name);
 
+    ChallengeTemplate findOneByCanonicalName(String canonicalName);
+
     @Query("SELECT challenge FROM ChallengeTemplate challenge " +
             "LEFT JOIN FETCH challenge.organization " +
             "WHERE challenge.id = :id")
