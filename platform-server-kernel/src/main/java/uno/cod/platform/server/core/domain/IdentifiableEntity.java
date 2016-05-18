@@ -6,11 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.UUID;
 
 @MappedSuperclass
-public abstract class IdentifiableEntity {
+public abstract class IdentifiableEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @NotNull
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uno.cod.platform.server.core.config.UseExistingOrGenerateUuidGenerator")
     @Column(columnDefinition = "BINARY(16)")
