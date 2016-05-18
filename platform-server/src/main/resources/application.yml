@@ -13,6 +13,8 @@ coduno:
     bucket: coduno-templates
   submission:
     bucket: coduno-submissions
+  test:
+    bucket: coduno-tests
 
 spring:
   application.name: Coduno Platform

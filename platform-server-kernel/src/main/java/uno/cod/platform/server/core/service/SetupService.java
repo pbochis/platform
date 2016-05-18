@@ -122,6 +122,7 @@ public class SetupService {
         ccc.setName(name);
         ccc.setDescription("## Description");
         ccc.setInstructions("## Instructions");
+        ccc.setCanonicalName(name);
         ccc.setOrganization(catalysts);
         ccc.setEndpoint(cccChallengeEndpoint);
         ccc.setDuration(duration);

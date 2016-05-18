@@ -1,3 +1,4 @@
 dependencies {
     compile project(':platform-server-kernel')
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.7.4"
 }

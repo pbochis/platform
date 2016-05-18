@@ -4,21 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.codingcontest.sync.dto.CodingcontestDto;
 import uno.cod.platform.server.codingcontest.sync.dto.ContestInfoDto;
 import uno.cod.platform.server.codingcontest.sync.dto.ParticipationDto;
 import uno.cod.platform.server.codingcontest.sync.service.CodingcontestSyncService;
 import uno.cod.platform.server.core.security.AllowedForAdmin;
+import uno.cod.platform.server.core.service.SessionService;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
 public class CodingcontestController {
     private final CodingcontestSyncService service;
+    private final SessionService sessionService;
 
     @Autowired
-    public CodingcontestController(CodingcontestSyncService service) {
+    public CodingcontestController(CodingcontestSyncService service, SessionService sessionService) {
         this.service = service;
+        this.sessionService = sessionService;
     }
 
     @AllowedForAdmin
@@ -46,5 +51,12 @@ public class CodingcontestController {
     @RequestMapping(value = "/api/contests/{uuid}/report/json", method = RequestMethod.GET)
     public ContestInfoDto getResults(@PathVariable("uuid") UUID uuid) {
         return service.getResults(uuid);
+    }
+
+    @AllowedForAdmin
+    @RequestMapping(value = "/contestuploadzip", method = RequestMethod.POST)
+    public ResponseEntity<String> contestuploadzip(@RequestParam("file") MultipartFile file) throws IOException {
+        service.createChallengeTemplateFromGameResources(file, sessionService.getActiveOrganization());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
