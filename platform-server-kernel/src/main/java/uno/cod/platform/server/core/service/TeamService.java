@@ -22,17 +22,15 @@ public class TeamService {
     private final TeamRepository repository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamInvitationRepository teamInvitationRepository;
-    private final SessionService sessionService;
 
     @Autowired
-    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, TeamInvitationRepository teamInvitationRepository, SessionService sessionService) {
+    public TeamService(TeamRepository repository, TeamMemberRepository teamMemberRepository, TeamInvitationRepository teamInvitationRepository) {
         this.repository = repository;
         this.teamMemberRepository = teamMemberRepository;
         this.teamInvitationRepository = teamInvitationRepository;
-        this.sessionService = sessionService;
     }
 
-    public void create(TeamCreateDto dto) {
+    public void create(TeamCreateDto dto, User user) {
         if (repository.findByCanonicalNameAndEnabledTrue(dto.getCanonicalName()) != null) {
             throw new IllegalArgumentException("team.canonicalName.existing");
         }
@@ -40,8 +38,6 @@ public class TeamService {
         team.setName(dto.getName());
         team.setCanonicalName(dto.getCanonicalName());
         team = repository.save(team);
-
-        User user = sessionService.getLoggedInUser();
 
         TeamUserKey key = new TeamUserKey();
         key.setTeam(team);

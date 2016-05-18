@@ -29,8 +29,8 @@ public class TeamController {
 
     @RequestMapping(value = RestUrls.TEAMS, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> create(@Valid @RequestBody TeamCreateDto dto) {
-        service.create(dto);
+    public ResponseEntity<String> create(@Valid @RequestBody TeamCreateDto dto, @AuthenticationPrincipal User user) {
+        service.create(dto, user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

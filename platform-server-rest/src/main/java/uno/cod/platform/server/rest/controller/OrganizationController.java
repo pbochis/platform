@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import uno.cod.platform.server.core.domain.User;
 import uno.cod.platform.server.core.dto.organization.active.ActiveOrganizationDto;
 import uno.cod.platform.server.core.dto.organization.OrganizationCreateDto;
 import uno.cod.platform.server.core.dto.organization.OrganizationShowDto;
@@ -62,8 +64,8 @@ public class OrganizationController {
 
     @RequestMapping(value = RestUrls.USER_ORGANIZATIONS_ACTIVE, method = RequestMethod.PUT)
     @PreAuthorize("isAuthenticated() and (#organization.id == null or @securityService.isOrganizationMember(principal, #organization.id))")
-    public ResponseEntity<CurrentUserDto> setLoggedInOrganization(@RequestBody ActiveOrganizationDto organization) {
+    public ResponseEntity<CurrentUserDto> setLoggedInOrganization(@RequestBody ActiveOrganizationDto organization, @AuthenticationPrincipal User user) {
         sessionService.setActiveOrganization(organization.getId());
-        return new ResponseEntity<>(new CurrentUserDto(sessionService.getLoggedInUser()), HttpStatus.OK);
+        return new ResponseEntity<>(new CurrentUserDto(user), HttpStatus.OK);
     }
 }

@@ -15,8 +15,4 @@ public class SessionService {
     public UUID getActiveOrganization() {
         return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getActiveOrganization();
     }
-
-    public User getLoggedInUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 }
