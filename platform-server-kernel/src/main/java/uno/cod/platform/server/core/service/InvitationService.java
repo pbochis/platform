@@ -21,10 +21,13 @@ import uno.cod.platform.server.core.service.mail.MailService;
 import uno.cod.platform.server.core.util.UsernameUtil;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.*;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
 @Transactional
@@ -36,6 +39,7 @@ public class InvitationService {
     private final MailService mailService;
     private final UserService userService;
     private final GithubService githubService;
+    private final HttpSession httpSession;
     private final Random random = new Random();
 
     @Value("#{T(java.time.Duration).parse('${coduno.invite.expire}')}")
@@ -49,7 +53,8 @@ public class InvitationService {
                              ResultRepository resultRepository, ChallengeRepository challengeRepository,
                              UserService userService,
                              MailService mailService,
-                             GithubService githubService) {
+                             GithubService githubService,
+                             HttpSession httpSession) {
         this.userRepository = userRepository;
         this.invitationRepository = invitationRepository;
         this.resultRepository = resultRepository;
@@ -57,6 +62,7 @@ public class InvitationService {
         this.userService = userService;
         this.mailService = mailService;
         this.githubService = githubService;
+        this.httpSession = httpSession;
     }
 
     public void invite(InvitationDto dto, String from) throws MessagingException {
@@ -113,7 +119,7 @@ public class InvitationService {
             throw new AccessDeniedException("invite.token.invalid");
         }
 
-        if (invite.getExpire().isBefore(ZonedDateTime.now())) {
+        if (invite.getExpire().isAfter(ZonedDateTime.now())) {
             throw new AccessDeniedException("invite.token.expired");
         }
 
@@ -126,9 +132,8 @@ public class InvitationService {
             List<String> guessedUsernames = githubService.guessUsername(invite.getEmail());
             dto.setNick(guessedUsernames.isEmpty() ? UsernameUtil.randomUsername() : guessedUsernames.get(0));
             dto.setPassword(new BigInteger(130, random).toString(32));
-            userService.createFromDto(dto);
+            user = userService.createFromDto(dto);
 
-            user = userRepository.findByEmail(invite.getEmail());
             /* invite to challenge if not already invited*/
             if (!challenge.getInvitedUsers().contains(user)) {
                 user.addInvitedChallenge(challenge);
@@ -140,6 +145,7 @@ public class InvitationService {
         /* authenticate */
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
         return challenge.getId();
     }

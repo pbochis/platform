@@ -17,6 +17,7 @@ import uno.cod.platform.server.core.service.util.InvitationTestUtil;
 import uno.cod.platform.server.core.service.util.ResultTestUtil;
 import uno.cod.platform.server.core.service.util.UserTestUtil;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class InvitationServiceTest {
     private UserService userService;
     private MailService mailService;
     private GithubService githubService;
+    private HttpSession httpSession;
 
     @Before
     public void setUp() {
@@ -40,8 +42,9 @@ public class InvitationServiceTest {
         this.userService = Mockito.mock(UserService.class);
         this.mailService = Mockito.mock(MailService.class);
         this.githubService = Mockito.mock(GithubService.class);
+        this.httpSession = Mockito.mock(HttpSession.class);
 
-        this.invitationService = new InvitationService(userRepository, invitationRepository, resultRepository, challengeRepository, userService, mailService, githubService);
+        this.invitationService = new InvitationService(userRepository, invitationRepository, resultRepository, challengeRepository, userService, mailService, githubService, httpSession);
     }
 
     @Test

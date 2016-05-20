@@ -26,7 +26,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createFromDto(UserCreateDto dto) {
+    public User createFromDto(UserCreateDto dto) {
         User found = repository.findByUsernameOrEmail(dto.getNick(), dto.getEmail());
         if (found != null) {
             throw new ResourceConflictException("user.name.exists");
@@ -36,7 +36,7 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setEnabled(true);
-        repository.save(user);
+        return repository.save(user);
     }
 
     public UserShowDto update(UserUpdateProfileDetailsDto dto, User user) {
