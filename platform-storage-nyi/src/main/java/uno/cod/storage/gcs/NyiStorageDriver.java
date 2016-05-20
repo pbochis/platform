@@ -41,4 +41,9 @@ public class NyiStorageDriver implements PlatformStorage {
     public List<String> exposeFilesInFolder(String bucket, String folderName, Long expiration) throws GeneralSecurityException, IOException {
         throw new UnsupportedOperationException("NYI");
     }
+
+    @Override
+    public String uploadPublic(String bucket, String fileName, InputStream data, String contentType) throws IOException {
+        throw new UnsupportedOperationException("NYI");
+    }
 }

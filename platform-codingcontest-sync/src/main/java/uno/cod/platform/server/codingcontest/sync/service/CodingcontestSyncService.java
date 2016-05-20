@@ -116,7 +116,7 @@ public class CodingcontestSyncService {
         Duration gameDuration = parseGameDuration(dto.getTimeframe());
 
         challengeTemplate = new ChallengeTemplate();
-        challengeTemplate.setCanonicalName(dto.getCanonicalName());
+        challengeTemplate.setCanonicalName(dto.getCanonicalName().replace(" ", "-"));
         challengeTemplate.setName(dto.getName());
         challengeTemplate.setDescription(dto.getDescription());
         challengeTemplate.setEndpoint(challengeEndpoint);
