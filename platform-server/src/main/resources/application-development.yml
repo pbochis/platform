@@ -12,6 +12,10 @@ coduno:
     bucket: coduno-templates
   submission:
     bucket: coduno-dev
+  tests:
+    bucket: coduno-dev
+  instructions:
+    bucket: coduno-dev
   storage:
     gcs:
       accountId: platform-gcs@coduno.iam.gserviceaccount.com

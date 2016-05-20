@@ -47,6 +47,9 @@ public class CodingcontestSyncService {
     @Value("${coduno.storage.gcs.buckets.tests}")
     private String testsBucket;
 
+    @Value("${coduno.storage.gcs.buckets.instructions}")
+    private String instructionsBucket;
+
     @Autowired
     public CodingcontestSyncService(UserRepository userRepository,
                                     ChallengeRepository challengeRepository,
@@ -126,8 +129,11 @@ public class CodingcontestSyncService {
             task.setCanonicalName(challengeTemplate.getCanonicalName() + "-" + puzzle.getCanonicalName());
             task.setName(puzzle.getCanonicalName());
             task.setEndpoint(taskEndpoint);
-            task.setDescription("-");
-            task.setInstructions("Instructions");
+            task.setDescription(puzzle.getCanonicalName());
+            task.setInstructions(storage.uploadPublic(instructionsBucket,
+                    instructionsFileName(challengeTemplate, puzzle.getInstructionsFile()),
+                    new ByteArrayInputStream(files.get(puzzle.getInstructionsFile()).toByteArray()),
+                    "application/pdf"));
             task.setDuration(gameDuration);
             task.setRunner(runner);
             task.setLanguages(languages);
@@ -159,6 +165,10 @@ public class CodingcontestSyncService {
             challengeTemplate.addTask(task);
         }
         challengeTemplateRepository.save(challengeTemplate);
+    }
+
+    private String instructionsFileName(ChallengeTemplate challengeTemplate, String fileName){
+        return challengeTemplate.getCanonicalName() + "/" + UUID.randomUUID().toString() + "/" + fileName;
     }
 
     private Map<String, ByteArrayOutputStream> unzip(byte[] zipbytes) throws IOException {
