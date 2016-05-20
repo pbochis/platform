@@ -81,11 +81,14 @@ public class InvitationService {
             throw new AccessDeniedException("you are not an admin to the parent organization of the challenge");
         }
 
-        User user = userRepository.findByEmailWithChallenges(dto.getEmail());
-        if (user != null && user.getRegisteredChallenges().contains(challenge)) {
-            throw new IllegalArgumentException("user.already.registered.to.challenge");
-        }
+        User user = userRepository.findByEmail(dto.getEmail());
         if (user != null) {
+            for (Participation participation: user.getParticipations()) {
+                if (participation.getKey().getChallenge().getId().equals(challenge.getId())) {
+                    throw new IllegalArgumentException("user.already.registered.to.challenge");
+                }
+            }
+
             user.addInvitedChallenge(challenge);
             challengeRepository.save(challenge);
             userRepository.save(user);

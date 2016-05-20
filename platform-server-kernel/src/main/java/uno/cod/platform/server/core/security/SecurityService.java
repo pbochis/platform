@@ -91,6 +91,15 @@ public class SecurityService {
         if (user == null || scheduledChallengeId == null) {
             return false;
         }
+        user = userRepository.findOne(user.getId());
+
+        // Is registered to challenge
+        for (Participation participation: user.getParticipations()) {
+            Challenge challenge = participation.getKey().getChallenge();
+            if (challenge.getId().equals(scheduledChallengeId)) {
+                return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
+            }
+        }
 
         for (Challenge challenge : user.getInvitedChallenges()) {
             if (challenge.getId().equals(scheduledChallengeId)) {
@@ -104,18 +113,21 @@ public class SecurityService {
         if (user == null || challengeId == null) {
             return false;
         }
+        user = userRepository.findOne(user.getId());
 
         // TODO add organization check
         if (user.getOrganizationMemberships() != null) {
             return true;
         }
+        // TODO: remove, an invite must be changed to a participation in order to participate
         for (Challenge challenge : user.getInvitedChallenges()) {
             if (challenge.getId().equals(challengeId)) {
                 return true;
             }
         }
-        for (Challenge challenge : user.getRegisteredChallenges()) {
-            if (challenge.getId().equals(challengeId)) {
+        // Is registered to challenge
+        for (Participation participation: user.getParticipations()) {
+            if (participation.getKey().getChallenge().getId().equals(challengeId)) {
                 return true;
             }
         }

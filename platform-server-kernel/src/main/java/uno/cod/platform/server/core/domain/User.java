@@ -73,9 +73,6 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
     @ManyToMany(mappedBy = "invitedUsers")
     private Set<Challenge> invitedChallenges;
 
-    @ManyToMany(mappedBy = "registeredUsers")
-    private Set<Challenge> registeredChallenges;
-
     @ManyToMany(mappedBy = "invitedUsers")
     private Set<Team> invitedTeams;
 
@@ -87,6 +84,9 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
 
     @Column(name = "last_login")
     private ZonedDateTime lastLogin;
+
+    @OneToMany(mappedBy = "key.user")
+    private Set<Participation> participations;
 
     @Transient
     private UUID activeOrganization;
@@ -214,15 +214,15 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
         this.results = results;
     }
 
-    public Set<Challenge> getRegisteredChallenges() {
-        if (registeredChallenges == null) {
+    public Set<Participation> getParticipations() {
+        if (participations == null) {
             return null;
         }
-        return Collections.unmodifiableSet(registeredChallenges);
+        return Collections.unmodifiableSet(participations);
     }
 
-    protected void setRegisteredChallenges(Set<Challenge> registeredChallenges) {
-        this.registeredChallenges = registeredChallenges;
+    protected void setParticipations(Set<Participation> participations) {
+        this.participations = participations;
     }
 
     @Transient
@@ -273,14 +273,6 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
         }
         challenge.addInvitedUser(this);
         invitedChallenges.add(challenge);
-    }
-
-    public void addRegisteredChallenge(Challenge challenge) {
-        if (registeredChallenges == null) {
-            registeredChallenges = new HashSet<>();
-        }
-        challenge.addRegisteredUser(this);
-        registeredChallenges.add(challenge);
     }
 
     public void removeInvitedChallenge(Challenge challenge) {
