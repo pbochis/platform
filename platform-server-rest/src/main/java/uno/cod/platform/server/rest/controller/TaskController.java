@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import uno.cod.platform.server.core.dto.task.TaskCreateDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
 import uno.cod.platform.server.core.security.AllowedForAdmin;
-import uno.cod.platform.server.core.service.SessionService;
 import uno.cod.platform.server.core.service.TaskService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -19,12 +18,10 @@ import java.util.UUID;
 @RestController
 public class TaskController {
     private final TaskService taskService;
-    private final SessionService sessionService;
 
     @Autowired
-    public TaskController(TaskService taskService, SessionService sessionService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.sessionService = sessionService;
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.POST)
@@ -39,10 +36,10 @@ public class TaskController {
         return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = RestUrls.USER_ORGANIZATIONS_ACTIVE_TASKS, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.isActiveOrganizationAdmin(principal)")
-    public ResponseEntity<List<TaskShowDto>> findAllForActiveOrganization() {
-        return new ResponseEntity<>(taskService.findAllForOrganization(sessionService.getActiveOrganization()), HttpStatus.OK);
+    @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.GET, params = {"organization"})
+    @PreAuthorize("isAuthenticated() and @securityService.isOrganizationAdmin(principal, #organization)")
+    public ResponseEntity<List<TaskShowDto>> findAllForOrganization(@RequestParam("organization") UUID organization) {
+        return new ResponseEntity<>(taskService.findAllForOrganization(organization), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.TASKS, method = RequestMethod.GET)

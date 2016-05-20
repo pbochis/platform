@@ -9,7 +9,6 @@ import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateCrea
 import uno.cod.platform.server.core.dto.challenge.template.ChallengeTemplateShowDto;
 import uno.cod.platform.server.core.dto.task.TaskShowDto;
 import uno.cod.platform.server.core.service.ChallengeTemplateService;
-import uno.cod.platform.server.core.service.SessionService;
 import uno.cod.platform.server.core.service.TaskService;
 import uno.cod.platform.server.rest.RestUrls;
 
@@ -20,13 +19,11 @@ import java.util.UUID;
 public class ChallengeTemplateController {
     private final ChallengeTemplateService service;
     private final TaskService taskService;
-    private final SessionService sessionService;
 
     @Autowired
-    public ChallengeTemplateController(ChallengeTemplateService service, TaskService taskService, SessionService sessionService) {
+    public ChallengeTemplateController(ChallengeTemplateService service, TaskService taskService) {
         this.service = service;
         this.taskService = taskService;
-        this.sessionService = sessionService;
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES, method = RequestMethod.POST)

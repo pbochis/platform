@@ -88,9 +88,6 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
     @OneToMany(mappedBy = "key.user")
     private Set<Participation> participations;
 
-    @Transient
-    private UUID activeOrganization;
-
     public String getUsername() {
         return username;
     }
@@ -314,13 +311,5 @@ public class User extends IdentifiableEntity implements UserDetails, CanonicalEn
     @Override
     public int hashCode() {
         return email.hashCode();
-    }
-
-    public UUID getActiveOrganization() {
-        return activeOrganization;
-    }
-
-    public void setActiveOrganization(UUID activeOrganization) {
-        this.activeOrganization = activeOrganization;
     }
 }
