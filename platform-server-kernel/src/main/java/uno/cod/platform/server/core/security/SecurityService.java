@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
+import uno.cod.platform.server.core.service.SessionService;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -20,11 +21,13 @@ import java.util.UUID;
 public class SecurityService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final SessionService sessionService;
 
     @Autowired
-    public SecurityService(TaskRepository taskRepository, UserRepository userRepository) {
+    public SecurityService(TaskRepository taskRepository, UserRepository userRepository, SessionService sessionService) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.sessionService = sessionService;
     }
 
     public boolean isTeamMember(User user, UUID teamId) {
@@ -81,7 +84,7 @@ public class SecurityService {
     }
 
     public boolean isActiveOrganizationAdmin(User user) {
-        return isOrganizationAdmin(user, user.getActiveOrganization());
+        return isOrganizationAdmin(user, sessionService.getActiveOrganization());
     }
 
     public boolean canAccessScheduledChallengeChallenge(User user, UUID scheduledChallengeId) {
