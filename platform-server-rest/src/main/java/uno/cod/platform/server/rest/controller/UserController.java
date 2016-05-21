@@ -53,7 +53,7 @@ public class UserController {
 
     @RequestMapping(value = RestUrls.USER_SEARCH, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<UserShortShowDto>> searchUsers(@RequestParam String searchValue){
+    public ResponseEntity<List<UserShortShowDto>> searchUsers(@RequestParam String searchValue) {
         return new ResponseEntity<>(userService.listUsersByUsernameContaining(searchValue), HttpStatus.OK);
     }
 

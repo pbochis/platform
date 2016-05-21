@@ -85,7 +85,7 @@ public class UserService {
     }
 
     public List<UserShortShowDto> listUsersByUsernameContaining(String searchValue) {
-        if(searchValue.length() <= 3) {
+        if (searchValue.length() <= 3) {
             throw new IllegalArgumentException("user.search.length.invalid");
         }
 

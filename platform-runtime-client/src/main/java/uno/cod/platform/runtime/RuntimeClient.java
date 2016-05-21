@@ -34,7 +34,7 @@ public class RuntimeClient {
         try {
             LOGGER.trace("calling {} with parameters {}", endpoint, form);
             obj = restTemplate.postForObject(endpoint, form, JsonNode.class);
-        } catch (HttpServerErrorException|HttpClientErrorException e) {
+        } catch (HttpServerErrorException | HttpClientErrorException e) {
             LOGGER.debug("Got HTTP {} and body {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
             obj = objectMapper.createObjectNode();
             ((ObjectNode) obj).put("failure", e.getResponseBodyAsString());

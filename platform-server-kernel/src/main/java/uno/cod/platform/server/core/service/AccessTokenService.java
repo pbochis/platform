@@ -63,7 +63,7 @@ public class AccessTokenService {
 
     public UserDetails loadByAccessToken(UUID id, String token) {
         AccessToken accessToken = accessTokenRepository.findById(id);
-        if(accessToken == null) {
+        if (accessToken == null) {
             return null;
         }
 
