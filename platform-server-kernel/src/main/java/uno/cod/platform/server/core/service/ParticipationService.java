@@ -65,7 +65,7 @@ public class ParticipationService {
         }
 
         for (TeamMember member : team.getMembers()) {
-            if (member.getKey().getUser().equals(user)) {
+            if (member.getKey().getUser().getId().equals(user.getId())) {
                 return true;
             }
         }
