@@ -44,10 +44,10 @@ public class CodingcontestSyncService {
     private final OrganizationRepository organizationRepository;
     private final TaskRepository taskRepository;
 
-    @Value("${coduno.storage.gcs.buckets.tests}")
+    @Value("${coduno.tests.bucket}")
     private String testsBucket;
 
-    @Value("${coduno.storage.gcs.buckets.instructions}")
+    @Value("${coduno.instructions.bucket}")
     private String instructionsBucket;
 
     @Autowired
@@ -109,7 +109,7 @@ public class CodingcontestSyncService {
             throw new IllegalArgumentException("ccc.game.structure.unsuported");
         }
 
-        Endpoint taskEndpoint = endpointRepository.findOneByComponent("ccc-drone-task");
+        Endpoint taskEndpoint = endpointRepository.findOneByComponent("ccc-io-task");
         Endpoint challengeEndpoint = endpointRepository.findOneByComponent("ccc-challenge");
         Runner runner = runnerRepository.findOneByPath("/io");
         Set<Language> languages = new HashSet<>(languageRepository.findAll());

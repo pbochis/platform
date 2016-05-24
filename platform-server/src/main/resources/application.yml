@@ -13,7 +13,7 @@ coduno:
     bucket: coduno-templates
   submission:
     bucket: coduno-submissions
-  test:
+  tests:
     bucket: coduno-tests
 
 spring:
