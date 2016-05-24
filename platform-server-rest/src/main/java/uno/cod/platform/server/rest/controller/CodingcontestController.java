@@ -10,7 +10,6 @@ import uno.cod.platform.server.codingcontest.sync.dto.ContestInfoDto;
 import uno.cod.platform.server.codingcontest.sync.dto.ParticipationDto;
 import uno.cod.platform.server.codingcontest.sync.service.CodingcontestSyncService;
 import uno.cod.platform.server.core.security.AllowedForAdmin;
-import uno.cod.platform.server.core.service.SessionService;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -18,12 +17,10 @@ import java.util.UUID;
 @RestController
 public class CodingcontestController {
     private final CodingcontestSyncService service;
-    private final SessionService sessionService;
 
     @Autowired
-    public CodingcontestController(CodingcontestSyncService service, SessionService sessionService) {
+    public CodingcontestController(CodingcontestSyncService service) {
         this.service = service;
-        this.sessionService = sessionService;
     }
 
     @AllowedForAdmin
@@ -55,8 +52,8 @@ public class CodingcontestController {
 
     @AllowedForAdmin
     @RequestMapping(value = "/contestuploadzip", method = RequestMethod.POST)
-    public ResponseEntity<String> contestuploadzip(@RequestParam("file") MultipartFile file) throws IOException {
-        service.createChallengeTemplateFromGameResources(file, sessionService.getActiveOrganization());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<UUID> contestuploadzip(@RequestParam("file") MultipartFile file,
+                                                   @RequestParam("organization") UUID organization) throws IOException {
+        return new ResponseEntity<>(service.createChallengeTemplateFromGameResources(file, organization), HttpStatus.OK);
     }
 }

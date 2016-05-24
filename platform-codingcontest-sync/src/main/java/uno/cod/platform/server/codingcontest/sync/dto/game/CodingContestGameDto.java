@@ -20,7 +20,7 @@ public class CodingContestGameDto {
     }
 
     public String getCanonicalName() {
-        return description.getCanonicalName();
+        return description.getCanonicalName().replace(" ", "-");
     }
 
     public String getVisibility() {

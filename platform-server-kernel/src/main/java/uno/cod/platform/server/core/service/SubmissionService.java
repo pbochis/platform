@@ -80,7 +80,7 @@ public class SubmissionService {
             MultiValueMap<String, Object> form = createForm(test.getParams());
             form.add("language", language);
             for (MultipartFile file : files) {
-                form.add("files", submission.filePath() + file.getOriginalFilename());
+                form.add("files", bucket + "/" + submission.filePath() + file.getOriginalFilename());
             }
             successful = runAndSendResults(form, key.getResult().getUser(), submission, test) && successful;
         }

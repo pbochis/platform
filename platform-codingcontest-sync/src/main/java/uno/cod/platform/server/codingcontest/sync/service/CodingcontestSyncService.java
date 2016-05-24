@@ -91,10 +91,10 @@ public class CodingcontestSyncService {
         return Duration.ofSeconds(seconds);
     }
 
-    private void createChallengeTemplate(CodingContestGameDto dto, UUID organizationId, Map<String, ByteArrayOutputStream> files) throws IOException {
+    private UUID createChallengeTemplate(CodingContestGameDto dto, UUID organizationId, Map<String, ByteArrayOutputStream> files) throws IOException {
         ChallengeTemplate challengeTemplate = challengeTemplateRepository.findOneByCanonicalName(dto.getCanonicalName());
         if (challengeTemplate != null){
-            return;
+            return challengeTemplate.getId();
         }
         Organization organization = organizationRepository.findOne(organizationId);
         if (organization == null){
@@ -111,12 +111,12 @@ public class CodingcontestSyncService {
 
         Endpoint taskEndpoint = endpointRepository.findOneByComponent("ccc-drone-task");
         Endpoint challengeEndpoint = endpointRepository.findOneByComponent("ccc-challenge");
-        Runner runner = runnerRepository.findOneByPath("/diff");
+        Runner runner = runnerRepository.findOneByPath("/io");
         Set<Language> languages = new HashSet<>(languageRepository.findAll());
         Duration gameDuration = parseGameDuration(dto.getTimeframe());
 
         challengeTemplate = new ChallengeTemplate();
-        challengeTemplate.setCanonicalName(dto.getCanonicalName().replace(" ", "-"));
+        challengeTemplate.setCanonicalName(dto.getCanonicalName());
         challengeTemplate.setName(dto.getName());
         challengeTemplate.setDescription(dto.getDescription());
         challengeTemplate.setEndpoint(challengeEndpoint);
@@ -147,15 +147,16 @@ public class CodingcontestSyncService {
                 test.setIndex(Integer.parseInt(puzzleTest.getIndex()));
                 test.setRunner(runner);
                 test = testRepository.save(test);
+                String inputFileName = test.getId() + "/" + puzzleTest.getIndex() + ".txt";
                 if (testFiles == null){
-                    storage.upload(testsBucket, test.getId() + "/input", new ByteArrayInputStream(puzzleTest.getData().getBytes()), "text/plain");
+                    storage.uploadPublic(testsBucket, inputFileName, new ByteArrayInputStream(puzzleTest.getData().getBytes()), "text/plain");
                 }else{
-                    storage.upload(testsBucket, test.getId() + "/input", new ByteArrayInputStream(testFiles.get(puzzleTest.getData()).toByteArray()), "text/plain");
+                    storage.uploadPublic(testsBucket, inputFileName, new ByteArrayInputStream(testFiles.get(puzzleTest.getData()).toByteArray()), "text/plain");
                 }
-                storage.upload(testsBucket, test.getId() + "/output", new ByteArrayInputStream(puzzleTest.getSolution().getBytes()), "text/plain");
+                storage.upload(testsBucket, test.getId() + "/output.txt", new ByteArrayInputStream(puzzleTest.getSolution().getBytes()), "text/plain");
                 Map<String, String> testParams = new HashMap<>();
-                testParams.put("test", testsBucket + "/" + test.getId() + "/output");
-                testParams.put("files_gcs", testsBucket + "/" + test.getId() + "/input");
+                testParams.put("test", testsBucket + "/" + test.getId() + "/output.txt");
+                testParams.put("stdin", testsBucket + "/" + inputFileName);
                 test.setParams(testParams);
                 test = testRepository.save(test);
                 test.setRunner(runner);
@@ -164,7 +165,7 @@ public class CodingcontestSyncService {
             task = taskRepository.save(task);
             challengeTemplate.addTask(task);
         }
-        challengeTemplateRepository.save(challengeTemplate);
+        return challengeTemplateRepository.save(challengeTemplate).getId();
     }
 
     private String instructionsFileName(ChallengeTemplate challengeTemplate, String fileName){
@@ -191,8 +192,7 @@ public class CodingcontestSyncService {
 
 
 
-    public void createChallengeTemplateFromGameResources(MultipartFile gameZip, UUID organizationId) throws IOException {
-        organizationId = organizationRepository.findAll().get(0).getId();
+    public UUID createChallengeTemplateFromGameResources(MultipartFile gameZip, UUID organizationId) throws IOException {
         Map<String, ByteArrayOutputStream> files = unzip(gameZip.getBytes());
         CodingContestGameDto game = null;
         for (String fileName: files.keySet()){
@@ -206,7 +206,7 @@ public class CodingcontestSyncService {
         if (game == null){
             throw new IllegalArgumentException("ccc.game.zip.invalid");
         }
-        createChallengeTemplate(game, organizationId, files);
+        return createChallengeTemplate(game, organizationId, files);
     }
 
     public void createOrUpdateContest(CodingcontestDto dto) {

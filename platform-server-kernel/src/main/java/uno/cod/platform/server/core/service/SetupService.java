@@ -67,6 +67,9 @@ public class SetupService {
         String[] schoolCCCTaskNames = new String[]{"drones-2d-level-1", "drones-2d-level-2",
                 "drones-2d-level-3", "drones-2d-level-4", "drones-2d-level-5"};
 
+        createRunner("/diff");
+        createRunner("/io");
+
         Runner testRunner = createRunner("/drones/test");
         Runner normalRunner = createRunner("/drones/run");
         initCCC(catalysts, cccLanguages, cccChallengeEndpoint, cccTaskEndpoint, ccc, cccTaskNames,
