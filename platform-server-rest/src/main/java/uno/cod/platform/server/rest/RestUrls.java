@@ -68,4 +68,5 @@ public class RestUrls {
     public static final String TEAMS_CANONICAL_NAME_INVITATION_DECLINE = "/teams/{canonicalName}/invitation/decline";
     public static final String TEAMS_CANONICAL_NAME_INVITATIONS = "/teams/{canonicalName}/invitations";
 
+    public static final String CATCODER_GAME_UPLOAD = "/contestgameupload";
 }
