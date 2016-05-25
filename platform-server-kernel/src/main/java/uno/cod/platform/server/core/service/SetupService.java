@@ -48,7 +48,7 @@ public class SetupService {
     public void init() {
         if (Arrays.asList(this.environment.getActiveProfiles()).contains(Profiles.DEVELOPMENT)) {
             LOGGER.info("initializing development database");
-//            this.initDevelopmentDatabase();
+            this.initDevelopmentDatabase();
         }
     }
 
@@ -58,6 +58,7 @@ public class SetupService {
 
         Endpoint cccTaskEndpoint = createEndpoint("CCC task", "ccc-drone-task");
         Endpoint cccChallengeEndpoint = createEndpoint("CCC challenge", "ccc-challenge");
+        createEndpoint("CCC general task", "ccc-io-task");
 
         String[] ccc = new String[]{".", ".", ".", ".", ".", ".", "."};
         String[] cccTaskNames = new String[]{"drones-level-1", "drones-level-2",
@@ -66,6 +67,9 @@ public class SetupService {
         String[] schoolCCC = new String[]{".", ".", ".", ".", "."};
         String[] schoolCCCTaskNames = new String[]{"drones-2d-level-1", "drones-2d-level-2",
                 "drones-2d-level-3", "drones-2d-level-4", "drones-2d-level-5"};
+
+        createRunner("/diff");
+        createRunner("/io");
 
         Runner testRunner = createRunner("/drones/test");
         Runner normalRunner = createRunner("/drones/run");
@@ -122,6 +126,7 @@ public class SetupService {
         ccc.setName(name);
         ccc.setDescription("## Description");
         ccc.setInstructions("## Instructions");
+        ccc.setCanonicalName(name);
         ccc.setOrganization(catalysts);
         ccc.setEndpoint(cccChallengeEndpoint);
         ccc.setDuration(duration);

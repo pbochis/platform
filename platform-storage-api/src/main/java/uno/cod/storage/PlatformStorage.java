@@ -12,6 +12,8 @@ public interface PlatformStorage {
 
     void upload(String bucket, String fileName, InputStream data, String contentType) throws IOException;
 
+    String uploadPublic(String bucket, String fileName, InputStream data, String contentType) throws IOException;
+
     InputStream download(String bucketName, String objectName) throws IOException;
 
     void downloadToOutputStream(String bucketName, String objectName, OutputStream data) throws IOException;

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uno.cod.platform.server.core.dto.runner.RunnerShowDto;
 import uno.cod.platform.server.core.security.AllowedForAdmin;
@@ -12,6 +13,7 @@ import uno.cod.platform.server.core.service.RunnerService;
 import uno.cod.platform.server.rest.RestUrls;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class RunnerController {
@@ -28,4 +30,9 @@ public class RunnerController {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = RestUrls.RUNNERS, method = RequestMethod.POST)
+    @AllowedForAdmin
+    public ResponseEntity<UUID> create(@RequestParam("path") String path) {
+        return new ResponseEntity<>(service.createRunner(path), HttpStatus.CREATED);
+    }
 }

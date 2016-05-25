@@ -28,7 +28,7 @@ public class SubmissionController {
     public ResponseEntity<String> create(@PathVariable UUID resultId,
                                          @PathVariable UUID taskId,
                                          @RequestParam("language") String language,
-                                         @RequestParam("files") MultipartFile[] files) throws IOException {
+                                         @RequestParam("file") MultipartFile[] files) throws IOException {
         service.compileAndRun(resultId, taskId, files, language);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -46,7 +46,7 @@ public class SubmissionController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> runTask(@PathVariable UUID taskId,
                                           @RequestParam("language") String language,
-                                          @RequestParam("files") MultipartFile[] files,
+                                          @RequestParam("file") MultipartFile[] files,
                                           @AuthenticationPrincipal User principal) throws IOException {
         service.run(principal, taskId, files, language);
         return new ResponseEntity<>(HttpStatus.OK);

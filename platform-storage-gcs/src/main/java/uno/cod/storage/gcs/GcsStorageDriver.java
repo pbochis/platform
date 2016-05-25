@@ -27,7 +27,7 @@ import java.util.List;
 
 public class GcsStorageDriver implements PlatformStorage {
     private static final Logger LOGGER = LoggerFactory.getLogger(GcsStorageDriver.class);
-
+    private final static String PUBLIC_STORAGE_BASE_URL = "https://storage.googleapis.com/";
     private Storage storage;
     private PrivateKey signingKey;
     private String accountId;
@@ -77,16 +77,29 @@ public class GcsStorageDriver implements PlatformStorage {
 
     @Override
     public void upload(String bucket, String fileName, InputStream data, String contentType) throws IOException {
-        InputStreamContent mediaContent = new InputStreamContent(contentType, data);
+        InputStreamContent contentStream = new InputStreamContent(contentType, data);
         Storage.Objects.Insert insertObject = storage
                 .objects()
-                .insert(bucket, null, mediaContent)
+                .insert(bucket, null, contentStream)
                 .setName(fileName);
         // The media uploader gzips content by default, and alters the Content-Encoding accordingly.
         // GCS dutifully stores content as-uploaded. This line disables the media uploader behavior,
         // so the service stores exactly what is in the InputStream, without transformation.
         insertObject.getMediaHttpUploader().setDisableGZipContent(true);
         insertObject.execute();
+    }
+
+    @Override
+    public String uploadPublic(String bucket, String fileName, InputStream data, String contentType) throws IOException {
+        InputStreamContent contentStream = new InputStreamContent(contentType, data);
+        Storage.Objects.Insert insertObject = storage
+                .objects()
+                .insert(bucket, null, contentStream)
+                .setName(fileName);
+        insertObject.setPredefinedAcl("publicRead");
+        insertObject.getMediaHttpUploader().setDisableGZipContent(true);
+        insertObject.execute();
+        return PUBLIC_STORAGE_BASE_URL + bucket + "/" + fileName;
     }
 
     public InputStream download(String bucketName, String objectName) throws IOException {

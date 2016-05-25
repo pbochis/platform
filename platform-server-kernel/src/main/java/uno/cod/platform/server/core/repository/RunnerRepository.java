@@ -6,4 +6,5 @@ import uno.cod.platform.server.core.domain.Runner;
 import java.util.UUID;
 
 public interface RunnerRepository extends JpaRepository<Runner, UUID> {
+    Runner findOneByPath(String path);
 }
