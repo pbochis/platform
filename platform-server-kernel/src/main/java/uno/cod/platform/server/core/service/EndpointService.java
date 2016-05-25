@@ -26,9 +26,9 @@ public class EndpointService {
         return EndpointMapper.map(repository.findAll());
     }
 
-    public UUID createFromDto(EndpointCreateDto dto){
+    public UUID createFromDto(EndpointCreateDto dto) {
         Endpoint endpoint = repository.findOneByComponent(dto.getComponent());
-        if (endpoint != null){
+        if (endpoint != null) {
             return endpoint.getId();
         }
         endpoint = new Endpoint();
