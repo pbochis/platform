@@ -72,6 +72,14 @@ public class UserService {
         return new UserShowDto(user);
     }
 
+    public CurrentUserDto findCurrentUser(UUID id) {
+        User user = repository.findOne(id);
+        if (user == null) {
+            throw new NoSuchElementException("user.invalid");
+        }
+        return new CurrentUserDto(user);
+    }
+
     public UserShowDto findOne(UUID id) {
         User user = repository.findOne(id);
         if (user == null) {

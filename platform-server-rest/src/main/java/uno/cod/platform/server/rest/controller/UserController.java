@@ -42,7 +42,7 @@ public class UserController {
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CurrentUserDto> get(@AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(new CurrentUserDto(user), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findCurrentUser(user.getId()), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.USER, method = RequestMethod.PUT)
