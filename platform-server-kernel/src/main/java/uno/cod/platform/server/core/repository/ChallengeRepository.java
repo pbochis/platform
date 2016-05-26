@@ -13,6 +13,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
 
     @Query("SELECT challenge FROM Challenge challenge " +
             "JOIN FETCH challenge.challengeTemplate template " +
+            "WHERE challenge.canonicalName=:canonicalName")
+    Challenge findOneByCanonicalNameWithTemplate(@Param("canonicalName") String canonicalName);
+
+    @Query("SELECT challenge FROM Challenge challenge " +
+            "JOIN FETCH challenge.challengeTemplate template " +
             "WHERE challenge.id=:id")
     Challenge findOneWithTemplate(@Param("id") UUID id);
 

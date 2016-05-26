@@ -31,14 +31,14 @@ public class ChallengeController {
         this.participationService = participationService;
     }
 
-    @RequestMapping(value = RestUrls.CHALLENGES_ID, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
-    public ResponseEntity<ChallengeDto> get(@PathVariable UUID id) {
-        return new ResponseEntity<>(challengeService.findOneById(id), HttpStatus.OK);
+    @RequestMapping(value = RestUrls.CHALLENGES_CANONICAL_NAME, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #canonicalName)")
+    public ResponseEntity<ChallengeDto> getByCanonicalName(@PathVariable String canonicalName) {
+        return new ResponseEntity<>(challengeService.findOneByCanonicalName(canonicalName), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #dto.templateId)")
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #dto.templateId)")
     public ResponseEntity<UUID> createChallenge(@Valid @RequestBody ChallengeCreateDto dto) {
         return new ResponseEntity<>(challengeService.createFromDto(dto), HttpStatus.CREATED);
     }

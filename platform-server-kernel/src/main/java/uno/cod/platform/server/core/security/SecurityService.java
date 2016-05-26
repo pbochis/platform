@@ -7,7 +7,6 @@ import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.repository.TaskRepository;
 import uno.cod.platform.server.core.repository.UserRepository;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -80,30 +79,8 @@ public class SecurityService {
         return false;
     }
 
-    public boolean canAccessScheduledChallengeChallenge(User user, UUID scheduledChallengeId) {
-        if (user == null || scheduledChallengeId == null) {
-            return false;
-        }
-        user = userRepository.findOne(user.getId());
-
-        // Is registered to challenge
-        for (Participation participation: user.getParticipations()) {
-            Challenge challenge = participation.getKey().getChallenge();
-            if (challenge.getId().equals(scheduledChallengeId)) {
-                return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
-            }
-        }
-
-        for (Challenge challenge : user.getInvitedChallenges()) {
-            if (challenge.getId().equals(scheduledChallengeId)) {
-                return challenge.getStartDate() == null || challenge.getStartDate().isBefore(ZonedDateTime.now());
-            }
-        }
-        return false;
-    }
-
-    public boolean canAccessChallenge(User user, UUID challengeId) {
-        if (user == null || challengeId == null) {
+    public boolean canAccessChallenge(User user, String canonicalName) {
+        if (user == null || canonicalName == null || canonicalName.isEmpty()) {
             return false;
         }
         user = userRepository.findOne(user.getId());
@@ -114,15 +91,28 @@ public class SecurityService {
         }
         // TODO: remove, an invite must be changed to a participation in order to participate
         for (Challenge challenge : user.getInvitedChallenges()) {
-            if (challenge.getId().equals(challengeId)) {
+            if (challenge.getCanonicalName().equals(canonicalName)) {
                 return true;
             }
         }
         // Is registered to challenge
-        for (Participation participation: user.getParticipations()) {
-            if (participation.getKey().getChallenge().getId().equals(challengeId)) {
+        for (Participation participation : user.getParticipations()) {
+            if (participation.getKey().getChallenge().getCanonicalName().equals(canonicalName)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean canAccessChallengeTemplate(User user, UUID templateId) {
+        if (user == null || templateId == null) {
+            return false;
+        }
+        user = userRepository.findOne(user.getId());
+
+        // TODO add organization check
+        if (user.getOrganizationMemberships() != null) {
+            return true;
         }
         return false;
     }

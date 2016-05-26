@@ -39,20 +39,20 @@ public class ChallengeTemplateController {
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES_ID, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #id)")
     public ResponseEntity<ChallengeTemplateShowDto> get(@PathVariable UUID id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = RestUrls.CHALLENGE_TEMPLATES_ID_TASKS, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #id)")
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #id)")
     public ResponseEntity<List<TaskShowDto>> getTasksForChallengeTemplate(@PathVariable UUID id) {
         return new ResponseEntity<>(taskService.findAllForChallengeTemplate(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = RestUrls.CHALLENGE_ID_TEMPLATE, method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessScheduledChallengeChallenge(principal, #id)")
-    public ResponseEntity<ChallengeTemplateShowDto> getByChallengeId(@PathVariable UUID id) {
-        return new ResponseEntity<>(service.findByChallengeId(id), HttpStatus.OK);
+    @RequestMapping(value = RestUrls.CHALLENGES_CANONICAL_NAME_TEMPLATE, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #canonicalName)")
+    public ResponseEntity<ChallengeTemplateShowDto> getByChallengeCanonicalName(@PathVariable String canonicalName) {
+        return new ResponseEntity<>(service.findByChallengeCanonicalName(canonicalName), HttpStatus.OK);
     }
 }
