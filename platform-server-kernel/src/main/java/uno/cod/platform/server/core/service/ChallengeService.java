@@ -47,6 +47,10 @@ public class ChallengeService {
         return repository.save(challenge).getId();
     }
 
+    public ChallengeDto findOneByCanonicalName(String canonicalName) {
+        return ChallengeMapper.map(repository.findOneByCanonicalName(canonicalName));
+    }
+
     public ChallengeDto findOneById(UUID challengeId) {
         return ChallengeMapper.map(repository.findOne(challengeId));
     }

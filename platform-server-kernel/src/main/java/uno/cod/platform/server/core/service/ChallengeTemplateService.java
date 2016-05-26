@@ -67,7 +67,7 @@ public class ChallengeTemplateService {
         return ChallengeTemplateMapper.map(repository.findAllWithTasks(organizationId));
     }
 
-    public ChallengeTemplateShowDto findByChallengeId(UUID challengeId) {
-        return ChallengeTemplateMapper.map(challengeRepository.findOneWithTemplate(challengeId).getChallengeTemplate());
+    public ChallengeTemplateShowDto findByChallengeCanonicalName(String canonicalName) {
+        return ChallengeTemplateMapper.map(challengeRepository.findOneByCanonicalNameWithTemplate(canonicalName).getChallengeTemplate());
     }
 }

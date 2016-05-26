@@ -5,10 +5,10 @@ public class RestUrls {
     public static final String CHALLENGE_TEMPLATES = "/challenges/templates";
     public static final String CHALLENGE_TEMPLATES_ID = "/challenges/templates/{id}";
     public static final String CHALLENGE_TEMPLATES_ID_TASKS = "/challenges/templates/{id}/tasks";
-    public static final String CHALLENGE_ID_TEMPLATE = "/challenges/{id}/template";
 
-    public static final String CHALLENGES_ID = "/challenges/{id}";
     public static final String CHALLENGES = "/challenges";
+    public static final String CHALLENGES_CANONICAL_NAME = "/challenges/{canonicalName}";
+    public static final String CHALLENGES_CANONICAL_NAME_TEMPLATE = "/challenges/{canonicalName}/template";
     public static final String CHALLENGES_CANONICAL_NAME_REGISTER = "/challenges/{canonicalName}/register";
     public static final String CHALLENGES_ID_INVITATIONS = "/challenges/{id}/invitations";
     public static final String CHALLENGES_PUBLIC = "/challenges/public";
