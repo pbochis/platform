@@ -4,6 +4,7 @@ include ':platform-server-websocket'
 include ':platform-server'
 
 include ':platform-codingcontest-sync'
+include ':platform-catcoder-game-importer'
 
 include ':platform-runtime-client'
 

@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform.iml" filepath="$PROJECT_DIR$/.idea/modules/platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer.iml" group="platform-catcoder-game-importer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer_main.iml" group="platform-catcoder-game-importer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-catcoder-game-importer/platform-catcoder-game-importer_test.iml" group="platform-catcoder-game-importer" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync.iml" group="platform-codingcontest-sync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_main.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_main.iml" group="platform-codingcontest-sync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_test.iml" filepath="$PROJECT_DIR$/.idea/modules/platform-codingcontest-sync/platform-codingcontest-sync_test.iml" group="platform-codingcontest-sync" />

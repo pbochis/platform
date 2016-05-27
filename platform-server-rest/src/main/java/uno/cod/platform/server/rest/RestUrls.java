@@ -29,7 +29,6 @@ public class RestUrls {
     public static final String USER = "/user";
     public static final String USER_PASSWORD = "/user/password";
     public static final String USER_ORGANIZATIONS = "/user/organizations";
-    public static final String USER_CHALLENGES = "/user/challenges";
     public static final String USER_TEAMS = "/user/teams";
     public static final String USER_TEAMS_INVITATIONS = "/user/teams/invitations";
     public static final String USER_SEARCH = "/users/search";

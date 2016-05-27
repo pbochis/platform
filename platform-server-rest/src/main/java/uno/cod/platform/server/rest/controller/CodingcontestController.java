@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.codingcontest.sync.dto.CodingcontestDto;
 import uno.cod.platform.server.codingcontest.sync.dto.ContestInfoDto;
 import uno.cod.platform.server.codingcontest.sync.dto.ParticipationDto;
 import uno.cod.platform.server.codingcontest.sync.service.CodingcontestSyncService;
 import uno.cod.platform.server.core.security.AllowedForAdmin;
-import uno.cod.platform.server.rest.RestUrls;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -51,10 +48,4 @@ public class CodingcontestController {
         return service.getResults(uuid);
     }
 
-    @AllowedForAdmin
-    @RequestMapping(value = RestUrls.CATCODER_GAME_UPLOAD, method = RequestMethod.POST)
-    public ResponseEntity<UUID> gameUploadZip(@RequestParam("file") MultipartFile file,
-                                                   @RequestParam("organization") UUID organization) throws IOException {
-        return new ResponseEntity<>(service.createChallengeTemplateFromGameResources(file, organization), HttpStatus.OK);
-    }
 }

@@ -1,30 +1,24 @@
 package uno.cod.platform.server.codingcontest.sync.service;
 
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import uno.cod.platform.server.codingcontest.sync.dto.*;
-import uno.cod.platform.server.codingcontest.sync.dto.game.CodingContestGameDto;
-import uno.cod.platform.server.codingcontest.sync.dto.game.PuzzleDto;
-import uno.cod.platform.server.codingcontest.sync.dto.game.PuzzleTestDto;
 import uno.cod.platform.server.core.domain.*;
-import uno.cod.platform.server.core.repository.*;
-import uno.cod.storage.PlatformStorage;
+import uno.cod.platform.server.core.repository.ChallengeRepository;
+import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
+import uno.cod.platform.server.core.repository.ResultRepository;
+import uno.cod.platform.server.core.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.*;
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -36,13 +30,6 @@ public class CodingcontestSyncService {
     private final ChallengeRepository challengeRepository;
     private final ChallengeTemplateRepository challengeTemplateRepository;
     private final ResultRepository resultRepository;
-    private final EndpointRepository endpointRepository;
-    private final RunnerRepository runnerRepository;
-    private final LanguageRepository languageRepository;
-    private final TestRepository testRepository;
-    private final PlatformStorage storage;
-    private final OrganizationRepository organizationRepository;
-    private final TaskRepository taskRepository;
 
     @Value("${coduno.tests.bucket}")
     private String testsBucket;
@@ -54,25 +41,11 @@ public class CodingcontestSyncService {
     public CodingcontestSyncService(UserRepository userRepository,
                                     ChallengeRepository challengeRepository,
                                     ChallengeTemplateRepository challengeTemplateRepository,
-                                    ResultRepository resultRepository,
-                                    EndpointRepository endpointRepository,
-                                    RunnerRepository runnerRepository,
-                                    LanguageRepository languageRepository,
-                                    PlatformStorage storage,
-                                    TestRepository testRepository,
-                                    OrganizationRepository organizationRepository,
-                                    TaskRepository taskRepository) {
+                                    ResultRepository resultRepository) {
         this.userRepository = userRepository;
         this.challengeRepository = challengeRepository;
         this.challengeTemplateRepository = challengeTemplateRepository;
         this.resultRepository = resultRepository;
-        this.endpointRepository = endpointRepository;
-        this.runnerRepository = runnerRepository;
-        this.languageRepository = languageRepository;
-        this.storage = storage;
-        this.testRepository = testRepository;
-        this.organizationRepository = organizationRepository;
-        this.taskRepository = taskRepository;
     }
 
     public User updateUserFromCodingcontest(ParticipationDto dto) {
@@ -83,155 +56,6 @@ public class CodingcontestSyncService {
             user.setPassword(dto.getPassword());
         }
         return userRepository.save(user);
-    }
-
-    private Duration parseGameDuration(String duration) {
-        LocalTime time = LocalTime.parse(duration);
-        int seconds = time.toSecondOfDay();
-        return Duration.ofSeconds(seconds);
-    }
-
-    private ChallengeTemplate mapChallengeTemplate(CodingContestGameDto dto, Organization organization, Duration gameDuration) {
-        Endpoint challengeEndpoint = endpointRepository.findOneByComponent("ccc-challenge");
-
-        ChallengeTemplate challengeTemplate = new ChallengeTemplate();
-        challengeTemplate.setCanonicalName(dto.getCanonicalName());
-        challengeTemplate.setName(dto.getName());
-        challengeTemplate.setDescription(dto.getDescription());
-        challengeTemplate.setEndpoint(challengeEndpoint);
-        challengeTemplate.setOrganization(organization);
-        challengeTemplate.setDuration(gameDuration);
-        challengeTemplate.setInstructions("You will be presented with a game composed of multiple levels. " +
-                "Each level has a description that you can download by pressing the button in the bottom right corner of the screen. " +
-                "The input for each level will be read from stdin. Good luck and have fun!");
-
-        return challengeTemplate;
-    }
-
-    private Task mapTask(PuzzleDto puzzle,
-                         ChallengeTemplate challengeTemplate,
-                         Organization organization,
-                         Map<String, ByteArrayOutputStream> files,
-                         Duration gameDuration,
-                         Runner runner,
-                         Endpoint endpoint,
-                         Set<Language> languages) throws IOException {
-        Task task = new Task();
-        task.setCanonicalName(challengeTemplate.getCanonicalName() + "-" + puzzle.getCanonicalName());
-        task.setName(puzzle.getCanonicalName());
-        task.setEndpoint(endpoint);
-        task.setDescription(puzzle.getCanonicalName());
-        task.setInstructions(storage.uploadPublic(instructionsBucket,
-                instructionsFileName(challengeTemplate, puzzle.getInstructionsFile()),
-                new ByteArrayInputStream(files.get(puzzle.getInstructionsFile()).toByteArray()),
-                "application/pdf"));
-        task.setDuration(gameDuration);
-        task.setRunner(runner);
-        task.setLanguages(languages);
-        task.setOrganization(organization);
-        return task;
-    }
-
-    private Test mapTest(PuzzleTestDto puzzleTest, Runner runner, Map<String, ByteArrayOutputStream> testFiles) throws IOException {
-        Test test = new Test();
-        test.setIndex(Integer.parseInt(puzzleTest.getIndex()));
-        test.setRunner(runner);
-        test = testRepository.save(test);
-        String inputFileName = test.getId() + "/" + puzzleTest.getIndex() + ".txt";
-        if (testFiles == null) {
-            storage.uploadPublic(testsBucket, inputFileName, new ByteArrayInputStream(puzzleTest.getData().getBytes()), "text/plain");
-        } else {
-            storage.uploadPublic(testsBucket, inputFileName, new ByteArrayInputStream(testFiles.get(puzzleTest.getData()).toByteArray()), "text/plain");
-        }
-        storage.upload(testsBucket, test.getId() + "/output.txt", new ByteArrayInputStream(puzzleTest.getSolution().getBytes()), "text/plain");
-        Map<String, String> testParams = new HashMap<>();
-        testParams.put("test", testsBucket + "/" + test.getId() + "/output.txt");
-        testParams.put("stdin", testsBucket + "/" + inputFileName);
-        test.setParams(testParams);
-        test = testRepository.save(test);
-        test.setRunner(runner);
-        return test;
-    }
-
-    private UUID createChallengeTemplate(CodingContestGameDto dto, UUID organizationId, Map<String, ByteArrayOutputStream> files) throws IOException {
-        ChallengeTemplate challengeTemplate = challengeTemplateRepository.findOneByCanonicalName(dto.getCanonicalName());
-        if (challengeTemplate != null) {
-            return challengeTemplate.getId();
-        }
-        Organization organization = organizationRepository.findOne(organizationId);
-        if (organization == null) {
-            throw new IllegalArgumentException("organization.invalid");
-        }
-
-        if (dto.getPuzzles()
-                .stream()
-                .findAny()
-                .filter(puzzleDto -> puzzleDto.getValidationClass() != null)
-                .isPresent()) {
-            throw new IllegalArgumentException("ccc.game.structure.unsuported");
-        }
-
-        Runner runner = runnerRepository.findOneByPath("/io");
-        Endpoint taskEndpoint = endpointRepository.findOneByComponent("ccc-io-task");
-        Set<Language> languages = new HashSet<>(languageRepository.findAll());
-        Duration gameDuration = parseGameDuration(dto.getTimeframe());
-
-        challengeTemplate = mapChallengeTemplate(dto, organization, gameDuration);
-
-        for (PuzzleDto puzzle : dto.getPuzzles()) {
-            Task task = mapTask(puzzle, challengeTemplate, organization, files, gameDuration, runner, taskEndpoint, languages);
-            Map<String, ByteArrayOutputStream> testFiles = null;
-            if (puzzle.getInputFilePath() != null) {
-                testFiles = unzip(files.get(puzzle.getInputFilePath()).toByteArray());
-            }
-            for (PuzzleTestDto puzzleTest : puzzle.getTests()) {
-                Test test = mapTest(puzzleTest, runner, testFiles);
-                task.addTest(test);
-            }
-            task = taskRepository.save(task);
-            challengeTemplate.addTask(task);
-        }
-        return challengeTemplateRepository.save(challengeTemplate).getId();
-    }
-
-    private String instructionsFileName(ChallengeTemplate challengeTemplate, String fileName) {
-        return challengeTemplate.getCanonicalName() + "/" + UUID.randomUUID().toString() + "/" + fileName;
-    }
-
-    private Map<String, ByteArrayOutputStream> unzip(byte[] zipbytes) throws IOException {
-        final int bufSize = 2048;
-        Map<String, ByteArrayOutputStream> map = new HashMap<>();
-        ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(zipbytes));
-        ZipEntry entry;
-        byte[] buf = new byte[bufSize];
-        while ((entry = zip.getNextEntry()) != null) {
-            String fileName = entry.getName().substring(entry.getName().indexOf("/") + 1);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int count;
-            while ((count = zip.read(buf, 0, bufSize)) != -1) {
-                baos.write(buf, 0, count);
-            }
-            map.put(fileName, baos);
-        }
-        return map;
-    }
-
-
-    public UUID createChallengeTemplateFromGameResources(MultipartFile gameZip, UUID organizationId) throws IOException {
-        Map<String, ByteArrayOutputStream> files = unzip(gameZip.getBytes());
-        CodingContestGameDto game = null;
-        for (String fileName : files.keySet()) {
-            if (fileName.endsWith(".xml")) {
-                byte[] byts = files.get(fileName).toByteArray();
-                ObjectMapper mapper = new XmlMapper();
-                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                game = mapper.readValue(new ByteArrayInputStream(byts), CodingContestGameDto.class);
-            }
-        }
-        if (game == null) {
-            throw new IllegalArgumentException("ccc.game.zip.invalid");
-        }
-        return createChallengeTemplate(game, organizationId, files);
     }
 
     public void createOrUpdateContest(CodingcontestDto dto) {

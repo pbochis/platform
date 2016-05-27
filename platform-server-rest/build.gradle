@@ -3,6 +3,7 @@ dependencies {
     compile "org.springframework.session:spring-session"
     compile project(':platform-server-kernel')
     compile project(':platform-codingcontest-sync')
+    compile project(':platform-catcoder-game-importer')
 
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
