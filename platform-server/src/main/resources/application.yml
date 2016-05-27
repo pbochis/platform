@@ -3,7 +3,6 @@ coduno:
   runtime:
     url: https://runtime.cod.uno
   codingcontest_url: https://codingcontest.catalysts.cc
-  codingcontest_lab_url: https://codingcontest.lab.catalysts.cc
   mail:
     from: noreply@cod.uno
   invite:
