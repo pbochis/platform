@@ -16,6 +16,7 @@ coduno:
     bucket: coduno-tests
   instructions:
     bucket: coduno
+
 spring:
   application.name: Coduno Platform
 
