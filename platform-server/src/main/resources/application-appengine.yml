@@ -2,7 +2,7 @@ coduno:
   storage:
     gcs:
       accountId: platform-gcs@coduno.iam.gserviceaccount.com
-      pkcs12: /service-account.p12
+      pkcs12: /gcs-service-account.p12
 
 spring:
   profiles.active: appengine
