@@ -1,0 +1,6 @@
+# overrides for lab instance
+coduno:
+  url: https://app-dot-coduno-lab.appspot.com
+  codingcontest_url: https://codingcontest.lab.catalysts.cc
+  submission:
+    bucket: coduno-submissions-lab
