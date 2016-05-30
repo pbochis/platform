@@ -57,4 +57,11 @@ public class ChallengeController {
         participationService.registerForChallenge(user, challengeName, dto.getTeam());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = RestUrls.USER_CHALLENGE_CANONICAL_NAME_STATUS, method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallenge(principal, #canonicalName)")
+    public ResponseEntity<UserChallengeShowDto> getUserStatusByCanonicalName(@PathVariable String canonicalName,
+                                                                             @AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(challengeService.getChallengeStatusForUser(canonicalName, user), HttpStatus.OK);
+    }
 }
