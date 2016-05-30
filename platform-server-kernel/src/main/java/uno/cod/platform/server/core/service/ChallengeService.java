@@ -8,8 +8,11 @@ import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
 import uno.cod.platform.server.core.dto.challenge.UserChallengeShowDto;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
-import uno.cod.platform.server.core.repository.*;
+import uno.cod.platform.server.core.repository.ChallengeRepository;
+import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
+import uno.cod.platform.server.core.repository.ResultRepository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,42 +58,64 @@ public class ChallengeService {
         return ChallengeMapper.map(repository.findOne(challengeId));
     }
 
+    public UserChallengeShowDto getChallengeStatusForUser(String name, User user) {
+        UserChallengeShowDto dto = new UserChallengeShowDto();
+        Challenge challenge = repository.findOneByCanonicalNameWithInvitedUsersAndRegisteredUsers(name);
+        addStatus(dto, challenge, user);
+        return dto;
+    }
+
     public List<UserChallengeShowDto> getPublicChallenges(final User user) {
-        List<Challenge> challenges = repository.findAllWithOrganizationAndInvitedUsersAndRegisteredUsers();
+        List<Challenge> challenges = repository.findAllValidWithOrganizationAndInvitedUsersAndRegisteredUsers(user.getId());
         return challenges.stream().map(challenge -> {
             UserChallengeShowDto dto = new UserChallengeShowDto();
             dto.setChallenge(new ChallengeDto(challenge));
-            UserChallengeShowDto.ChallengeStatus status = null;
+            addStatus(dto, challenge, user);
 
-            if (challenge.getInvitedUsers() != null && challenge.getInvitedUsers().contains(user)) {
-                status = UserChallengeShowDto.ChallengeStatus.INVITED;
-            } else if (challenge.getParticipations() != null) {
-                for (Participation participation : challenge.getParticipations()) {
-                    if (participation.getKey().getUser().equals(user)) {
-                        status = UserChallengeShowDto.ChallengeStatus.REGISTERED;
-                        break;
-                    }
-                }
-            }
-            Result result = resultRepository.findOneByUserAndChallenge(user.getId(), dto.getChallenge().getId());
-            if (result != null && result.getStarted() != null) {
-                if (result.getFinished() != null) {
-                    status = UserChallengeShowDto.ChallengeStatus.COMPLETED;
-                } else {
-                    status = UserChallengeShowDto.ChallengeStatus.IN_PROGRESS;
-                }
-            }
-            dto.setStatus(status);
-            if (status != null) {
-                return dto;
-            }
-            if (challenge.isInviteOnly()) {
-                return null;
-            }
-            dto.setStatus(UserChallengeShowDto.ChallengeStatus.OPEN);
             return dto;
 
         }).filter(p -> p != null).collect(Collectors.toList());
+    }
+
+    private void addStatus(UserChallengeShowDto dto, Challenge challenge, User user) {
+        UserChallengeShowDto.ChallengeStatus status = null;
+
+        if (challenge.getInvitedUsers() != null && challenge.getInvitedUsers().contains(user)) {
+            status = UserChallengeShowDto.ChallengeStatus.INVITED;
+        } else if (challenge.getParticipations() != null) {
+            for (Participation participation : challenge.getParticipations()) {
+                if (participation.getKey().getUser().equals(user)) {
+                    status = UserChallengeShowDto.ChallengeStatus.REGISTERED;
+                    if (participation.getTeam() != null) {
+                        dto.setRegisteredAs(participation.getTeam().getName());
+                    } else {
+                        dto.setRegisteredAs(user.getUsername());
+                    }
+                    break;
+                }
+            }
+        }
+        Result result = resultRepository.findOneByUserAndChallenge(user.getId(), challenge.getId());
+        if (result != null && result.getStarted() != null) {
+            if (result.getFinished() != null) {
+                status = UserChallengeShowDto.ChallengeStatus.COMPLETED;
+            } else {
+                status = UserChallengeShowDto.ChallengeStatus.IN_PROGRESS;
+            }
+        }
+        if (status == null & challenge.isInviteOnly()) {
+            status = UserChallengeShowDto.ChallengeStatus.INVITE_ONLY;
+        }
+
+        if (status == null) {
+            status = UserChallengeShowDto.ChallengeStatus.OPEN;
+        }
+        if (challenge.getEndDate() != null &&
+                challenge.getEndDate().isBefore(ZonedDateTime.now()) &&
+                !status.equals(UserChallengeShowDto.ChallengeStatus.COMPLETED)) {
+            status = UserChallengeShowDto.ChallengeStatus.ENDED;
+        }
+        dto.setStatus(status);
     }
 
 }
