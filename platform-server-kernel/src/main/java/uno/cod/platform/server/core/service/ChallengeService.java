@@ -7,6 +7,8 @@ import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
 import uno.cod.platform.server.core.dto.challenge.UserChallengeShowDto;
+import uno.cod.platform.server.core.exception.CodunoIllegalArgumentException;
+import uno.cod.platform.server.core.exception.CodunoResourceConflictException;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
@@ -36,7 +38,11 @@ public class ChallengeService {
     public UUID createFromDto(ChallengeCreateDto dto) {
         ChallengeTemplate template = challengeTemplateRepository.findOne(dto.getTemplateId());
         if (template == null) {
-            throw new IllegalArgumentException("challenge.invalid");
+            throw new CodunoIllegalArgumentException("challenge.invalid");
+        }
+
+        if (repository.findOneByCanonicalName(dto.getCanonicalName()) != null) {
+            throw new CodunoResourceConflictException("challenge.canonicalName.existing", new String[]{dto.getCanonicalName()});
         }
         Challenge challenge = new Challenge();
         challenge.setChallengeTemplate(template);
