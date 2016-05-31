@@ -15,6 +15,7 @@ import uno.cod.platform.server.core.service.util.ChallengeTestUtil;
 import uno.cod.platform.server.core.service.util.ResultTestUtil;
 import uno.cod.platform.server.core.service.util.UserTestUtil;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -66,11 +67,12 @@ public class ChallengeServiceTest {
     @Test
     public void getUserChallenges() throws Exception {
         Challenge challenge = ChallengeTestUtil.getChallenge();
+        challenge.setEndDate(ZonedDateTime.now().plusDays(5));
         Result result = ResultTestUtil.getResult();
         result.setFinished(null);
         User user = UserTestUtil.getUser();
 
-        Mockito.when(repository.findAllWithOrganizationAndInvitedUsersAndRegisteredUsers()).thenReturn(Collections.singletonList(challenge));
+        Mockito.when(repository.findAllValidWithOrganizationAndInvitedUsersAndRegisteredUsers(user.getId())).thenReturn(Collections.singletonList(challenge));
         Mockito.when(resultRepository.findOneByUserAndChallenge(user.getId(), challenge.getId())).thenReturn(result);
 
         List<UserChallengeShowDto> dtos = service.getPublicChallenges(user);
