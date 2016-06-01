@@ -70,4 +70,8 @@ public class RestUrls {
     public static final String TEAMS_CANONICAL_NAME_INVITATIONS = "/teams/{canonicalName}/invitations";
 
     public static final String CATCODER_GAME_UPLOAD = "/contestgameupload";
+
+    public static final String CONNECT = "/connect";
+    public static final String CONNECT_PROVIDERID = "/connect/{providerId}";
+    public static final String CONNECT_PROVIDERID_USERID = "/connect/{providerId}/{providerUserId}";
 }
