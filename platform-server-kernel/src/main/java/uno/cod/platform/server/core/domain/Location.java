@@ -3,17 +3,19 @@ package uno.cod.platform.server.core.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
+@Table(name = "location")
 public class Location extends IdentifiableEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
     @Column(name = "place_id", unique = true)
     private String placeId;
-    private String latitude;
-    private String longitude;
+    private Float latitude;
+    private Float longitude;
 
     @ManyToMany(mappedBy = "locations")
     private Set<Challenge> challenges;
@@ -34,19 +36,19 @@ public class Location extends IdentifiableEntity {
         this.placeId = placeId;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
 

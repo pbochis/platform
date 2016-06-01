@@ -9,8 +9,8 @@ CREATE TABLE `location` (
   `id`        BINARY(16)   NOT NULL,
   `name`      VARCHAR(255) NOT NULL,
   `place_id`  VARCHAR(255) DEFAULT NULL,
-  `latitude`  VARCHAR(255) DEFAULT NULL,
-  `longitude` VARCHAR(255) DEFAULT NULL,
+  `latitude`  FLOAT DEFAULT NULL,
+  `longitude` FLOAT DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`),
   UNIQUE KEY (`place_id`)
