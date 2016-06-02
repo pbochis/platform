@@ -247,7 +247,11 @@ public class User extends IdentifiableEntity implements SocialUserDetails, Canon
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        ArrayList<GrantedAuthority> ga = new ArrayList<>();
+        if (isAdmin()) {
+            ga.add(() -> "ROLE_ADMIN");
+        }
+        return ga;
     }
 
     public void addOrganizationMembership(OrganizationMembership membership) {
