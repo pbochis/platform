@@ -61,3 +61,13 @@ flyway:
 multipart:
   maxFileSize: 16MB
   maxRequestSize: 16MB
+
+endpoints:
+  health:
+    path: /_ah/health
+
+# til gmail is fixed
+management:
+  health:
+    mail:
+      enabled: false
