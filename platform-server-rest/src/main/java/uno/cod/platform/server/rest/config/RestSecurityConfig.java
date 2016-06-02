@@ -54,7 +54,6 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/challenges/*",
                         "/users",
                         "/ip",
-                        "/connect/**",
                         "/auth/**",
                         "/invite/auth/*").permitAll()
                 .anyRequest().authenticated()
