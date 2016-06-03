@@ -37,7 +37,7 @@ public class LocationController {
 
     @RequestMapping(value = RestUrls.CHALLENGES_CANONICAL_NAME_LOCATIONS, method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<LocationShowDto>> getLocationsForChallenge(@RequestParam String canonicalName) {
+    public ResponseEntity<List<LocationShowDto>> getLocationsForChallenge(@PathVariable String canonicalName) {
         return new ResponseEntity<>(service.findLocations(canonicalName), HttpStatus.OK);
     }
 }
