@@ -13,6 +13,7 @@ import uno.cod.platform.server.core.exception.CodunoResourceConflictException;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
 import uno.cod.platform.server.core.repository.ChallengeRepository;
 import uno.cod.platform.server.core.repository.ChallengeTemplateRepository;
+import uno.cod.platform.server.core.repository.LocationRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
 
 import java.time.ZonedDateTime;
@@ -26,17 +27,17 @@ public class ChallengeService {
     private final ChallengeTemplateRepository challengeTemplateRepository;
     private final ChallengeRepository repository;
     private final ResultRepository resultRepository;
-    private final LocationService locationService;
+    private final LocationRepository locationRepository;
 
     @Autowired
     public ChallengeService(ChallengeRepository repository,
                             ChallengeTemplateRepository challengeTemplateRepository,
                             ResultRepository resultRepository,
-                            LocationService locationService) {
+                            LocationRepository locationRepository) {
         this.repository = repository;
         this.challengeTemplateRepository = challengeTemplateRepository;
         this.resultRepository = resultRepository;
-        this.locationService = locationService;
+        this.locationRepository = locationRepository;
     }
 
     public UUID createFromDto(ChallengeCreateDto dto) {
@@ -58,11 +59,22 @@ public class ChallengeService {
         }
         if (dto.getLocations() != null) {
             for (LocationCreateDto locationDto : dto.getLocations()) {
-                challenge.addLocation(locationService.findOrCreate(locationDto));
+                challenge.addLocation(createLocationFromDto(locationDto));
             }
         }
         challenge.setInviteOnly(dto.isInviteOnly());
         return repository.save(challenge).getId();
+    }
+
+    private Location createLocationFromDto(LocationCreateDto dto) {
+        Location location = new Location();
+        location.setName(dto.getName());
+        location.setDescription(dto.getDescription());
+        location.setAddress(dto.getAddress());
+        location.setPlaceId(dto.getPlaceId());
+        location.setLatitude(dto.getLatitude());
+        location.setLongitude(dto.getLongitude());
+        return locationRepository.save(location);
     }
 
     public ChallengeDto findOneByCanonicalName(String canonicalName) {
