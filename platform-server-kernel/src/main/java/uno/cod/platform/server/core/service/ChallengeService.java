@@ -7,6 +7,7 @@ import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
 import uno.cod.platform.server.core.dto.challenge.UserChallengeShowDto;
+import uno.cod.platform.server.core.dto.location.LocationCreateDto;
 import uno.cod.platform.server.core.exception.CodunoIllegalArgumentException;
 import uno.cod.platform.server.core.exception.CodunoResourceConflictException;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
@@ -57,12 +58,23 @@ public class ChallengeService {
             challenge.setEndDate(dto.getStartDate().plus(template.getDuration()));
         }
         if (dto.getLocations() != null) {
-            for (UUID locationId : dto.getLocations()) {
-                challenge.addLocation(locationRepository.findOne(locationId));
+            for (LocationCreateDto locationDto : dto.getLocations()) {
+                challenge.addLocation(createLocationFromDto(locationDto));
             }
         }
         challenge.setInviteOnly(dto.isInviteOnly());
         return repository.save(challenge).getId();
+    }
+
+    private Location createLocationFromDto(LocationCreateDto dto) {
+        Location location = new Location();
+        location.setName(dto.getName());
+        location.setDescription(dto.getDescription());
+        location.setAddress(dto.getAddress());
+        location.setPlaceId(dto.getPlaceId());
+        location.setLatitude(dto.getLatitude());
+        location.setLongitude(dto.getLongitude());
+        return locationRepository.save(location);
     }
 
     public ChallengeDto findOneByCanonicalName(String canonicalName) {
