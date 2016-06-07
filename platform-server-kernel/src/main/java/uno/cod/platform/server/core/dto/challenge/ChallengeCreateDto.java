@@ -1,6 +1,8 @@
 package uno.cod.platform.server.core.dto.challenge;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import uno.cod.platform.server.core.dto.location.LocationCreateDto;
+import uno.cod.platform.server.core.util.constraints.CanonicalName;
 
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
@@ -10,10 +12,12 @@ import java.util.UUID;
 public class ChallengeCreateDto {
 
     @NotNull
+    @NotEmpty
     private UUID templateId;
 
     @NotNull
     private String name;
+    @CanonicalName
     private String canonicalName;
     private boolean inviteOnly;
     private ZonedDateTime startDate;
