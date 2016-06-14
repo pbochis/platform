@@ -1,6 +1,5 @@
 package uno.cod.platform.server.core.dto.challenge;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import uno.cod.platform.server.core.dto.location.LocationCreateDto;
 import uno.cod.platform.server.core.util.constraints.CanonicalName;
 
@@ -12,7 +11,6 @@ import java.util.UUID;
 public class ChallengeCreateDto {
 
     @NotNull
-    @NotEmpty
     private UUID templateId;
 
     @NotNull
