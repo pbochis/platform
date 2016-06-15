@@ -8,6 +8,7 @@ import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
 import uno.cod.platform.server.core.dto.challenge.UserChallengeShowDto;
 import uno.cod.platform.server.core.dto.location.LocationCreateDto;
+import uno.cod.platform.server.core.dto.location.LocationShowDto;
 import uno.cod.platform.server.core.exception.CodunoIllegalArgumentException;
 import uno.cod.platform.server.core.exception.CodunoResourceConflictException;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
@@ -88,7 +89,7 @@ public class ChallengeService {
     public UserChallengeShowDto getChallengeStatusForUser(String name, User user) {
         UserChallengeShowDto dto = new UserChallengeShowDto();
         Challenge challenge = repository.findOneByCanonicalNameWithInvitedUsersAndRegisteredUsers(name);
-        addStatus(dto, challenge, user);
+        addStatusAndLocation(dto, challenge, user);
         return dto;
     }
 
@@ -97,14 +98,14 @@ public class ChallengeService {
         return challenges.stream().map(challenge -> {
             UserChallengeShowDto dto = new UserChallengeShowDto();
             dto.setChallenge(new ChallengeDto(challenge));
-            addStatus(dto, challenge, user);
+            addStatusAndLocation(dto, challenge, user);
 
             return dto;
 
         }).filter(p -> p != null).collect(Collectors.toList());
     }
 
-    private void addStatus(UserChallengeShowDto dto, Challenge challenge, User user) {
+    private void addStatusAndLocation(UserChallengeShowDto dto, Challenge challenge, User user) {
         UserChallengeShowDto.ChallengeStatus status = null;
 
         if (challenge.getInvitedUsers() != null && challenge.getInvitedUsers().contains(user)) {
@@ -113,6 +114,7 @@ public class ChallengeService {
             for (Participation participation : challenge.getParticipations()) {
                 if (participation.getKey().getUser().equals(user)) {
                     status = UserChallengeShowDto.ChallengeStatus.REGISTERED;
+                    dto.setLocation(new LocationShowDto(participation.getLocation()));
                     if (participation.getTeam() != null) {
                         dto.setRegisteredAs(participation.getTeam().getName());
                     } else {
