@@ -41,7 +41,7 @@ public class ChallengeService {
         this.locationRepository = locationRepository;
     }
 
-    public UUID createFromDto(ChallengeCreateDto dto) {
+    public String createFromDto(ChallengeCreateDto dto) {
         ChallengeTemplate template = challengeTemplateRepository.findOne(dto.getTemplateId());
         if (template == null) {
             throw new CodunoIllegalArgumentException("challenge.invalid");
@@ -64,7 +64,7 @@ public class ChallengeService {
             }
         }
         challenge.setInviteOnly(dto.isInviteOnly());
-        return repository.save(challenge).getId();
+        return repository.save(challenge).getCanonicalName();
     }
 
     private Location createLocationFromDto(LocationCreateDto dto) {
@@ -114,7 +114,9 @@ public class ChallengeService {
             for (Participation participation : challenge.getParticipations()) {
                 if (participation.getKey().getUser().equals(user)) {
                     status = UserChallengeShowDto.ChallengeStatus.REGISTERED;
-                    dto.setLocation(new LocationShowDto(participation.getLocation()));
+                    if (participation.getLocation() != null) {
+                        dto.setLocation(new LocationShowDto(participation.getLocation()));
+                    }
                     if (participation.getTeam() != null) {
                         dto.setRegisteredAs(participation.getTeam().getName());
                     } else {
