@@ -19,7 +19,6 @@ import uno.cod.platform.server.rest.RestUrls;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 public class ChallengeController {
@@ -47,7 +46,7 @@ public class ChallengeController {
 
     @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #dto.templateId)")
-    public ResponseEntity<UUID> createChallenge(@Valid @RequestBody ChallengeCreateDto dto) {
+    public ResponseEntity<String> createChallenge(@Valid @RequestBody ChallengeCreateDto dto) {
         return new ResponseEntity<>(challengeService.createFromDto(dto), HttpStatus.CREATED);
     }
 
