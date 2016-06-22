@@ -38,7 +38,7 @@ deploy:
     project: coduno
     flexible: true
     module: platform
-    version: "${TRAVIS_COMMIT:7}-${TRAVIS_BUILD_NUMBER}"
+    version: "${TRAVIS_COMMIT:0:7}-${TRAVIS_BUILD_NUMBER}"
     skip_cleanup: true
     edge:
       source: coduno/dpl
@@ -49,7 +49,7 @@ deploy:
     project: coduno-lab
     flexible: true
     module: platform
-    version: "${TRAVIS_COMMIT:7}-${TRAVIS_BUILD_NUMBER}"
+    version: "${TRAVIS_COMMIT:0:7}-${TRAVIS_BUILD_NUMBER}"
     skip_cleanup: true
     edge:
       source: coduno/dpl
