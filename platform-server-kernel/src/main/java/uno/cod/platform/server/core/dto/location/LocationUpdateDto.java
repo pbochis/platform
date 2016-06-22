@@ -2,7 +2,11 @@ package uno.cod.platform.server.core.dto.location;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class LocationCreateDto {
+import java.util.UUID;
+
+public class LocationUpdateDto {
+    private UUID id;
+
     @NotEmpty
     private String name;
 
@@ -58,5 +62,13 @@ public class LocationCreateDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

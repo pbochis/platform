@@ -6,9 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.challenge.ChallengeCreateDto;
 import uno.cod.platform.server.core.dto.challenge.ChallengeDto;
+import uno.cod.platform.server.core.dto.challenge.ChallengeUpdateDto;
 import uno.cod.platform.server.core.dto.challenge.UserChallengeShowDto;
-import uno.cod.platform.server.core.dto.location.LocationCreateDto;
 import uno.cod.platform.server.core.dto.location.LocationShowDto;
+import uno.cod.platform.server.core.dto.location.LocationUpdateDto;
 import uno.cod.platform.server.core.exception.CodunoIllegalArgumentException;
 import uno.cod.platform.server.core.exception.CodunoResourceConflictException;
 import uno.cod.platform.server.core.mapper.ChallengeMapper;
@@ -18,6 +19,7 @@ import uno.cod.platform.server.core.repository.LocationRepository;
 import uno.cod.platform.server.core.repository.ResultRepository;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,6 +43,29 @@ public class ChallengeService {
         this.locationRepository = locationRepository;
     }
 
+    public String updateChallengeInfo(ChallengeUpdateDto dto) {
+        Challenge challenge = repository.findOne(dto.getId());
+        if (challenge == null) {
+            throw new CodunoIllegalArgumentException("challenge.invalid");
+        }
+
+        Challenge duplicate = repository.findOneByCanonicalName(dto.getCanonicalName());
+        if (duplicate != null && !duplicate.getId().equals(challenge.getId())) {
+            throw new CodunoResourceConflictException("challenge.canonicalName.existing", new String[]{dto.getCanonicalName()});
+        }
+
+        challenge.setName(dto.getName());
+        challenge.setCanonicalName(dto.getCanonicalName());
+        challenge.setStartDate(dto.getStartDate());
+        if (dto.getStartDate() != null) {
+            challenge.setEndDate(dto.getStartDate().plus(challenge.getChallengeTemplate().getDuration()));
+        } else {
+            challenge.setEndDate(null);
+        }
+        challenge.setInviteOnly(dto.isInviteOnly());
+        return repository.save(challenge).getCanonicalName();
+    }
+
     public String createFromDto(ChallengeCreateDto dto) {
         ChallengeTemplate template = challengeTemplateRepository.findOne(dto.getTemplateId());
         if (template == null) {
@@ -59,7 +84,7 @@ public class ChallengeService {
             challenge.setEndDate(dto.getStartDate().plus(template.getDuration()));
         }
         if (dto.getLocations() != null) {
-            for (LocationCreateDto locationDto : dto.getLocations()) {
+            for (LocationUpdateDto locationDto : dto.getLocations()) {
                 challenge.addLocation(createLocationFromDto(locationDto));
             }
         }
@@ -67,7 +92,48 @@ public class ChallengeService {
         return repository.save(challenge).getCanonicalName();
     }
 
-    private Location createLocationFromDto(LocationCreateDto dto) {
+    public void updateLocations(String canonicalName, List<LocationUpdateDto> locations) {
+        Challenge challenge = repository.findOneByCanonicalName(canonicalName);
+        if (challenge == null) {
+            throw new CodunoIllegalArgumentException("challenge.invalid");
+        }
+
+        List<Location> locationsToRemove = new ArrayList<>();
+
+        for (Location location : challenge.getLocations()) {
+            boolean found = false;
+            for (LocationUpdateDto dto : locations) {
+                if (location.getId().equals(dto.getId())) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                locationsToRemove.add(location);
+            }
+        }
+        for (Location location : locationsToRemove) {
+            challenge.removeLocation(location);
+        }
+        repository.save(challenge);
+
+        for (LocationUpdateDto dto : locations) {
+            if (dto.getId() != null) {
+                updateLocation(dto);
+            } else {
+                challenge.addLocation(createLocationFromDto(dto));
+            }
+        }
+        repository.save(challenge);
+    }
+
+    private void updateLocation(LocationUpdateDto dto) {
+        Location location = locationRepository.findOne(dto.getId());
+        location.setName(dto.getName());
+        location.setDescription(dto.getDescription());
+        locationRepository.save(location);
+    }
+
+    private Location createLocationFromDto(LocationUpdateDto dto) {
         Location location = new Location();
         location.setName(dto.getName());
         location.setDescription(dto.getDescription());
