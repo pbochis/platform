@@ -68,7 +68,7 @@ public class InvitationService {
 
     public void invite(InvitationDto dto, String from) throws MessagingException {
         User invitingUser = userRepository.findByUsername(from);
-        Challenge challenge = challengeRepository.findOne(dto.getChallengeId());
+        Challenge challenge = challengeRepository.findOneByCanonicalName(dto.getCanonicalName());
 
         Organization organization = challenge.getChallengeTemplate().getOrganization();
         boolean ok = false;
