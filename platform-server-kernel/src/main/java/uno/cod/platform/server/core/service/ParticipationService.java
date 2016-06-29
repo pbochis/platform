@@ -7,6 +7,7 @@ import uno.cod.platform.server.core.domain.*;
 import uno.cod.platform.server.core.dto.challenge.ParticipationCreateDto;
 import uno.cod.platform.server.core.dto.participation.ParticipationShowDto;
 import uno.cod.platform.server.core.exception.CodunoIllegalArgumentException;
+import uno.cod.platform.server.core.exception.CodunoNoSuchElementException;
 import uno.cod.platform.server.core.repository.*;
 
 import java.util.Set;
@@ -43,18 +44,23 @@ public class ParticipationService {
         if (challenge == null) {
             throw new CodunoIllegalArgumentException("challenge.invalid");
         }
-        if (participationRepository.findOneByUserAndChallenge(user.getId(), challenge.getId()) != null) {
-            throw new CodunoIllegalArgumentException("participation.registered.already");
-        }
-        user = userRepository.getOne(user.getId());
-        ParticipationKey key = new ParticipationKey();
-        key.setChallenge(challenge);
-        key.setUser(user);
 
-        Participation participation = new Participation();
-        participation.setKey(key);
+        Participation participation = participationRepository.findOneByUserAndChallenge(user.getId(), challenge.getId());
+        if (participation == null) {
+            user = userRepository.getOne(user.getId());
+            ParticipationKey key = new ParticipationKey();
+            key.setChallenge(challenge);
+            key.setUser(user);
+
+            participation = new Participation();
+            participation.setKey(key);
+        }
+
+
         if (dto != null && dto.getLocation() != null) {
             participation.setLocation(locationRepository.findOne(dto.getLocation()));
+        } else {
+            participation.setLocation(null);
         }
         // Join as teamName
         if (dto != null && dto.getTeam() != null && !dto.getTeam().isEmpty()) {
@@ -63,9 +69,23 @@ public class ParticipationService {
                 throw new CodunoIllegalArgumentException("team.invalid");
             }
             participation.setTeam(team);
+        } else {
+            participation.setTeam(null);
         }
 
         participationRepository.save(participation);
+    }
+
+    public void unregisterFromChallenge(User user, String challengeCanonicalName) {
+        Challenge challenge = challengeRepository.findOneByCanonicalName(challengeCanonicalName);
+        if (challenge == null) {
+            throw new CodunoIllegalArgumentException("challenge.invalid");
+        }
+        Participation participation = participationRepository.findOneByUserAndChallenge(user.getId(), challenge.getId());
+        if (participation == null) {
+            throw new CodunoNoSuchElementException("participation.not.registered");
+        }
+        participationRepository.delete(participation);
     }
 
     public Set<ParticipationShowDto> getByChallengeCanonicalName(String canonicalName) {

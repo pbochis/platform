@@ -64,6 +64,14 @@ public class ChallengeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = RestUrls.CHALLENGES_CANONICAL_NAME_PARTICIPATION, method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> unregister(@PathVariable("canonicalName") String challengeName,
+                                             @AuthenticationPrincipal User user) {
+        participationService.unregisterFromChallenge(user, challengeName);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.PUT)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<NameDto> updateChallengeInfo(@Valid @RequestBody ChallengeUpdateDto dto) {
