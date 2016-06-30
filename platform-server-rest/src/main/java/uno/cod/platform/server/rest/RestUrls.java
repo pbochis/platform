@@ -12,6 +12,7 @@ public class RestUrls {
     public static final String CHALLENGES_CANONICAL_NAME_PARTICIPANTS = "/challenges/{canonicalName}/participants";
     public static final String CHALLENGES_CANONICAL_NAME_TEMPLATE = "/challenges/{canonicalName}/template";
     public static final String CHALLENGES_CANONICAL_NAME_REGISTER = "/challenges/{canonicalName}/register";
+    public static final String CHALLENGES_CANONICAL_NAME_PARTICIPATION = "/challenges/{canonicalName}/participation";
     public static final String CHALLENGES_CANONICAL_NAME_INVITATIONS = "/challenges/{canonicalName}/invitations";
     public static final String CHALLENGES_CANONICAL_NAME_LOCATIONS = "/challenges/{canonicalName}/locations";
     public static final String CHALLENGES_PUBLIC = "/challenges/public";
