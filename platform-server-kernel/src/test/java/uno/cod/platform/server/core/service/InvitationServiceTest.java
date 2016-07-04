@@ -85,7 +85,7 @@ public class InvitationServiceTest {
         // the seventies and executes this unit test ...
         invitation.setExpire(Instant.EPOCH.atZone(ZoneId.of("UTC")));
 
-        when(invitationRepository.getOne(token)).thenReturn(invitation);
+        when(invitationRepository.findOne(token)).thenReturn(invitation);
 
         invitationService.authByToken(token);
     }
