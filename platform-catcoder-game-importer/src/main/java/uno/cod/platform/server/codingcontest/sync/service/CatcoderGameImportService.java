@@ -66,7 +66,7 @@ public class CatcoderGameImportService {
         Endpoint challengeEndpoint = endpointRepository.findOneByComponent("ccc-challenge");
 
         ChallengeTemplate challengeTemplate = new ChallengeTemplate();
-        challengeTemplate.setCanonicalName(dto.getCanonicalName());
+        challengeTemplate.setCanonicalName(fixCanonicalName(dto.getCanonicalName()));
         challengeTemplate.setName(dto.getName());
         challengeTemplate.setDescription(dto.getDescription());
         challengeTemplate.setEndpoint(challengeEndpoint);
@@ -88,7 +88,7 @@ public class CatcoderGameImportService {
                          Endpoint endpoint,
                          Set<Language> languages) throws IOException {
         Task task = new Task();
-        task.setCanonicalName(challengeTemplate.getCanonicalName() + "-" + puzzle.getCanonicalName());
+        task.setCanonicalName(fixCanonicalName(challengeTemplate.getCanonicalName() + "-" + puzzle.getCanonicalName()));
         task.setName(puzzle.getCanonicalName());
         task.setEndpoint(endpoint);
         task.setDescription(puzzle.getCanonicalName());
@@ -208,5 +208,9 @@ public class CatcoderGameImportService {
         LocalTime time = LocalTime.parse(duration);
         int seconds = time.toSecondOfDay();
         return Duration.ofSeconds(seconds);
+    }
+
+    private String fixCanonicalName(String canonicalName) {
+        return canonicalName.toLowerCase().replaceAll("[^0-9a-z]", "-").replaceAll("--", "");
     }
 }
