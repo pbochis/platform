@@ -47,7 +47,8 @@ public class EndpointServiceTest {
 
     @Test
     public void createFromDto() throws Exception {
-        final String name = "name", component = "component";
+        final String name = "name";
+        final String component = "component";
 
         final EndpointCreateDto dto = new EndpointCreateDto();
         dto.setComponent(component);
