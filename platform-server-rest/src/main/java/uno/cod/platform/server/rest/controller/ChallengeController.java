@@ -44,7 +44,7 @@ public class ChallengeController {
     }
 
     @RequestMapping(value = RestUrls.CHALLENGES, method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #dto.templateId)")
+    @PreAuthorize("isAuthenticated() and @securityService.canAccessChallengeTemplate(principal, #dto.templateCanonicalName)")
     public ResponseEntity<NameDto> createChallenge(@Valid @RequestBody ChallengeCreateDto dto) {
         return new ResponseEntity<>(new NameDto(challengeService.createFromDto(dto)), HttpStatus.CREATED);
     }
