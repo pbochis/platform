@@ -63,7 +63,7 @@ public class CatcoderGameImportService {
     }
 
     private ChallengeTemplate mapChallengeTemplate(CodingContestGameDto dto, Organization organization, Duration gameDuration) {
-        Endpoint challengeEndpoint = endpointRepository.findOneByComponent("ccc-challenge");
+        Endpoint challengeEndpoint = getEndpoint("CCC challenge", "ccc-challenge");
 
         ChallengeTemplate challengeTemplate = new ChallengeTemplate();
         challengeTemplate.setCanonicalName(fixCanonicalName(dto.getCanonicalName()));
@@ -142,8 +142,8 @@ public class CatcoderGameImportService {
             throw new CodunoIllegalArgumentException("ccc.game.structure.unsuported");
         }
 
-        Runner runner = runnerRepository.findOneByPath("/io");
-        Endpoint taskEndpoint = endpointRepository.findOneByComponent("ccc-io-task");
+        Runner runner = getRunner("/io");
+        Endpoint taskEndpoint = getEndpoint("CCC general task", "ccc-io-task");
         Set<Language> languages = new HashSet<>(languageRepository.findAll());
         Duration gameDuration = parseGameDuration(dto.getTimeframe());
 
@@ -208,6 +208,27 @@ public class CatcoderGameImportService {
         LocalTime time = LocalTime.parse(duration);
         int seconds = time.toSecondOfDay();
         return Duration.ofSeconds(seconds);
+    }
+
+    private Runner getRunner(String path) {
+        Runner runner = runnerRepository.findOneByPath(path);
+        if (runner == null) {
+            runner = new Runner();
+            runner.setPath(path);
+            return runnerRepository.save(runner);
+        }
+        return runner;
+    }
+
+    private Endpoint getEndpoint(String name, String component) {
+        Endpoint endpoint = endpointRepository.findOneByComponent(component);
+        if (endpoint == null) {
+            endpoint = new Endpoint();
+            endpoint.setComponent(component);
+            endpoint.setName(name);
+            return endpointRepository.save(endpoint);
+        }
+        return endpoint;
     }
 
     private String fixCanonicalName(String canonicalName) {
