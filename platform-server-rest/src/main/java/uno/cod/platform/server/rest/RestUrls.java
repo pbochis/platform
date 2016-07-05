@@ -3,11 +3,10 @@ package uno.cod.platform.server.rest;
 
 public class RestUrls {
     public static final String CHALLENGE_TEMPLATES = "/challenges/templates";
-    public static final String CHALLENGE_TEMPLATES_ID = "/challenges/templates/{id}";
-    public static final String CHALLENGE_TEMPLATES_ID_TASKS = "/challenges/templates/{id}/tasks";
+    public static final String CHALLENGE_TEMPLATES_CANONICAL_NAME = "/challenge-templates/{canonicalName}";
+    public static final String CHALLENGE_TEMPLATES_CANONICAL_NAME_TASKS = "/challenge-templates/{canonicalName}/tasks";
 
     public static final String CHALLENGES = "/challenges";
-    public static final String CHALLENGES_ID = "/challenges/{id}";
     public static final String CHALLENGES_CANONICAL_NAME = "/challenges/{canonicalName}";
     public static final String CHALLENGES_CANONICAL_NAME_PARTICIPANTS = "/challenges/{canonicalName}/participants";
     public static final String CHALLENGES_CANONICAL_NAME_TEMPLATE = "/challenges/{canonicalName}/template";
